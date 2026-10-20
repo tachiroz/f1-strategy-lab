@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "f1-strategy-lab"
 description = "F1 race strategy simulator: tyre degradation, pit-stop strategies and Monte Carlo."
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12"
 authors = [{ name = "Matvey" }]
 dynamic = ["version", "dependencies", "optional-dependencies"]
