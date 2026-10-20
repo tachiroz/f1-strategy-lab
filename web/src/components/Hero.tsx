@@ -1,10 +1,10 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { REPO_URL } from '../config'
-import { CURRENT_STAGE, STAGES } from '../data/stages'
+import { LAST_DONE_STAGE, STAGES, stageStatus } from '../data/stages'
 import { StrategyPreview } from './StrategyPreview'
 
 export function Hero() {
-  const currentStage = STAGES.find((stage) => stage.id === CURRENT_STAGE)
+  const nextStage = STAGES.find((stage) => stageStatus(stage.id) === 'next')
 
   return (
     <section className="relative overflow-hidden">
@@ -17,7 +17,9 @@ export function Hero() {
               <span className="absolute inline-flex size-full rounded-full bg-accent opacity-75 motion-safe:animate-ping" />
               <span className="relative inline-flex size-2 rounded-full bg-accent" />
             </span>
-            Этап {CURRENT_STAGE} · {currentStage?.title}
+            {nextStage
+              ? `Этап ${LAST_DONE_STAGE}/${STAGES.length} готов · далее: ${nextStage.title}`
+              : 'Все этапы готовы'}
           </p>
 
           <h1 className="mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">

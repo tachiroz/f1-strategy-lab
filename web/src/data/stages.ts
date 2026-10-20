@@ -8,7 +8,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 
-export type StageStatus = 'done' | 'active' | 'planned'
+export type StageStatus = 'done' | 'next' | 'planned'
 
 export interface Stage {
   id: number
@@ -17,8 +17,8 @@ export interface Stage {
   icon: LucideIcon
 }
 
-/** Stage in progress right now; bump it after each stage is merged into main. */
-export const CURRENT_STAGE = 1
+/** Last finished stage; bump it in the PR that completes a stage (together with README). */
+export const LAST_DONE_STAGE = 1
 
 /** Project roadmap, mirrors the stages in CLAUDE.md. */
 export const STAGES: readonly Stage[] = [
@@ -60,9 +60,9 @@ export const STAGES: readonly Stage[] = [
   },
 ]
 
-/** Status of a stage relative to the stage currently in progress. */
-export function stageStatus(stageId: number, current: number = CURRENT_STAGE): StageStatus {
-  if (stageId < current) return 'done'
-  if (stageId === current) return 'active'
+/** Status of a stage relative to the last finished one. */
+export function stageStatus(stageId: number, lastDone: number = LAST_DONE_STAGE): StageStatus {
+  if (stageId <= lastDone) return 'done'
+  if (stageId === lastDone + 1) return 'next'
   return 'planned'
 }

@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { CURRENT_STAGE, STAGES, stageStatus } from './stages'
+import { LAST_DONE_STAGE, STAGES, stageStatus } from './stages'
 
 describe('stageStatus', () => {
-  it('marks earlier stages done, the current one active and later ones planned', () => {
+  it('marks finished stages done, the following one next and the rest planned', () => {
     expect(stageStatus(1, 2)).toBe('done')
-    expect(stageStatus(2, 2)).toBe('active')
-    expect(stageStatus(3, 2)).toBe('planned')
+    expect(stageStatus(2, 2)).toBe('done')
+    expect(stageStatus(3, 2)).toBe('next')
+    expect(stageStatus(4, 2)).toBe('planned')
+  })
+
+  it('makes the first stage next when nothing is done yet', () => {
+    expect(stageStatus(1, 0)).toBe('next')
   })
 })
 
@@ -14,7 +19,8 @@ describe('STAGES', () => {
     expect(STAGES.map((stage) => stage.id)).toEqual(STAGES.map((_, index) => index + 1))
   })
 
-  it('contains the current stage', () => {
-    expect(STAGES.some((stage) => stage.id === CURRENT_STAGE)).toBe(true)
+  it('keeps LAST_DONE_STAGE inside the roadmap', () => {
+    expect(LAST_DONE_STAGE).toBeGreaterThanOrEqual(0)
+    expect(LAST_DONE_STAGE).toBeLessThanOrEqual(STAGES.length)
   })
 })

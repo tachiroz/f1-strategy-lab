@@ -1,6 +1,6 @@
 import { ArrowUpRight } from 'lucide-react'
 import { REPO_URL } from '../config'
-import { CURRENT_STAGE, STAGES } from '../data/stages'
+import { LAST_DONE_STAGE, STAGES } from '../data/stages'
 import { LogoMark } from './LogoMark'
 
 /** Sections of the future dashboard; only the overview exists for now. */
@@ -49,7 +49,7 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-4">
           <span className="hidden font-mono text-xs text-ink-subtle tabular-nums sm:inline">
-            Этап {CURRENT_STAGE}/{STAGES.length}
+            Готово {LAST_DONE_STAGE}/{STAGES.length}
           </span>
           <a
             href={REPO_URL}

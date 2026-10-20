@@ -3,14 +3,20 @@ import type { Stage, StageStatus } from '../data/stages'
 
 const STATUS_LABEL: Record<StageStatus, string> = {
   done: 'Готово',
-  active: 'В работе',
+  next: 'Следующий',
   planned: 'Впереди',
 }
 
 const STATUS_BADGE: Record<StageStatus, string> = {
   done: 'border-success/30 bg-success/10 text-success',
-  active: 'border-accent/40 bg-accent/10 text-accent',
+  next: 'border-accent/40 bg-accent/10 text-accent',
   planned: 'border-line text-ink-subtle',
+}
+
+const STATUS_ICON_TILE: Record<StageStatus, string> = {
+  done: 'border-success/30 bg-success/10 text-success',
+  next: 'border-accent/40 bg-accent/15 text-accent',
+  planned: 'border-line bg-white/5 text-ink-muted',
 }
 
 interface StageCardProps {
@@ -20,15 +26,15 @@ interface StageCardProps {
 
 export function StageCard({ stage, status }: StageCardProps) {
   const Icon = stage.icon
-  const isActive = status === 'active'
+  const isNext = status === 'next'
 
   return (
     <li
       className={`relative overflow-hidden rounded-2xl border bg-surface/60 p-5 transition-colors hover:bg-surface ${
-        isActive ? 'border-accent/50' : 'border-line hover:border-line-strong'
+        isNext ? 'border-accent/50' : 'border-line hover:border-line-strong'
       }`}
     >
-      {isActive && (
+      {isNext && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -top-24 -right-24 size-48 rounded-full bg-accent/20 blur-3xl"
@@ -48,11 +54,7 @@ export function StageCard({ stage, status }: StageCardProps) {
       </div>
 
       <div
-        className={`mt-5 inline-flex size-10 items-center justify-center rounded-xl border ${
-          isActive
-            ? 'border-accent/40 bg-accent/15 text-accent'
-            : 'border-line bg-white/5 text-ink-muted'
-        }`}
+        className={`mt-5 inline-flex size-10 items-center justify-center rounded-xl border ${STATUS_ICON_TILE[status]}`}
       >
         <Icon aria-hidden="true" className="size-5" />
       </div>
