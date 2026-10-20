@@ -1,0 +1,5 @@
+# Development tools, installed with: pip install -e ".[dev]"
+# Keep the ruff version in sync with .pre-commit-config.yaml.
+ruff==0.17.1
+pytest==9.1.1
+pre-commit==4.7.0
