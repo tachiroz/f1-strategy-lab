@@ -11,13 +11,18 @@
 в README на русском, код и имена переменных на английском.
 
 ## Стек
-- Python 3.12, менеджер зависимостей: uv (или pip + requirements.txt)
+- Python 3.12, зависимости: pip + venv; requirements.txt (runtime) и requirements-dev.txt
+  (dev) — единственный источник, pyproject.toml читает их. Установка: `pip install -e ".[dev]"`
 - Данные: FastF1 (телеметрия, круги, шины) и Jolpica-F1 API (результаты, пит-стопы)
 - Хранилище: SQLite (потом возможен PostgreSQL), доступ через SQL (SQLAlchemy Core)
 - Расчёты: pandas, numpy, scipy
-- Дашборд: Streamlit + Plotly
-- Тесты: pytest, линтер: ruff, форматтер: ruff format
-- CI: GitHub Actions (ruff + pytest)
+- API: FastAPI (`src/f1lab/api`) отдаёт данные и результаты симуляции дашборду
+- Дашборд: веб-приложение в `web/`: React + TypeScript (Vite), Tailwind CSS, Node.js 24 LTS + npm.
+  Дизайн современный и аккуратный: тёмная тема, адаптивность, токены в `web/src/index.css`.
+  Библиотека графиков выбирается на Этапе 5. Streamlit не используем.
+- Тесты: pytest (Python), Vitest + Testing Library (web)
+- Линтеры и форматтеры: ruff + ruff format (Python), Oxlint + Prettier (web); хуки pre-commit
+- CI: GitHub Actions, ubuntu + windows (Python: ruff + pytest; web: lint, format, tests, build)
 
 ## Структура репозитория
 f1-strategy-lab/
@@ -30,7 +35,8 @@ f1-strategy-lab/
     models/      # деградация шин, расчёт темпа, топливо
     sim/         # Монте-Карло, стратегии, Safety Car
     report/      # авто-разбор гонки (текст + графики)
-    app/         # Streamlit
+    api/         # FastAPI: JSON для дашборда
+  web/           # дашборд: React + TypeScript + Vite + Tailwind
   sql/           # аналитические запросы (JOIN, CTE, оконные функции)
   tests/
   notebooks/
@@ -59,6 +65,8 @@ f1-strategy-lab/
 ### Этап 5. Дашборд
 - Выбор гонки/пилота, графики деградации, сравнение 2-3 стратегий,
   распределение финишных позиций, чувствительность к SC.
+- Эндпоинты FastAPI + страницы в `web/`. Визуально красивый современный дизайн
+  в едином стиле с уже готовой оболочкой (тёмная тема, цвета составов шин, адаптивность).
 ### Этап 6. Авто-разбор гонки
 - Генерация текстового отчёта по шаблону на основе данных (без выдумывания фактов).
 - Экспорт в Markdown.
@@ -67,7 +75,8 @@ f1-strategy-lab/
 ## Правила работы
 - Один этап = одна ветка (`feat/stage-N-name`) -> PR в main. Мелкие осмысленные коммиты
   в стиле Conventional Commits (feat:, fix:, test:, docs:, chore:).
-- После каждого коммита: `ruff check`, `pytest` должны проходить. Пушить только зелёное.
+- После каждого коммита: `ruff check`, `pytest`, а для web `npm run lint` и `npm test`
+  должны проходить. Пушить только зелёное.
 - Не коммитить данные, ключи, .env, кэш.
 - Сначала план и список файлов, потом код. Перед крупным решением (схема БД,
   выбор модели) кратко опиши варианты и выбор.
@@ -78,7 +87,8 @@ f1-strategy-lab/
   что сделано, что проверено, известные ограничения.
 
 ## Критерии готовности (Definition of Done)
-- `uv run pytest` зелёный, CI зелёный.
-- `streamlit run src/f1lab/app/main.py` запускается на чистой машине по README.
+- `pytest` и `npm test` (в `web/`) зелёные, CI зелёный.
+- API (`uvicorn f1lab.api.main:app`) и дашборд (`npm run dev` в `web/`) запускаются
+  на чистой машине по README.
 - Для минимум 3 гонок симуляция даёт результаты, сопоставимые с реальностью,
   и это показано на графике.
