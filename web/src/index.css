@@ -1,3 +1,53 @@
-body {
-  margin: 0;
+@import 'tailwindcss';
+
+/* Design tokens. Dark "night race" theme; tyre colours follow the Pirelli convention. */
+@theme {
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --color-canvas: oklch(0.145 0.012 265);
+  --color-surface: oklch(0.185 0.013 265);
+  --color-surface-2: oklch(0.225 0.014 265);
+  --color-line: oklch(1 0 0 / 0.08);
+  --color-line-strong: oklch(1 0 0 / 0.16);
+
+  --color-ink: oklch(0.97 0.004 265);
+  --color-ink-muted: oklch(0.76 0.012 265);
+  --color-ink-subtle: oklch(0.62 0.014 265);
+
+  --color-accent: oklch(0.63 0.235 27);
+  --color-success: oklch(0.76 0.16 155);
+
+  --color-tyre-soft: oklch(0.63 0.235 27);
+  --color-tyre-medium: oklch(0.87 0.17 92);
+  --color-tyre-hard: oklch(0.95 0.005 90);
+  --color-tyre-inter: oklch(0.72 0.19 142);
+  --color-tyre-wet: oklch(0.66 0.15 245);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+    background-image:
+      radial-gradient(60rem 32rem at 10% -10%, oklch(0.63 0.235 27 / 0.14), transparent 65%),
+      radial-gradient(48rem 28rem at 100% 0%, oklch(0.66 0.15 245 / 0.1), transparent 65%);
+    background-repeat: no-repeat;
+  }
+
+  ::selection {
+    @apply bg-accent/40 text-ink;
+  }
+}
+
+/* Telemetry-style grid that fades out towards the edges. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
 }
