@@ -1,2 +1,4 @@
 # Runtime dependencies of the f1lab package (read by pyproject.toml).
 # Added stage by stage, only when the code actually uses them.
+requests==2.34.2
+SQLAlchemy==2.1.5
