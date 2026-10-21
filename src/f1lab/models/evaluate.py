@@ -5,11 +5,14 @@ of the same circuit. Each driver's level in a test race is estimated from that
 race (the simulator will know it too), so the errors measure how well the model
 explains the change of pace *within* a race.
 
-Three variants are compared on exactly the same test laps:
+All variants are scored on exactly the same test laps:
 
 * driver mean: each driver's mean lap time in the race (no fuel, no tyres);
 * fuel + compound: the model without tyre-age slopes;
-* full: fuel + compound + degradation.
+* degradation per circuit / pooled, each with and without the tyre-age cap.
+
+``FINAL_VARIANT`` (pooled slopes + age cap) is the one used downstream; the
+others are kept as an ablation that justifies it.
 """
 
 from dataclasses import dataclass
@@ -26,15 +29,27 @@ class Variant(StrEnum):
 
     DRIVER_MEAN = "driver mean"
     NO_DEGRADATION = "fuel + compound"
-    FULL = "fuel + compound + degradation"
+    PER_CIRCUIT = "degradation per circuit"
+    PER_CIRCUIT_CAPPED = "degradation per circuit, age cap"
+    POOLED = "degradation pooled"
+    POOLED_CAPPED = "degradation pooled, age cap"
 
 
 VARIANTS: tuple[Variant, ...] = tuple(Variant)
+FINAL_VARIANT = Variant.POOLED_CAPPED
+MODEL_VARIANTS: dict[Variant, tuple[str, bool]] = {
+    Variant.NO_DEGRADATION: ("no_degradation", False),
+    Variant.PER_CIRCUIT: ("per_circuit", False),
+    Variant.PER_CIRCUIT_CAPPED: ("per_circuit", True),
+    Variant.POOLED: ("pooled", False),
+    Variant.POOLED_CAPPED: ("pooled", True),
+}
+"""Variant -> (fitted model family, cap tyre age)."""
 
 
 @dataclass(frozen=True)
 class Evaluation:
-    """Predictions on the test laps and the models they came from."""
+    """Predictions on the test laps and the final models they came from."""
 
     train_seasons: tuple[int, ...]
     test_seasons: tuple[int, ...]
@@ -77,24 +92,28 @@ def evaluate(
         test_seasons: Seasons used for scoring.
 
     Returns:
-        Predictions of every variant and the fitted full models.
+        Predictions of every variant and the fitted final (pooled) models.
     """
     train = clean[clean["season"].isin(train_seasons)]
     test = clean[clean["season"].isin(test_seasons)]
-    full = fit_circuits(train, with_degradation=True)
-    no_degradation = fit_circuits(train, with_degradation=False)
+    families = {
+        "no_degradation": fit_circuits(train, with_degradation=False),
+        "per_circuit": fit_circuits(train),
+        "pooled": fit_circuits(train, pooled=True),
+    }
 
+    model_columns = [variant.value for variant in MODEL_VARIANTS]
     parts = []
     for circuit_id, laps in test.groupby("circuit_id"):
-        if circuit_id not in full or circuit_id not in no_degradation:
+        if not all(str(circuit_id) in models for models in families.values()):
             continue
         frame = laps.copy()
-        for variant, models in ((Variant.FULL, full), (Variant.NO_DEGRADATION, no_degradation)):
-            model = models[str(circuit_id)]
-            frame[variant.value] = predict(model, frame, driver_levels(model, frame))
+        for variant, (family, cap_age) in MODEL_VARIANTS.items():
+            model = families[family][str(circuit_id)]
+            levels = driver_levels(model, frame, cap_age=cap_age)
+            frame[variant.value] = predict(model, frame, levels, cap_age=cap_age)
         parts.append(frame)
 
-    model_columns = [Variant.FULL.value, Variant.NO_DEGRADATION.value]
     if parts:
         predictions = pd.concat(parts)
     else:  # nothing to predict: keep the columns so the result has a stable shape
@@ -106,7 +125,7 @@ def evaluate(
     return Evaluation(
         train_seasons=tuple(train_seasons),
         test_seasons=tuple(test_seasons),
-        models=full,
+        models=families["pooled"],
         predictions=predictions,
         skipped_laps=len(test) - len(predictions),
     )

@@ -18,7 +18,7 @@ from matplotlib.lines import Line2D
 
 from f1lab.config import SHOWCASE_MIN_DRIVER_LAPS
 from f1lab.models.degradation import CircuitModel
-from f1lab.models.evaluate import Evaluation, Variant
+from f1lab.models.evaluate import FINAL_VARIANT, Evaluation, Variant
 
 SURFACE = "#101319"
 GRID = "#1f232b"
@@ -117,7 +117,7 @@ def pick_showcase(evaluation: Evaluation, count: int = 3) -> list[tuple[int, str
     eligible = busiest[busiest >= SHOWCASE_MIN_DRIVER_LAPS].index
     if eligible.empty:
         eligible = busiest.index
-    errors = evaluation.errors()[Variant.FULL.value]
+    errors = evaluation.errors()[FINAL_VARIANT.value]
     by_race = errors.groupby(predictions["race_id"]).mean().loc[eligible]
     ordered = by_race.sort_values().index.tolist()
     positions = np.linspace(0, len(ordered) - 1, num=min(count, len(ordered))).round().astype(int)
@@ -140,8 +140,8 @@ def plot_actual_vs_model(
         laps = predictions[
             (predictions["race_id"] == race_id) & (predictions["driver_id"] == driver_id)
         ].sort_values("lap")
-        mae = (laps[Variant.FULL.value] - laps["lap_time_s"]).abs().mean()
-        x, y = _with_gaps(laps["lap"], laps[Variant.FULL.value])
+        mae = (laps[FINAL_VARIANT.value] - laps["lap_time_s"]).abs().mean()
+        x, y = _with_gaps(laps["lap"], laps[FINAL_VARIANT.value])
         ax.plot(x, y, color=SERIES_BLUE, linewidth=LINE_WIDTH, solid_capstyle="round", zorder=3)
         for compound, group in laps.groupby("compound"):
             colour, marker = COMPOUND_STYLE.get(str(compound), (INK_MUTED, "o"))
@@ -185,7 +185,7 @@ def plot_mae_overall(evaluation: Evaluation, path: Path) -> Path:
     mae = evaluation.mae()["mae_s"]
     labels = [variant.value for variant in reversed(Variant)]
     values = [mae[label] for label in labels]
-    colours = [SERIES_BLUE if label == Variant.FULL.value else INK_MUTED for label in labels]
+    colours = [SERIES_BLUE if label == FINAL_VARIANT.value else INK_MUTED for label in labels]
     figure, (ax,) = _new_figure(2.4)
     ax.barh(labels, values, color=colours, height=BAR_HEIGHT)
     for y, value in enumerate(values):
@@ -210,15 +210,15 @@ def plot_mae_overall(evaluation: Evaluation, path: Path) -> Path:
 def plot_mae_by_circuit(evaluation: Evaluation, path: Path) -> Path:
     """Dumbbell per circuit: model without degradation vs the full model."""
     mae = evaluation.mae(by="circuit_id")
-    mae = mae.sort_values(Variant.FULL.value, ascending=False)
+    mae = mae.sort_values(FINAL_VARIANT.value, ascending=False)
     y = np.arange(len(mae))
     figure, (ax,) = _new_figure(0.28 * len(mae) + 1.2)
     without = mae[Variant.NO_DEGRADATION.value].to_numpy()
-    full = mae[Variant.FULL.value].to_numpy()
+    full = mae[FINAL_VARIANT.value].to_numpy()
     ax.hlines(y, np.minimum(without, full), np.maximum(without, full), color=AXIS, linewidth=2)
     for values, colour, label in (
         (without, SERIES_ORANGE, Variant.NO_DEGRADATION.value),
-        (full, SERIES_BLUE, Variant.FULL.value),
+        (full, SERIES_BLUE, FINAL_VARIANT.value),
     ):
         ax.plot(
             values,
@@ -248,7 +248,7 @@ def plot_mae_by_circuit(evaluation: Evaluation, path: Path) -> Path:
         )
         for colour, name in (
             (SERIES_ORANGE, Variant.NO_DEGRADATION.value),
-            (SERIES_BLUE, Variant.FULL.value),
+            (SERIES_BLUE, FINAL_VARIANT.value),
         )
     ]
     _legend(ax, handles, loc="upper right")

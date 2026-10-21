@@ -8,7 +8,7 @@ from sqlalchemy import Engine
 
 from f1lab.models.__main__ import EXIT_NO_DATA, EXIT_OK, build_report, main
 from f1lab.models.degradation import fit_circuits
-from f1lab.models.evaluate import Evaluation, evaluate
+from f1lab.models.evaluate import FINAL_VARIANT, Evaluation, evaluate
 from f1lab.models.plots import (
     pick_showcase,
     plot_actual_vs_model,
@@ -60,7 +60,8 @@ def test_build_report(synthetic_laps: pd.DataFrame, tmp_path: Path) -> None:
     assert set(params["compound"]) == {"SOFT", "MEDIUM", "HARD"}
     results = (tmp_path / "results.md").read_text(encoding="utf-8")
     assert "## MAE на отложенных гонках" in results
-    assert "fuel + compound + degradation" in results
+    assert FINAL_VARIANT.value in results
+    assert "макс. возраст шины" in results
     for name in ("results.md", "degradation_params.csv"):
         assert b"\r\n" not in (tmp_path / name).read_bytes(), name  # same bytes on every OS
 

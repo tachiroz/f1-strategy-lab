@@ -15,7 +15,7 @@ import pandas as pd
 from f1lab.config import MODEL_REPORT_DIR, TEST_SEASONS, TRAIN_SEASONS, get_db_path
 from f1lab.db.engine import create_sqlite_engine, init_db
 from f1lab.models.degradation import fit_circuits, parameters_table
-from f1lab.models.evaluate import Evaluation, evaluate
+from f1lab.models.evaluate import FINAL_VARIANT, Evaluation, evaluate
 from f1lab.models.filters import annotate_laps, clean_laps, exclusion_summary
 from f1lab.models.laps import load_model_laps, load_race_control, load_rainfall
 from f1lab.models.plots import (
@@ -66,6 +66,7 @@ def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFr
             "laps",
             "degradation_s_per_lap",
             "interval",
+            "max_tyre_age",
             "offset_s",
             "fuel_s_per_lap",
         ]
@@ -76,6 +77,7 @@ def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFr
             "laps": "кругов",
             "degradation_s_per_lap": "деградация, с/круг",
             "interval": "95% интервал",
+            "max_tyre_age": "макс. возраст шины",
             "offset_s": "сдвиг к эталону, с",
             "fuel_s_per_lap": "топливо, с/круг",
         }
@@ -97,6 +99,9 @@ def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFr
             "",
             "## MAE на отложенных гонках",
             "",
+            f"Итоговый вариант: **{FINAL_VARIANT.value}**. Остальные строки - абляция, "
+            "которая его обосновывает.",
+            "",
             _markdown_table(overall),
             "",
             "### По составам",
@@ -107,9 +112,11 @@ def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFr
             "",
             _markdown_table(by_circuit),
             "",
-            "## Параметры по трассам (подгонка на всех сезонах)",
+            "## Параметры по трассам (все сезоны, итоговый вариант)",
             "",
-            "Сдвиг состава считается относительно эталонного (MEDIUM, если он есть на трассе).",
+            "Деградация сжата к общему наклону состава; дальше максимального возраста шины "
+            "износ не экстраполируется. Сдвиг состава считается относительно эталонного "
+            "(MEDIUM, если он есть на трассе).",
             "",
             _markdown_table(table),
             "",
@@ -136,7 +143,9 @@ def build_report(
     """
     clean = clean_laps(annotated)
     evaluation = evaluate(clean, train_seasons, test_seasons)
-    final_models = fit_circuits(clean[clean["season"].isin({*train_seasons, *test_seasons})])
+    final_models = fit_circuits(
+        clean[clean["season"].isin({*train_seasons, *test_seasons})], pooled=True
+    )
     params = parameters_table(final_models.values())
 
     out_dir.mkdir(parents=True, exist_ok=True)

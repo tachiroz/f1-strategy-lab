@@ -3,15 +3,17 @@
 import pandas as pd
 import pytest
 
-from f1lab.models.evaluate import Variant, evaluate
+from f1lab.models.evaluate import FINAL_VARIANT, Variant, evaluate
 from synthetic import make_synthetic_laps
 
 
 def test_full_model_beats_both_baselines(synthetic_laps: pd.DataFrame) -> None:
     result = evaluate(synthetic_laps, train_seasons=(2023, 2024), test_seasons=(2025,))
     mae = result.mae()["mae_s"]
-    assert mae[Variant.FULL] < 0.15  # noise sd 0.15 -> MAE about 0.12
-    assert mae[Variant.FULL] < mae[Variant.NO_DEGRADATION] < mae[Variant.DRIVER_MEAN]
+    assert mae[FINAL_VARIANT] < 0.15  # noise sd 0.15 -> MAE about 0.12
+    assert mae[FINAL_VARIANT] < mae[Variant.NO_DEGRADATION] < mae[Variant.DRIVER_MEAN]
+    for variant in (Variant.PER_CIRCUIT, Variant.PER_CIRCUIT_CAPPED, Variant.POOLED):
+        assert mae[variant] < mae[Variant.NO_DEGRADATION]
     assert result.coverage == 1.0
 
 
@@ -37,6 +39,7 @@ def test_mae_by_compound(synthetic_laps: pd.DataFrame) -> None:
     by_compound = evaluate(synthetic_laps).mae(by="compound")
     assert list(by_compound.index) == ["HARD", "MEDIUM", "SOFT"]
     assert list(by_compound.columns) == [variant.value for variant in Variant]
+    assert FINAL_VARIANT in by_compound.columns
 
 
 def test_empty_test_set(synthetic_laps: pd.DataFrame) -> None:

@@ -86,6 +86,8 @@ MIN_COMPOUND_LAPS: int = 30
 """A compound needs this many clean laps at a circuit to get its own offset and slope."""
 REFERENCE_COMPOUND: str = "MEDIUM"
 """Compound offsets are relative to this one (or to the most used one if it is absent)."""
+MIN_POOLING_CIRCUITS: int = 3
+"""Partial pooling of a compound's degradation needs estimates from at least this many circuits."""
 TRAIN_SEASONS: tuple[int, ...] = (2023, 2024)
 TEST_SEASONS: tuple[int, ...] = (2025,)
 CONFIDENCE_LEVEL: float = 0.95
