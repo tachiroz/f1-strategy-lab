@@ -225,3 +225,27 @@ def test_race_without_results_is_an_error(jolpica: JolpicaClient, openf1: OpenF1
         build_race_rows(
             race, session, results=[], pit_stops=[], laps=[], stints=[], weather=[], race_control=[]
         )
+
+
+def test_qualifying_rows(jolpica: JolpicaClient, openf1: OpenF1Client) -> None:
+    race = by_round(jolpica, 21)
+    session = match_session(race, openf1.race_sessions(2024))
+    rows = build_race_rows(
+        race,
+        session,
+        results=jolpica.results(2024, 21),
+        pit_stops=[],
+        laps=[],
+        stints=[],
+        weather=[],
+        race_control=[],
+        qualifying=jolpica.qualifying(2024, 21),
+    )
+    by_driver = {r["driver_id"]: r for r in rows.qualifying}
+    assert len(by_driver) == 20
+    assert by_driver["norris"]["position"] == 1
+    assert by_driver["norris"]["q3_s"] == 83.405  # 1:23.405
+    knocked_out = by_driver["zhou"]  # out in Q1 (P20)
+    assert knocked_out["q1_s"] is not None
+    assert (knocked_out["q2_s"], knocked_out["q3_s"]) == (None, None)
+    assert rows.row_counts()["qualifying"] == 20

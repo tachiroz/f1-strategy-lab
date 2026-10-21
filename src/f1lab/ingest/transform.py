@@ -35,6 +35,7 @@ class RaceRows:
     race: Row
     drivers: list[Row]
     results: list[Row]
+    qualifying: list[Row]
     pit_stops: list[Row]
     laps: list[Row]
     stints: list[Row]
@@ -208,6 +209,23 @@ def _driver_for_number(numbers: dict[int, str], driver_number: int, context: str
         ) from None
 
 
+def _session_time_s(text: str | None) -> float | None:
+    """Parse a qualifying session time; missing or empty means the driver did not run."""
+    return parse_duration_s(text) if text and text.strip() else None
+
+
+def qualifying_row(race_id: int, result: JsonObject) -> Row:
+    """Build a ``qualifying`` row; Q2/Q3 are None for drivers knocked out earlier."""
+    return {
+        "race_id": race_id,
+        "driver_id": result["Driver"]["driverId"],
+        "position": int(result["position"]),
+        "q1_s": _session_time_s(result.get("Q1")),
+        "q2_s": _session_time_s(result.get("Q2")),
+        "q3_s": _session_time_s(result.get("Q3")),
+    }
+
+
 def pit_stop_row(race_id: int, stop: JsonObject) -> Row:
     """Build a ``pit_stops`` row.
 
@@ -309,6 +327,7 @@ def build_race_rows(
     stints: list[JsonObject],
     weather: list[JsonObject],
     race_control: list[JsonObject],
+    qualifying: list[JsonObject] | None = None,
 ) -> RaceRows:
     """Transform all payloads of one race into table rows.
 
@@ -321,6 +340,7 @@ def build_race_rows(
         stints: OpenF1 stints.
         weather: OpenF1 weather samples.
         race_control: OpenF1 race control messages.
+        qualifying: Jolpica qualifying classification (optional).
 
     Returns:
         Rows for every table, drivers deduplicated.
@@ -333,10 +353,12 @@ def build_race_rows(
     if not results:
         raise TransformError(f"{row['season']} R{row['round']} {row['race_name']}: no results")
     numbers = car_number_map(results)
+    qualifying = qualifying or []
     return RaceRows(
         race=row,
-        drivers=[driver_row(result["Driver"]) for result in results],
+        drivers=[driver_row(entry["Driver"]) for entry in [*results, *qualifying]],
         results=[result_row(race_id, result) for result in results],
+        qualifying=[qualifying_row(race_id, entry) for entry in qualifying],
         pit_stops=[pit_stop_row(race_id, stop) for stop in pit_stops],
         laps=[lap_row(race_id, lap, numbers) for lap in laps],
         stints=[stint_row(race_id, stint, numbers) for stint in stints],
