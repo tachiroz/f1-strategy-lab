@@ -96,6 +96,14 @@ SHOWCASE_MIN_DRIVER_LAPS: int = 30
 MODEL_REPORT_DIR: Path = PROJECT_ROOT / "docs" / "models"
 MODEL_LAPS_SQL: Path = PROJECT_ROOT / "sql" / "model_laps.sql"
 
+# --- Simulator (stage 4) ------------------------------------------------------
+COMPOUND_CODES: dict[str, str] = {"S": "SOFT", "M": "MEDIUM", "H": "HARD"}
+"""Letters of the strategy notation, e.g. "S3-15-H-38-M"."""
+MIN_DRY_COMPOUNDS: int = 2
+"""Sporting rule: a dry race must use at least two different dry compounds."""
+RED_FLAG_STOP_S: float = 300.0
+"""A recorded 'pit stop' longer than this is a tyre change under red flag (free)."""
+
 
 def get_data_dir() -> Path:
     """Return the directory for local data (FastF1 cache, SQLite database).
