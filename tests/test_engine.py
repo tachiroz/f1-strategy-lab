@@ -5,65 +5,11 @@ import pytest
 from sqlalchemy import Engine, insert, select
 
 from f1lab.db import schema
-from f1lab.models.degradation import CircuitModel, Estimate
 from f1lab.sim.calibration import calibrate, load_history
 from f1lab.sim.engine import SAFETY_CAR, SimulationParams, simulate
 from f1lab.sim.setup import RaceSetup, SetupError, race_setup
 from f1lab.sim.strategy import StrategyError, parse_strategy
-
-FLAT = Estimate(0.0, 0.0, 0.0)
-COMPOUNDS = ("SOFT", "MEDIUM", "HARD")
-
-
-def flat_model() -> CircuitModel:
-    """No fuel effect, no compound offsets, no degradation: pace = driver level."""
-    return CircuitModel(
-        circuit_id="ring",
-        seasons=(2024,),
-        n_laps=1,
-        reference_compound="MEDIUM",
-        fuel_s_per_lap=FLAT,
-        compound_offset_s=dict.fromkeys(COMPOUNDS, FLAT),
-        degradation_s_per_lap=dict.fromkeys(COMPOUNDS, FLAT),
-        max_tyre_age=dict.fromkeys(COMPOUNDS, 100),
-    )
-
-
-def make_setup(levels: list[float], laps: int = 20, **overrides: object) -> RaceSetup:
-    """A deterministic race: no noise, no SC/VSC, no retirements unless overridden."""
-    drivers = tuple(f"car{i}" for i in range(len(levels)))
-    values: dict[str, object] = {
-        "race_id": 1,
-        "race_name": "Test GP 2025",
-        "circuit_id": "ring",
-        "race_laps": laps,
-        "drivers": drivers,
-        "grid": np.arange(1, len(levels) + 1),
-        "level_s": np.array(levels, dtype=float),
-        "strategies": {driver: parse_strategy("M-10-H") for driver in drivers},
-        "model": flat_model(),
-        "lap_noise_sd_s": 0.0,
-        "form_sd_s": 0.0,
-        "grid_slot_s": 0.5,
-        "pit_loss_samples_s": np.array([20.0]),
-        "sc_pit_ratio": 0.5,
-        "vsc_pit_ratio": 0.8,
-        "sc_lap1_probability": 0.0,
-        "vsc_lap1_probability": 0.0,
-        "sc_hazard": 0.0,
-        "vsc_hazard": 0.0,
-        "sc_lengths_laps": np.array([3]),
-        "vsc_lengths_laps": np.array([1]),
-        "dnf_probability": 0.0,
-        "dnf_race_fraction": np.array([0.5]),
-    }
-    values.update(overrides)
-    return RaceSetup(**values)
-
-
-def params(**overrides: object) -> SimulationParams:
-    base = {"runs": 50, "overtake_delta_s": 0.5, "dirty_air_penalty_s": 0.0}
-    return SimulationParams(**{**base, **overrides})
+from synthetic import make_setup, params
 
 
 def winner(setup: RaceSetup, **overrides: object) -> set[str]:

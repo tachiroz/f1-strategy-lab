@@ -132,6 +132,9 @@ DIRTY_AIR_PENALTY_S: float = 0.3
 """Time lost per lap in dirty air (calibrated, see docs/assumptions.md)."""
 PIT_LANE_START_GRID: int = 0
 """Jolpica grid value of a car starting from the pit lane."""
+PODIUM_POSITIONS: int = 3
+POINTS_POSITIONS: int = 10
+"""Finishing positions that score points (2023-2025 regulations)."""
 
 
 def get_data_dir() -> Path:
