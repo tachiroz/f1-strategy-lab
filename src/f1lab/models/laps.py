@@ -9,10 +9,13 @@ from sqlalchemy import Engine, bindparam, select, text
 from f1lab.config import MODEL_LAPS_SQL
 from f1lab.db import schema
 
+TIMESTAMP_DTYPE = "datetime64[ns, UTC]"
+"""One resolution everywhere: pandas refuses to merge timestamps of different units."""
+
 
 def _to_utc(series: pd.Series) -> pd.Series:
-    """Parse ISO 8601 strings (with offsets) into timezone-aware UTC timestamps."""
-    return pd.to_datetime(series, utc=True, format="ISO8601")
+    """Parse ISO 8601 strings (with offsets) into UTC timestamps of ``TIMESTAMP_DTYPE``."""
+    return pd.to_datetime(series, utc=True, format="ISO8601").astype(TIMESTAMP_DTYPE)
 
 
 def load_model_laps(
