@@ -19,8 +19,8 @@ CACHE_DIR_NAME: str = "cache"
 DB_FILE_NAME: str = "f1lab.sqlite"
 
 # --- Database -----------------------------------------------------------------
-SCHEMA_VERSION: int = 1
-"""Bump together with any change to f1lab.db.schema."""
+SCHEMA_VERSION: int = 2
+"""Bump together with any change to f1lab.db.schema and add a step to db.engine.MIGRATIONS."""
 
 RACE_ID_SEASON_MULTIPLIER: int = 100
 """race_id = season * 100 + round, e.g. 202401 for round 1 of 2024."""

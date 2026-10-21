@@ -1,18 +1,31 @@
-"""SQLite engine creation and database initialisation."""
+"""SQLite engine creation, database initialisation and schema migrations."""
 
 import sqlite3
+from collections.abc import Callable
 from pathlib import Path
 
-from sqlalchemy import Engine, create_engine, event, insert, inspect, select
+from sqlalchemy import Connection, Engine, create_engine, event, insert, inspect, select, update
 
 from f1lab.config import SCHEMA_VERSION
+from f1lab.db import schema
 from f1lab.db.schema import metadata, schema_meta
 
 SCHEMA_VERSION_KEY = "schema_version"
 
 
 class SchemaVersionError(RuntimeError):
-    """The database was created by a different version of the schema."""
+    """The database was created by a newer version of the schema than the code knows."""
+
+
+def _create_qualifying(conn: Connection) -> None:
+    """Version 2: add the ``qualifying`` table."""
+    schema.qualifying.create(conn, checkfirst=True)
+
+
+MIGRATIONS: dict[int, Callable[[Connection], None]] = {
+    2: _create_qualifying,
+}
+"""Upgrade steps: ``MIGRATIONS[n]`` turns a version ``n - 1`` database into version ``n``."""
 
 
 def create_sqlite_engine(db_path: Path) -> Engine:
@@ -50,25 +63,37 @@ def read_schema_version(engine: Engine) -> int | None:
 
 
 def init_db(engine: Engine) -> None:
-    """Create missing tables and record the schema version.
+    """Create a new database or upgrade an existing one to ``SCHEMA_VERSION``.
 
-    Safe to call on every start: existing tables and data are left untouched.
+    Safe to call on every start: existing data is kept, missing upgrade steps
+    run in order inside one transaction.
 
     Args:
         engine: Engine of the target database.
 
     Raises:
-        SchemaVersionError: If the database was created by another schema version.
+        SchemaVersionError: If the database is newer than the code.
     """
     stored = read_schema_version(engine)
-    if stored is not None and stored != SCHEMA_VERSION:
-        raise SchemaVersionError(
-            f"Database schema version is {stored}, the code expects {SCHEMA_VERSION}. "
-            "The database only caches public data: delete it and load again."
-        )
-    metadata.create_all(engine)
     if stored is None:
+        metadata.create_all(engine)
         with engine.begin() as conn:
             conn.execute(
                 insert(schema_meta).values(key=SCHEMA_VERSION_KEY, value=str(SCHEMA_VERSION))
             )
+        return
+    if stored > SCHEMA_VERSION:
+        raise SchemaVersionError(
+            f"Database schema version is {stored}, the code only knows up to {SCHEMA_VERSION}. "
+            "Update the code, or delete the database (it only caches public data) and load again."
+        )
+    if stored == SCHEMA_VERSION:
+        return
+    with engine.begin() as conn:
+        for version in range(stored + 1, SCHEMA_VERSION + 1):
+            MIGRATIONS[version](conn)
+        conn.execute(
+            update(schema_meta)
+            .where(schema_meta.c.key == SCHEMA_VERSION_KEY)
+            .values(value=str(SCHEMA_VERSION))
+        )

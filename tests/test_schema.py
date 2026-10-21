@@ -3,12 +3,13 @@
 from pathlib import Path
 
 import pytest
-from sqlalchemy import Engine, insert, inspect, select, update
+from sqlalchemy import Engine, insert, inspect, select, text, update
 from sqlalchemy.exc import IntegrityError
 
 from f1lab.config import SCHEMA_VERSION
 from f1lab.db import schema
 from f1lab.db.engine import (
+    MIGRATIONS,
     SchemaVersionError,
     create_sqlite_engine,
     init_db,
@@ -19,6 +20,7 @@ EXPECTED_PRIMARY_KEYS = {
     "races": ["race_id"],
     "drivers": ["driver_id"],
     "results": ["race_id", "driver_id"],
+    "qualifying": ["race_id", "driver_id"],
     "pit_stops": ["race_id", "driver_id", "stop"],
     "laps": ["race_id", "driver_id", "lap"],
     "stints": ["race_id", "driver_id", "stint"],
@@ -114,3 +116,19 @@ def test_engine_creates_parent_directory(tmp_path: Path) -> None:
     db_path = tmp_path / "nested" / "dir" / "db.sqlite"
     init_db(create_sqlite_engine(db_path))
     assert db_path.is_file()
+
+
+def test_every_version_has_a_migration() -> None:
+    assert set(MIGRATIONS) == set(range(2, SCHEMA_VERSION + 1))
+
+
+def test_version_1_database_is_upgraded_in_place(engine: Engine) -> None:
+    with engine.begin() as conn:
+        conn.execute(insert(schema.races).values(**RACE))
+        conn.execute(text("DROP TABLE qualifying"))
+        conn.execute(update(schema.schema_meta).values(value="1"))
+    init_db(engine)
+    assert read_schema_version(engine) == SCHEMA_VERSION
+    assert inspect(engine).has_table("qualifying")
+    with engine.connect() as conn:
+        assert conn.execute(select(schema.races.c.race_id)).scalars().all() == [202401]

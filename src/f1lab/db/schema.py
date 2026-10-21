@@ -6,7 +6,7 @@ Conventions:
     * every race-scoped table has ``race_id`` in its primary key, so reloading a race
       means deleting its rows and inserting fresh ones inside one transaction.
 
-Sources: races, drivers, results and pit stops come from Jolpica-F1; laps, stints,
+Sources: races, drivers, results, qualifying and pit stops come from Jolpica-F1; laps, stints,
 weather and race control messages come from OpenF1. Nullable columns mirror fields
 that are missing in real payloads (e.g. sector times during red flags).
 """
@@ -85,6 +85,17 @@ results = Table(
     Column("fastest_lap_rank", Integer),
     Column("fastest_lap_time_s", Float),
     UniqueConstraint("race_id", "car_number"),
+)
+
+qualifying = Table(
+    "qualifying",
+    metadata,
+    _race_key(),
+    _driver_key(),
+    Column("position", Integer, nullable=False),
+    Column("q1_s", Float),
+    Column("q2_s", Float),
+    Column("q3_s", Float, comment="NULL for drivers knocked out earlier"),
 )
 
 pit_stops = Table(
@@ -177,6 +188,7 @@ schema_meta = Table(
 
 RACE_TABLES: tuple[Table, ...] = (
     results,
+    qualifying,
     pit_stops,
     laps,
     stints,
