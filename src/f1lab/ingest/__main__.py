@@ -16,6 +16,7 @@ from pathlib import Path
 
 from f1lab.config import DEFAULT_SEASONS, get_cache_dir, get_db_path
 from f1lab.db.engine import create_sqlite_engine, init_db
+from f1lab.db.quality import format_report, run_checks
 from f1lab.ingest.jolpica import create_jolpica_client
 from f1lab.ingest.loader import (
     LoadStatus,
@@ -83,6 +84,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(
         f"Database: {db_path}\n" + ", ".join(f"{status}: {totals[status]}" for status in LoadStatus)
     )
+    print(format_report(run_checks(engine)))
     return EXIT_RACE_FAILED if totals[LoadStatus.FAILED] else EXIT_OK
 
 

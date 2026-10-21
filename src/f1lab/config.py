@@ -25,6 +25,8 @@ SCHEMA_VERSION: int = 1
 RACE_ID_SEASON_MULTIPLIER: int = 100
 """race_id = season * 100 + round, e.g. 202401 for round 1 of 2024."""
 
+DATA_QUALITY_SQL: Path = PROJECT_ROOT / "sql" / "data_quality.sql"
+
 # --- HTTP -------------------------------------------------------------------
 HTTP_TIMEOUT_S: float = 30.0
 HTTP_MAX_RETRIES: int = 4
