@@ -11,6 +11,7 @@ from f1lab.config import JOLPICA_CACHE_DIR_NAME, OPENF1_CACHE_DIR_NAME
 from f1lab.db.engine import create_sqlite_engine, init_db
 from f1lab.ingest.http import CachedHttpClient
 from f1lab.ingest.jolpica import JolpicaClient
+from f1lab.ingest.loader import RaceLoader
 from f1lab.ingest.openf1 import OpenF1Client
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
@@ -46,6 +47,13 @@ def engine(tmp_path: Path) -> Engine:
     db_engine = create_sqlite_engine(tmp_path / "test.sqlite")
     init_db(db_engine)
     return db_engine
+
+
+@pytest.fixture
+def loaded(engine: Engine, jolpica: JolpicaClient, openf1: OpenF1Client) -> Engine:
+    """Database with the recorded races loaded (2024 rounds 1 and 21)."""
+    RaceLoader(engine, jolpica, openf1).load_season(2024, rounds=[1, 21])
+    return engine
 
 
 @pytest.fixture

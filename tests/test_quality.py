@@ -17,8 +17,6 @@ from f1lab.db.quality import (
     run_checks,
 )
 from f1lab.ingest.jolpica import JolpicaClient
-from f1lab.ingest.loader import RaceLoader
-from f1lab.ingest.openf1 import OpenF1Client
 
 EXPECTED_CHECKS = [
     "race_without_openf1_session",
@@ -35,13 +33,6 @@ FIXTURE_DRIVERS = {
     1: {"max_verstappen", "hulkenberg"},
     21: {"max_verstappen", "hulkenberg", "stroll", "sainz"},
 }
-
-
-@pytest.fixture
-def loaded(engine: Engine, jolpica: JolpicaClient, openf1: OpenF1Client) -> Engine:
-    """Database with the two recorded races loaded."""
-    RaceLoader(engine, jolpica, openf1).load_season(2024, rounds=[1, 21])
-    return engine
 
 
 def test_parse_checks() -> None:
