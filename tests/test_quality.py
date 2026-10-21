@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pytest
-from sqlalchemy import Engine, insert, select, update
+from sqlalchemy import Engine, delete, insert, select, update
 
 from f1lab.db import schema
 from f1lab.db.quality import (
@@ -23,6 +23,7 @@ EXPECTED_CHECKS = [
     "laps_without_result",
     "lap_beyond_race_distance",
     "classified_without_laps",
+    "incomplete_lap_coverage",
     "stint_inverted_range",
     "stint_overlap",
     "shared_stint_lap_without_pit_stop",
@@ -164,3 +165,16 @@ def test_format_report() -> None:
 def test_main_exit_codes(loaded: Engine, tmp_path: Path) -> None:
     assert main(["--db", str(tmp_path / "empty.sqlite")]) == EXIT_OK
     assert main(["--db", str(loaded.url.database)]) == EXIT_VIOLATIONS
+
+
+def test_partial_lap_coverage_is_detected(loaded: Engine) -> None:
+    # Like Miami 2025 in OpenF1: a classified driver with a block of laps missing.
+    with loaded.begin() as conn:
+        conn.execute(
+            delete(schema.laps)
+            .where(schema.laps.c.race_id == 202401)
+            .where(schema.laps.c.driver_id == "max_verstappen")
+            .where(schema.laps.c.lap.between(2, 24))
+        )
+    # Only Verstappen: the 18 drivers with no laps at all belong to classified_without_laps.
+    assert run_checks(loaded)["incomplete_lap_coverage"] == 1
