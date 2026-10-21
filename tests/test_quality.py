@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pytest
-from sqlalchemy import Engine, insert
+from sqlalchemy import Engine, insert, select, update
 
 from f1lab.db import schema
 from f1lab.db.quality import (
@@ -27,6 +27,7 @@ EXPECTED_CHECKS = [
     "classified_without_laps",
     "stint_inverted_range",
     "stint_overlap",
+    "shared_stint_lap_without_pit_stop",
     "timed_lap_without_stint",
     "pit_stop_without_result",
 ]
@@ -80,24 +81,86 @@ def test_recorded_races_pass_except_trimmed_laps(loaded: Engine, jolpica: Jolpic
     assert set(violations.values()) == {0}
 
 
-def test_inverted_stint_is_detected(loaded: Engine) -> None:
-    with loaded.begin() as conn:
+def add_verstappen_stint(engine: Engine, lap_start: int, lap_end: int) -> None:
+    """Add a 4th stint to Verstappen's Bahrain 2024 race (real stints: 1-17, 18-37, 38-57)."""
+    with engine.begin() as conn:
         conn.execute(
             insert(schema.stints).values(
-                race_id=202401, driver_id="max_verstappen", stint=9, lap_start=40, lap_end=30
+                race_id=202401,
+                driver_id="max_verstappen",
+                stint=4,
+                compound="SOFT",
+                lap_start=lap_start,
+                lap_end=lap_end,
             )
         )
+
+
+def set_verstappen_stint(engine: Engine, stint: int, **laps: int) -> None:
+    with engine.begin() as conn:
+        conn.execute(
+            update(schema.stints)
+            .where(schema.stints.c.race_id == 202401)
+            .where(schema.stints.c.driver_id == "max_verstappen")
+            .where(schema.stints.c.stint == stint)
+            .values(**laps)
+        )
+
+
+def test_verstappen_pitted_on_laps_17_and_37(loaded: Engine) -> None:
+    with loaded.connect() as conn:
+        laps = conn.execute(
+            select(schema.pit_stops.c.lap)
+            .where(schema.pit_stops.c.race_id == 202401)
+            .where(schema.pit_stops.c.driver_id == "max_verstappen")
+        ).scalars()
+        assert sorted(laps) == [17, 37]
+
+
+def test_inverted_stint_is_detected(loaded: Engine) -> None:
+    add_verstappen_stint(loaded, lap_start=40, lap_end=30)
     assert run_checks(loaded)["stint_inverted_range"] == 1
 
 
-def test_lap_beyond_distance_is_detected(loaded: Engine) -> None:
+def test_zero_lap_stint_is_valid(loaded: Engine) -> None:
+    add_verstappen_stint(loaded, lap_start=58, lap_end=57)
+    assert run_checks(loaded)["stint_inverted_range"] == 0
+
+
+def test_shared_pit_lap_is_valid(loaded: Engine) -> None:
+    set_verstappen_stint(loaded, 2, lap_start=17)  # in-lap 17 in both stints
+    violations = run_checks(loaded)
+    assert violations["stint_overlap"] == 0
+    assert violations["shared_stint_lap_without_pit_stop"] == 0
+
+
+def test_shared_lap_without_pit_stop_is_detected(loaded: Engine) -> None:
+    set_verstappen_stint(loaded, 2, lap_end=38)  # no pit stop on lap 38
+    violations = run_checks(loaded)
+    assert violations["shared_stint_lap_without_pit_stop"] == 1
+    assert violations["stint_overlap"] == 0
+
+
+def test_real_overlap_is_detected(loaded: Engine) -> None:
+    set_verstappen_stint(loaded, 2, lap_end=40)  # stint 3 starts on lap 38
+    assert run_checks(loaded)["stint_overlap"] == 1
+
+
+@pytest.mark.parametrize(("lap_time_s", "flagged"), [(95.1, 1), (None, 0)])
+def test_lap_beyond_distance_counts_timed_laps_only(
+    loaded: Engine, lap_time_s: float | None, flagged: int
+) -> None:
     with loaded.begin() as conn:
         conn.execute(
             insert(schema.laps).values(
-                race_id=202401, driver_id="max_verstappen", lap=58, is_pit_out_lap=False
+                race_id=202401,
+                driver_id="max_verstappen",
+                lap=58,
+                lap_time_s=lap_time_s,
+                is_pit_out_lap=False,
             )
         )
-    assert run_checks(loaded)["lap_beyond_race_distance"] == 1
+    assert run_checks(loaded)["lap_beyond_race_distance"] == flagged
 
 
 def test_format_report() -> None:
