@@ -63,6 +63,14 @@ def test_rare_compound_is_left_out(synthetic_laps: pd.DataFrame) -> None:
     assert model.relative_pace(soft).isna().all()
 
 
+def test_single_stint_races_are_not_identifiable(synthetic_laps: pd.DataFrame) -> None:
+    # Like Spa 2025: every driver on one compound from lap 2 to the flag, so tyre
+    # age = lap - 2 for everyone and fuel cannot be separated from degradation.
+    one_stint = synthetic_laps.assign(compound="MEDIUM", tyre_age=synthetic_laps["lap"] - 2)
+    with pytest.raises(ValueError, match="not identifiable"):
+        fit_circuit(one_stint)
+
+
 def test_one_circuit_per_fit(synthetic_laps: pd.DataFrame) -> None:
     other = make_synthetic_laps(circuit_id="other", seed=8)
     with pytest.raises(ValueError, match="one circuit"):

@@ -114,7 +114,8 @@ def fit_circuit(laps: pd.DataFrame, *, with_degradation: bool = True) -> Circuit
         Fitted parameters.
 
     Raises:
-        ValueError: If the laps cover more than one circuit or no compound has enough laps.
+        ValueError: If the laps cover more than one circuit, no compound has enough
+            laps, or the parameters are not identifiable (rank-deficient design).
     """
     circuits = laps["circuit_id"].unique()
     if len(circuits) != 1:
@@ -129,6 +130,10 @@ def fit_circuit(laps: pd.DataFrame, *, with_degradation: bool = True) -> Circuit
     )
 
     design = design_matrix(data, compounds, reference, with_degradation=with_degradation)
+    if np.linalg.matrix_rank(design.to_numpy()) < design.shape[1]:
+        # E.g. Spa 2025: everyone ran one slick stint to the flag, so tyre age grew
+        # in lockstep with the lap number and fuel cannot be told from degradation.
+        raise ValueError(f"{circuits[0]}: parameters are not identifiable from these laps")
     result = sm.OLS(data["lap_time_s"].astype(float), design).fit()
 
     offsets = {reference: Estimate(0.0, 0.0, 0.0)}
