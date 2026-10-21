@@ -60,6 +60,34 @@ SESSION_MATCH_TOLERANCE_DAYS: int = 1
 """Jolpica and OpenF1 race dates may differ by a day (e.g. Las Vegas 2024)."""
 DEFAULT_SEASONS: tuple[int, ...] = (2023, 2024, 2025)
 
+# --- Race control vocabulary (verified on 2023-2025 OpenF1 messages) -----------
+RC_SC_DEPLOYED: str = "SAFETY CAR DEPLOYED"
+RC_SC_ENDING: str = "SAFETY CAR IN THIS LAP"
+RC_VSC_DEPLOYED: str = "VIRTUAL SAFETY CAR DEPLOYED"
+RC_VSC_ENDING: str = "VIRTUAL SAFETY CAR ENDING"
+RC_SESSION_STARTED: str = "SESSION STARTED"
+RC_FLAG_RED: str = "RED"
+RC_FLAG_CHEQUERED: str = "CHEQUERED"
+RC_TRACK_SCOPE: str = "Track"
+RC_GREEN_FLAGS: frozenset[str] = frozenset({"CLEAR", "GREEN"})
+"""A track-wide CLEAR/GREEN after "IN THIS LAP" / "ENDING" marks the actual restart."""
+
+# --- Tyre model (stage 3) -----------------------------------------------------
+DRY_COMPOUNDS: tuple[str, ...] = ("SOFT", "MEDIUM", "HARD")
+FIRST_MODEL_LAP: int = 2
+"""Lap 1 starts from the grid and is not representative of race pace."""
+NEUTRALISATION_RECOVERY_LAPS: int = 1
+"""Laps after a SC/VSC/red flag period that are also dropped (restart, cold tyres)."""
+OUTLIER_MAX_SLOWDOWN: float = 0.05
+"""Drop laps more than 5% slower than the driver's median otherwise clean lap of the race."""
+MIN_CLEAN_LAPS_PER_DRIVER: int = 5
+"""Drivers with fewer clean laps in a race are left out (too little to estimate their pace)."""
+TRAIN_SEASONS: tuple[int, ...] = (2023, 2024)
+TEST_SEASONS: tuple[int, ...] = (2025,)
+CONFIDENCE_LEVEL: float = 0.95
+MODEL_REPORT_DIR: Path = PROJECT_ROOT / "docs" / "models"
+MODEL_LAPS_SQL: Path = PROJECT_ROOT / "sql" / "model_laps.sql"
+
 
 def get_data_dir() -> Path:
     """Return the directory for local data (FastF1 cache, SQLite database).
