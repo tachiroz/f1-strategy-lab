@@ -35,6 +35,12 @@ def offline_fetcher(source_dir_name: str) -> CachedHttpClient:
 
 
 @pytest.fixture
+def fixtures_dir() -> Path:
+    """Directory with recorded API responses (HTTP cache layout)."""
+    return FIXTURES_DIR
+
+
+@pytest.fixture
 def engine(tmp_path: Path) -> Engine:
     """Return an engine for an empty, initialised SQLite database in a temp dir."""
     db_engine = create_sqlite_engine(tmp_path / "test.sqlite")
