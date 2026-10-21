@@ -140,7 +140,8 @@ def build_report(
     params = parameters_table(final_models.values())
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    params.to_csv(out_dir / PARAMS_FILE, index=False, float_format="%.4f")
+    # LF everywhere: the report is committed and must not depend on the OS it was built on.
+    params.to_csv(out_dir / PARAMS_FILE, index=False, float_format="%.4f", lineterminator="\n")
     if not evaluation.predictions.empty:
         plot_actual_vs_model(evaluation, pick_showcase(evaluation), out_dir / "actual_vs_model.png")
         plot_mae_overall(evaluation, out_dir / "mae_overall.png")
@@ -148,7 +149,9 @@ def build_report(
     if final_models:
         plot_degradation(final_models.values(), out_dir / "degradation.png")
     (out_dir / RESULTS_FILE).write_text(
-        render_results(evaluation, exclusion_summary(annotated), params), encoding="utf-8"
+        render_results(evaluation, exclusion_summary(annotated), params),
+        encoding="utf-8",
+        newline="\n",
     )
     return evaluation
 
