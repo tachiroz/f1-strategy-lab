@@ -114,6 +114,24 @@ MIN_CIRCUIT_PIT_STOPS: int = 20
 SC_PRIOR_RACES: float = 2.0
 """Shrinkage of per-circuit SC/VSC hazards: weight of the all-circuit rate in races."""
 FIRST_RACE_LAP: int = 1
+CALIBRATION_SEASONS: tuple[int, ...] = (2023, 2024)
+"""Seasons the simulator learns from; races of later seasons are simulated out of sample."""
+
+SIM_RUNS: int = 5000
+SIM_SEED: int = 20261021
+"""Fixed seed: the same command always gives the same distribution."""
+MIN_FOLLOW_GAP_S: float = 0.3
+"""Closest a car can follow another at the line when it cannot pass (assumption)."""
+DIRTY_AIR_GAP_S: float = 1.0
+"""Within this gap behind another car a driver loses time in its wake (DRS window)."""
+SC_RESTART_GAP_S: float = 0.8
+"""Gap between consecutive cars after a Safety Car restart (assumption)."""
+OVERTAKE_DELTA_S: float = 0.5
+"""Pace advantage per lap needed to pass the car ahead (calibrated, see docs/assumptions.md)."""
+DIRTY_AIR_PENALTY_S: float = 0.3
+"""Time lost per lap in dirty air (calibrated, see docs/assumptions.md)."""
+PIT_LANE_START_GRID: int = 0
+"""Jolpica grid value of a car starting from the pit lane."""
 
 
 def get_data_dir() -> Path:
