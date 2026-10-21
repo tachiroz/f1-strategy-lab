@@ -209,14 +209,20 @@ def _driver_for_number(numbers: dict[int, str], driver_number: int, context: str
 
 
 def pit_stop_row(race_id: int, stop: JsonObject) -> Row:
-    """Build a ``pit_stops`` row (red-flag periods appear as very long stops)."""
+    """Build a ``pit_stops`` row.
+
+    Red-flag periods appear as very long stops. Jolpica sometimes records a stop
+    with an empty duration (e.g. Tsunoda, British GP 2024): the stop is kept and
+    its duration is None rather than invented.
+    """
+    duration = stop["duration"].strip()
     return {
         "race_id": race_id,
         "driver_id": stop["driverId"],
         "stop": int(stop["stop"]),
         "lap": int(stop["lap"]),
         "time_of_day": stop["time"],
-        "duration_s": parse_duration_s(stop["duration"]),
+        "duration_s": parse_duration_s(duration) if duration else None,
     }
 
 

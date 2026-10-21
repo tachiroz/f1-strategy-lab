@@ -24,6 +24,7 @@ RACES = {
     1: 9472,  # Bahrain: dry, no Safety Car
     21: 9636,  # São Paulo: wet, red flag, Safety Car, DNS and DSQ in the results
 }
+EXTRA_PIT_STOPS = (12,)  # British GP: a pit stop recorded without a duration
 BASE_DRIVERS = (1, 27)  # Verstappen (winner of both) and Hülkenberg (lap-1 stop in Bahrain)
 MAX_EXTRA_DRIVERS = 2
 
@@ -52,6 +53,8 @@ def main() -> None:
 
     jolpica.schedule(SEASON)
     openf1.race_sessions(SEASON)
+    for round_number in EXTRA_PIT_STOPS:
+        jolpica.pit_stops(SEASON, round_number)
     for round_number, session_key in RACES.items():
         jolpica.results(SEASON, round_number)
         jolpica.pit_stops(SEASON, round_number)

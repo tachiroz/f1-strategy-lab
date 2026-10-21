@@ -95,7 +95,11 @@ pit_stops = Table(
     Column("stop", Integer, primary_key=True),
     Column("lap", Integer, nullable=False),
     Column("time_of_day", String, nullable=False, comment="local time at the track"),
-    Column("duration_s", Float, nullable=False, comment="pit lane time, red flags included"),
+    Column(
+        "duration_s",
+        Float,
+        comment="pit lane time, red flags included; NULL when the source has no duration",
+    ),
 )
 
 laps = Table(

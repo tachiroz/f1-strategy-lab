@@ -12,6 +12,7 @@ from f1lab.ingest.transform import (
     car_number_map,
     match_session,
     parse_duration_s,
+    pit_stop_row,
     race_id_for,
     race_row,
     race_start_utc,
@@ -160,6 +161,14 @@ def test_results_of_dns_and_dsq(jolpica: JolpicaClient, openf1: OpenF1Client) ->
 def test_red_flag_pit_stops_are_kept(jolpica: JolpicaClient, openf1: OpenF1Client) -> None:
     durations = [row["duration_s"] for row in build(jolpica, openf1, 21).pit_stops]
     assert max(durations) > 20 * 60
+
+
+def test_pit_stop_without_duration_is_kept(jolpica: JolpicaClient) -> None:
+    # Real Jolpica data, British GP 2024: Tsunoda's stop has an empty duration.
+    rows = [pit_stop_row(202412, stop) for stop in jolpica.pit_stops(2024, 12)]
+    missing = [row for row in rows if row["duration_s"] is None]
+    assert [(r["driver_id"], r["lap"], r["stop"]) for r in missing] == [("tsunoda", 27, 1)]
+    assert all(isinstance(r["duration_s"], float) for r in rows if r not in missing)
 
 
 def test_laps_keep_missing_timing_as_none(jolpica: JolpicaClient, openf1: OpenF1Client) -> None:

@@ -70,6 +70,22 @@ def test_season_round_is_unique(engine: Engine) -> None:
         conn.execute(insert(schema.races).values(**{**RACE, "race_id": 202499}))
 
 
+def test_pit_stop_duration_may_be_unknown(engine: Engine) -> None:
+    with engine.begin() as conn:
+        conn.execute(insert(schema.races).values(**RACE))
+        conn.execute(
+            insert(schema.drivers).values(
+                driver_id="tsunoda", given_name="Yuki", family_name="Tsunoda"
+            )
+        )
+        conn.execute(
+            insert(schema.pit_stops).values(
+                race_id=202401, driver_id="tsunoda", stop=1, lap=27, time_of_day="15:45:52"
+            )
+        )
+        assert conn.execute(select(schema.pit_stops.c.duration_s)).scalar_one() is None
+
+
 def test_init_db_is_idempotent(engine: Engine) -> None:
     with engine.begin() as conn:
         conn.execute(insert(schema.races).values(**RACE))
