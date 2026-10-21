@@ -47,6 +47,21 @@ WHERE r.laps > 0
       WHERE l.race_id = r.race_id AND l.driver_id = r.driver_id
   );
 
+-- name: incomplete_lap_coverage
+-- Finished or lapped drivers with some, but clearly not all, of their laps in
+-- OpenF1 (one missing lap is tolerated). OpenF1 itself has such gaps: Miami 2025
+-- has 559 of ~1,100 laps (laps 2-24 missing for most drivers).
+WITH have AS (
+    SELECT race_id, driver_id, COUNT(*) AS laps_rows
+    FROM laps
+    GROUP BY race_id, driver_id
+)
+SELECT r.race_id, r.driver_id, r.laps AS classified_laps, h.laps_rows
+FROM results AS r
+JOIN have AS h ON h.race_id = r.race_id AND h.driver_id = r.driver_id
+WHERE r.position_text GLOB '[0-9]*'
+  AND h.laps_rows < r.laps - 1;
+
 -- name: stint_inverted_range
 -- Stints that end before they start. lap_end = lap_start - 1 is a valid
 -- zero-lap stint (tyres changed before completing a lap: pit-lane starts in

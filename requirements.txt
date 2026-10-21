@@ -2,3 +2,8 @@
 # Added stage by stage, only when the code actually uses them.
 requests==2.34.2
 SQLAlchemy==2.1.5
+pandas==3.0.6
+numpy==2.5.4
+scipy==1.18.1
+statsmodels==0.15.0
+matplotlib==3.11.2
