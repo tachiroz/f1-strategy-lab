@@ -89,6 +89,8 @@ REFERENCE_COMPOUND: str = "MEDIUM"
 TRAIN_SEASONS: tuple[int, ...] = (2023, 2024)
 TEST_SEASONS: tuple[int, ...] = (2025,)
 CONFIDENCE_LEVEL: float = 0.95
+SHOWCASE_MIN_DRIVER_LAPS: int = 30
+"""A race is shown in the actual-vs-model chart only if one driver has this many test laps."""
 MODEL_REPORT_DIR: Path = PROJECT_ROOT / "docs" / "models"
 MODEL_LAPS_SQL: Path = PROJECT_ROOT / "sql" / "model_laps.sql"
 
