@@ -82,6 +82,10 @@ OUTLIER_MAX_SLOWDOWN: float = 0.05
 """Drop laps more than 5% slower than the driver's median otherwise clean lap of the race."""
 MIN_CLEAN_LAPS_PER_DRIVER: int = 5
 """Drivers with fewer clean laps in a race are left out (too little to estimate their pace)."""
+MIN_COMPOUND_LAPS: int = 30
+"""A compound needs this many clean laps at a circuit to get its own offset and slope."""
+REFERENCE_COMPOUND: str = "MEDIUM"
+"""Compound offsets are relative to this one (or to the most used one if it is absent)."""
 TRAIN_SEASONS: tuple[int, ...] = (2023, 2024)
 TEST_SEASONS: tuple[int, ...] = (2025,)
 CONFIDENCE_LEVEL: float = 0.95

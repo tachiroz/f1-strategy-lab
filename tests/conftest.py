@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import cast
 
+import pandas as pd
 import pytest
 import requests
 from sqlalchemy import Engine
@@ -13,6 +14,7 @@ from f1lab.ingest.http import CachedHttpClient
 from f1lab.ingest.jolpica import JolpicaClient
 from f1lab.ingest.loader import RaceLoader
 from f1lab.ingest.openf1 import OpenF1Client
+from synthetic import make_synthetic_laps
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -33,6 +35,12 @@ def offline_fetcher(source_dir_name: str) -> CachedHttpClient:
         session=cast(requests.Session, OfflineSession()),
         max_retries=0,
     )
+
+
+@pytest.fixture
+def synthetic_laps() -> pd.DataFrame:
+    """Synthetic clean laps (2023-2025, one circuit) with known model parameters."""
+    return make_synthetic_laps()
 
 
 @pytest.fixture
