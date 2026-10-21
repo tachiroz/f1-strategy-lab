@@ -103,6 +103,17 @@ MIN_DRY_COMPOUNDS: int = 2
 """Sporting rule: a dry race must use at least two different dry compounds."""
 RED_FLAG_STOP_S: float = 300.0
 """A recorded 'pit stop' longer than this is a tyre change under red flag (free)."""
+FINISHED_STATUSES: frozenset[str] = frozenset({"Finished", "Lapped"})
+NON_STARTER_STATUSES: frozenset[str] = frozenset({"Did not start", "Withdrew"})
+DISQUALIFIED_STATUS: str = "Disqualified"
+"""Disqualified cars finished on track: neither a retirement nor a non-starter."""
+PIT_LOSS_PERCENTILES: tuple[float, float] = (1.0, 99.0)
+"""Pit losses outside these percentiles (repairs, penalties served) are dropped."""
+MIN_CIRCUIT_PIT_STOPS: int = 20
+"""Fewer green-flag stops at a circuit: sample pit losses from all circuits instead."""
+SC_PRIOR_RACES: float = 2.0
+"""Shrinkage of per-circuit SC/VSC hazards: weight of the all-circuit rate in races."""
+FIRST_RACE_LAP: int = 1
 
 
 def get_data_dir() -> Path:

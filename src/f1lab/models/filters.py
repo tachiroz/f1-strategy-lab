@@ -39,7 +39,7 @@ class Exclusion(StrEnum):
     FEW_LAPS = "too few clean laps"
 
 
-def _rain_during_lap(laps: pd.DataFrame, rainfall: pd.DataFrame) -> pd.Series:
+def rain_during_lap(laps: pd.DataFrame, rainfall: pd.DataFrame) -> pd.Series:
     """Return True where the latest weather sample at lap start or lap end reports rain."""
     rain = pd.Series(False, index=laps.index)
     placed = laps[laps["start_time_utc"].notna()]
@@ -109,7 +109,7 @@ def annotate_laps(
         (Exclusion.NOT_DRY, ~annotated["compound"].isin(DRY_COMPOUNDS)),
         (Exclusion.NEUTRALISED, neutralised),
         (Exclusion.AFTER_NEUTRALISATION, _after_neutralisation(annotated, neutralised)),
-        (Exclusion.RAIN, _rain_during_lap(annotated, rainfall)),
+        (Exclusion.RAIN, rain_during_lap(annotated, rainfall)),
     ]
     exclusion = pd.Series(pd.NA, index=annotated.index, dtype="string")
     for reason, mask in rules:
