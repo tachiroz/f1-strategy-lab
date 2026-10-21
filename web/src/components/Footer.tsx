@@ -1,8 +1,9 @@
 const STACK = [
   'Python 3.12',
-  'FastF1',
+  'OpenF1',
   'Jolpica-F1',
   'SQLite',
+  'SQLAlchemy',
   'pandas',
   'NumPy',
   'SciPy',
@@ -28,7 +29,7 @@ export function Footer() {
           ))}
         </ul>
         <div className="mt-8 flex flex-col gap-2 text-sm text-ink-subtle sm:flex-row sm:justify-between">
-          <p>Данные: FastF1 и Jolpica-F1. Неофициальный проект, не связан с Formula 1 и FIA.</p>
+          <p>Данные: OpenF1 и Jolpica-F1. Неофициальный проект, не связан с Formula 1 и FIA.</p>
           <p>MIT License</p>
         </div>
       </div>

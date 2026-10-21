@@ -13,7 +13,9 @@
 ## Стек
 - Python 3.12, зависимости: pip + venv; requirements.txt (runtime) и requirements-dev.txt
   (dev) — единственный источник, pyproject.toml читает их. Установка: `pip install -e ".[dev]"`
-- Данные: FastF1 (телеметрия, круги, шины) и Jolpica-F1 API (результаты, пит-стопы)
+- Данные: OpenF1 (круги, стинты и шины, погода, race control; есть с 2023 г.) и Jolpica-F1
+  (расписание, результаты, пит-стопы). FastF1 не используем: архив тайминга F1 отвечает 403
+  из сети автора (блокировка по IP). Клиенты кэшируют ответы и соблюдают лимиты API.
 - Хранилище: SQLite (потом возможен PostgreSQL), доступ через SQL (SQLAlchemy Core)
 - Расчёты: pandas, numpy, scipy
 - API: FastAPI (`src/f1lab/api`) отдаёт данные и результаты симуляции дашборду
@@ -40,19 +42,21 @@ f1-strategy-lab/
   sql/           # аналитические запросы (JOIN, CTE, оконные функции)
   tests/
   notebooks/
-  data/          # в .gitignore (кэш FastF1, sqlite)
+  data/          # в .gitignore (HTTP-кэш API, sqlite)
 
 ## Этапы (делай строго по порядку)
 ### Этап 1. Каркас
 - Структура, pyproject, ruff, pytest, GitHub Actions, README с описанием.
 ### Этап 2. Загрузка данных
 - Загрузчик по сезону/этапу, кэш, запись в SQLite.
-- Таблицы: races, drivers, laps, stints, pit_stops, weather, results.
+- Таблицы: races, drivers, laps, stints, pit_stops, weather, results, race_control
+  (+ служебные ingest_runs, schema_meta).
 - Тесты на схему и идемпотентность загрузки.
 ### Этап 3. Модель шин
 - Для каждого compound оценить деградацию (сек/круг) с поправкой на
   выгорание топлива и трассу. Начать с линейной регрессии, потом усложнять.
-- Фильтровать выбросы: круги под SC/VSC, in/out-laps, мокрые круги.
+- Фильтровать выбросы: круги под SC/VSC (периоды из race_control), in/out-laps,
+  мокрые круги, «пит-стопы» во время красного флага.
 - Метрики качества (MAE на отложенных гонках), график факт vs модель.
 ### Этап 4. Симулятор
 - Состояние гонщика: круг, шина, возраст шины, топливо, пит-лейн потеря.

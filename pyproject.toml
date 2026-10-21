@@ -55,4 +55,5 @@ convention = "google"
 [tool.pytest.ini_options]
 minversion = "9.0"
 testpaths = ["tests"]
-addopts = "-ra --strict-markers --strict-config"
+addopts = "-ra --strict-markers --strict-config -m 'not network'"
+markers = ["network: calls the real APIs; opt-in with `pytest -m network`"]

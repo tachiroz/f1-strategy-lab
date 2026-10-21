@@ -4,8 +4,11 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
+      # API fixtures are stored byte-for-byte as the HTTP cache writes them.
       - id: trailing-whitespace
+        exclude: ^tests/fixtures/.*\.json$
       - id: end-of-file-fixer
+        exclude: ^tests/fixtures/.*\.json$
       - id: mixed-line-ending
         args: ["--fix=lf"]
       - id: check-yaml

@@ -18,7 +18,7 @@ export interface Stage {
 }
 
 /** Last finished stage; bump it in the PR that completes a stage (together with README). */
-export const LAST_DONE_STAGE = 1
+export const LAST_DONE_STAGE = 2
 
 /** Project roadmap, mirrors the stages in CLAUDE.md. */
 export const STAGES: readonly Stage[] = [
@@ -31,7 +31,7 @@ export const STAGES: readonly Stage[] = [
   {
     id: 2,
     title: 'Загрузка данных',
-    description: 'FastF1 и Jolpica-F1 → SQLite: круги, стинты, пит-стопы, погода и результаты.',
+    description: 'OpenF1 и Jolpica-F1 → SQLite: круги, стинты, пит-стопы, погода и результаты.',
     icon: Database,
   },
   {
