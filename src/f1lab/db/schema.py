@@ -125,7 +125,7 @@ stints = Table(
     _race_key(),
     _driver_key(),
     Column("stint", Integer, primary_key=True),
-    Column("compound", String, comment="SOFT, MEDIUM, HARD, INTERMEDIATE, WET"),
+    Column("compound", String, comment="SOFT, MEDIUM, HARD, INTERMEDIATE, WET or UNKNOWN"),
     Column("lap_start", Integer),
     Column("lap_end", Integer),
     Column("tyre_age_at_start", Integer),
