@@ -152,8 +152,9 @@ MAX_COMPARED_STRATEGIES: int = 3
 """The actual strategy plus up to two alternatives."""
 SC_SENSITIVITY_SCALES: tuple[float, ...] = (0.0, 0.5, 1.0, 2.0, 3.0)
 """Multipliers of the circuit's SC and VSC probabilities on the sensitivity chart."""
-SENSITIVITY_RUNS: int = 1000
-"""Runs per point of the sensitivity chart (5 scales x up to 3 strategies per request)."""
+SENSITIVITY_RUNS: int = 2000
+"""Runs per point of the sensitivity chart (5 scales x up to 3 strategies per request): fewer
+than SIM_RUNS to answer in seconds, enough to keep Monte Carlo noise around 0.1 position."""
 API_CACHE_SIZE: int = 128
 """Simulation results kept in memory per kind of request (the seed is fixed)."""
 MIN_OBSERVED_LAPS: int = 5

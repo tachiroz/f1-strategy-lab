@@ -1,0 +1,596 @@
+[
+  {
+    "circuit_id": "albert_park",
+    "circuit_name": "Albert Park Grand Prix Circuit",
+    "country": "Australia",
+    "laps": 1532,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.005916736374037779,
+        "low": 0.0015615805080579663,
+        "high": 0.01027189224001759
+      },
+      "MEDIUM": {
+        "value": 0.0609793492015671,
+        "low": 0.04801926409947987,
+        "high": 0.07393943430365432
+      }
+    }
+  },
+  {
+    "circuit_id": "imola",
+    "circuit_name": "Autodromo Enzo e Dino Ferrari",
+    "country": "Italy",
+    "laps": 1149,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.04602738767428284,
+        "low": 0.04120444937306955,
+        "high": 0.05085032597549613
+      },
+      "MEDIUM": {
+        "value": 0.06381553177257762,
+        "low": 0.05641159072276281,
+        "high": 0.07121947282239242
+      }
+    }
+  },
+  {
+    "circuit_id": "monza",
+    "circuit_name": "Autodromo Nazionale di Monza",
+    "country": "Italy",
+    "laps": 1804,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.05458332126813733,
+        "low": 0.04984426914729741,
+        "high": 0.05932237338897725
+      },
+      "MEDIUM": {
+        "value": 0.05258422197300912,
+        "low": 0.04328978358592166,
+        "high": 0.06187866036009658
+      }
+    }
+  },
+  {
+    "circuit_id": "rodriguez",
+    "circuit_name": "Autódromo Hermanos Rodríguez",
+    "country": "Mexico",
+    "laps": 2127,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.03676549253445446,
+        "low": 0.03336771060529343,
+        "high": 0.040163274463615485
+      },
+      "MEDIUM": {
+        "value": 0.054788862622075454,
+        "low": 0.05017662923832397,
+        "high": 0.05940109600582694
+      }
+    }
+  },
+  {
+    "circuit_id": "interlagos",
+    "circuit_name": "Autódromo José Carlos Pace",
+    "country": "Brazil",
+    "laps": 970,
+    "compounds": [
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "MEDIUM": {
+        "value": 0.058017264243321084,
+        "low": 0.051318169887621154,
+        "high": 0.06471635859902101
+      },
+      "SOFT": {
+        "value": 0.05533038268556635,
+        "low": 0.04968656120152556,
+        "high": 0.060974204169607145
+      }
+    }
+  },
+  {
+    "circuit_id": "bahrain",
+    "circuit_name": "Bahrain International Circuit",
+    "country": "Bahrain",
+    "laps": 1913,
+    "compounds": [
+      "HARD",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.11325712570281105,
+        "low": 0.10822223254499468,
+        "high": 0.11829201886062742
+      },
+      "SOFT": {
+        "value": 0.12560482635269193,
+        "low": 0.11652399811949833,
+        "high": 0.13468565458588552
+      }
+    }
+  },
+  {
+    "circuit_id": "baku",
+    "circuit_name": "Baku City Circuit",
+    "country": "Azerbaijan",
+    "laps": 1708,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.03143324248865659,
+        "low": 0.025629246716995874,
+        "high": 0.0372372382603173
+      },
+      "MEDIUM": {
+        "value": 0.028420762361058668,
+        "low": 0.008047650112963715,
+        "high": 0.04879387460915362
+      }
+    }
+  },
+  {
+    "circuit_id": "villeneuve",
+    "circuit_name": "Circuit Gilles Villeneuve",
+    "country": "Canada",
+    "laps": 1341,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.018936089099348644,
+        "low": 0.01361786606222113,
+        "high": 0.024254312136476157
+      },
+      "MEDIUM": {
+        "value": -0.010022385190855077,
+        "low": -0.018561946340755642,
+        "high": -0.0014828240409545113
+      }
+    }
+  },
+  {
+    "circuit_id": "zandvoort",
+    "circuit_name": "Circuit Park Zandvoort",
+    "country": "Netherlands",
+    "laps": 1992,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.042604309144350476,
+        "low": 0.0387588070541758,
+        "high": 0.04644981123452515
+      },
+      "MEDIUM": {
+        "value": 0.04746940430704022,
+        "low": 0.041289860062288214,
+        "high": 0.053648948551792225
+      },
+      "SOFT": {
+        "value": 0.03315238129614678,
+        "low": 0.027630458191887017,
+        "high": 0.03867430440040655
+      }
+    }
+  },
+  {
+    "circuit_id": "catalunya",
+    "circuit_name": "Circuit de Barcelona-Catalunya",
+    "country": "Spain",
+    "laps": 2372,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.07544260202375679,
+        "low": 0.07003958374680543,
+        "high": 0.08084562030070815
+      },
+      "MEDIUM": {
+        "value": 0.07038864914078458,
+        "low": 0.06395286895470519,
+        "high": 0.07682442932686397
+      },
+      "SOFT": {
+        "value": 0.0654395914735193,
+        "low": 0.05739187745157216,
+        "high": 0.07348730549546643
+      }
+    }
+  },
+  {
+    "circuit_id": "monaco",
+    "circuit_name": "Circuit de Monaco",
+    "country": "Monaco",
+    "laps": 2121,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.03185005669799419,
+        "low": 0.026791411620858033,
+        "high": 0.03690870177513035
+      },
+      "MEDIUM": {
+        "value": 0.02260814123226617,
+        "low": 0.01683929695172016,
+        "high": 0.02837698551281218
+      },
+      "SOFT": {
+        "value": 0.13007329589961564,
+        "low": 0.10074105133699117,
+        "high": 0.15940554046224012
+      }
+    }
+  },
+  {
+    "circuit_id": "spa",
+    "circuit_name": "Circuit de Spa-Francorchamps",
+    "country": "Belgium",
+    "laps": 1374,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.05662348877692858,
+        "low": 0.04719133636200668,
+        "high": 0.06605564119185048
+      },
+      "MEDIUM": {
+        "value": 0.1473939727654564,
+        "low": 0.13410877675691363,
+        "high": 0.16067916877399918
+      },
+      "SOFT": {
+        "value": 0.12510698139026866,
+        "low": 0.1100414997025091,
+        "high": 0.14017246307802822
+      }
+    }
+  },
+  {
+    "circuit_id": "americas",
+    "circuit_name": "Circuit of the Americas",
+    "country": "USA",
+    "laps": 1825,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.04443473659805103,
+        "low": 0.0392139667624964,
+        "high": 0.04965550643360565
+      },
+      "MEDIUM": {
+        "value": 0.05636535346586149,
+        "low": 0.04965385906400087,
+        "high": 0.06307684786772211
+      }
+    }
+  },
+  {
+    "circuit_id": "hungaroring",
+    "circuit_name": "Hungaroring",
+    "country": "Hungary",
+    "laps": 2409,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.07436920990501997,
+        "low": 0.07001883499094211,
+        "high": 0.07871958481909783
+      },
+      "MEDIUM": {
+        "value": 0.05805887454716702,
+        "low": 0.05110870374415314,
+        "high": 0.0650090453501809
+      },
+      "SOFT": {
+        "value": 0.020395536632311834,
+        "low": -0.019965488211127314,
+        "high": 0.06075656147575098
+      }
+    }
+  },
+  {
+    "circuit_id": "jeddah",
+    "circuit_name": "Jeddah Corniche Circuit",
+    "country": "Saudi Arabia",
+    "laps": 1602,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.012649365054073401,
+        "low": 0.0064899950166940066,
+        "high": 0.018808735091452797
+      },
+      "MEDIUM": {
+        "value": 0.016319128222130073,
+        "low": 0.007989800498819996,
+        "high": 0.02464845594544015
+      },
+      "SOFT": {
+        "value": 0.049269310908786626,
+        "low": 0.018653263410827996,
+        "high": 0.07988535840674525
+      }
+    }
+  },
+  {
+    "circuit_id": "vegas",
+    "circuit_name": "Las Vegas Strip Street Circuit",
+    "country": "USA",
+    "laps": 1531,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.04966547942903125,
+        "low": 0.04214582992694688,
+        "high": 0.057185128931115624
+      },
+      "MEDIUM": {
+        "value": 0.10107905733303049,
+        "low": 0.08257184972950507,
+        "high": 0.11958626493655591
+      }
+    }
+  },
+  {
+    "circuit_id": "losail",
+    "circuit_name": "Lusail International Circuit",
+    "country": "Qatar",
+    "laps": 1280,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.04313461703509242,
+        "low": 0.030514146954424688,
+        "high": 0.05575508711576016
+      },
+      "MEDIUM": {
+        "value": 0.0006525225267343879,
+        "low": -0.00579594673842171,
+        "high": 0.0071009917918904856
+      }
+    }
+  },
+  {
+    "circuit_id": "marina_bay",
+    "circuit_name": "Marina Bay Street Circuit",
+    "country": "Singapore",
+    "laps": 2027,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.04757528229021428,
+        "low": 0.04193562076408973,
+        "high": 0.05321494381633883
+      },
+      "MEDIUM": {
+        "value": 0.06603171530900297,
+        "low": 0.0587513582511912,
+        "high": 0.07331207236681472
+      },
+      "SOFT": {
+        "value": 0.05278285579136441,
+        "low": 0.03153068949539812,
+        "high": 0.0740350220873307
+      }
+    }
+  },
+  {
+    "circuit_id": "miami",
+    "circuit_name": "Miami International Autodrome",
+    "country": "USA",
+    "laps": 1975,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.025190387164778366,
+        "low": 0.022215132749518557,
+        "high": 0.028165641580038175
+      },
+      "MEDIUM": {
+        "value": 0.01790864898272352,
+        "low": 0.012638407966481805,
+        "high": 0.023178889998965235
+      },
+      "SOFT": {
+        "value": 0.030236882024585944,
+        "low": 0.012000767848090038,
+        "high": 0.04847299620108185
+      }
+    }
+  },
+  {
+    "circuit_id": "red_bull_ring",
+    "circuit_name": "Red Bull Ring",
+    "country": "Austria",
+    "laps": 2390,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.060271213558791586,
+        "low": 0.05667295544237934,
+        "high": 0.06386947167520383
+      },
+      "MEDIUM": {
+        "value": 0.06897898582031997,
+        "low": 0.06445184755426214,
+        "high": 0.0735061240863778
+      }
+    }
+  },
+  {
+    "circuit_id": "shanghai",
+    "circuit_name": "Shanghai International Circuit",
+    "country": "China",
+    "laps": 344,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.1441729245095315,
+        "low": 0.1181161083204647,
+        "high": 0.1702297406985983
+      },
+      "MEDIUM": {
+        "value": 0.15714817785925944,
+        "low": 0.13760666197578536,
+        "high": 0.17668969374273352
+      },
+      "SOFT": {
+        "value": 0.10833292567434391,
+        "low": 0.05868241195740329,
+        "high": 0.15798343939128454
+      }
+    }
+  },
+  {
+    "circuit_id": "silverstone",
+    "circuit_name": "Silverstone Circuit",
+    "country": "UK",
+    "laps": 1037,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.021344899957164695,
+        "low": 0.002067865861568822,
+        "high": 0.04062193405276057
+      },
+      "MEDIUM": {
+        "value": 0.03345179580500014,
+        "low": 0.02609532438667416,
+        "high": 0.040808267223326124
+      },
+      "SOFT": {
+        "value": 0.04687339355739374,
+        "low": 0.030532188863290337,
+        "high": 0.06321459825149714
+      }
+    }
+  },
+  {
+    "circuit_id": "suzuka",
+    "circuit_name": "Suzuka Circuit",
+    "country": "Japan",
+    "laps": 1445,
+    "compounds": [
+      "HARD",
+      "MEDIUM",
+      "SOFT"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.11671119719320308,
+        "low": 0.10959933263967384,
+        "high": 0.12382306174673233
+      },
+      "MEDIUM": {
+        "value": 0.11486277889739469,
+        "low": 0.10244205500696418,
+        "high": 0.1272835027878252
+      },
+      "SOFT": {
+        "value": 0.12433601204288974,
+        "low": 0.09437313128259392,
+        "high": 0.15429889280318557
+      }
+    }
+  },
+  {
+    "circuit_id": "yas_marina",
+    "circuit_name": "Yas Marina Circuit",
+    "country": "UAE",
+    "laps": 1943,
+    "compounds": [
+      "HARD",
+      "MEDIUM"
+    ],
+    "degradation_s_per_lap": {
+      "HARD": {
+        "value": 0.05882437433379154,
+        "low": 0.05553843484492605,
+        "high": 0.06211031382265703
+      },
+      "MEDIUM": {
+        "value": 0.06578278313324985,
+        "low": 0.05839617564887833,
+        "high": 0.07316939061762139
+      }
+    }
+  }
+]
