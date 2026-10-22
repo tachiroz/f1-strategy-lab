@@ -11,6 +11,7 @@ from f1lab.sim.strategy import (
     lap_plan,
     parse_strategy,
     strategy_from_stints,
+    strategy_stints,
     validate_strategy,
 )
 
@@ -79,6 +80,15 @@ def test_lap_plan() -> None:
     assert (plan.loc[16, "compound"], plan.loc[16, "tyre_age"]) == ("HARD", 0)
     assert plan.loc[20, "tyre_age"] == 4
     assert plan["pit"].sum() == 1
+
+
+def test_strategy_stints_cover_the_race() -> None:
+    assert strategy_stints(parse_strategy("S3-15-H-38-M"), race_laps=57) == [
+        ("SOFT", 1, 15),
+        ("HARD", 16, 38),
+        ("MEDIUM", 39, 57),
+    ]
+    assert strategy_stints(Strategy("MEDIUM"), race_laps=10) == [("MEDIUM", 1, 10)]
 
 
 def test_strategy_from_real_stints(loaded: Engine) -> None:

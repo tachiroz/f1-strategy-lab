@@ -6,6 +6,9 @@ difference to the first strategy: thanks to common random numbers every run of
 one strategy has a twin run of the other with the same Safety Cars,
 retirements and noise, so the difference is far more precise than the
 difference of two independent means.
+
+For the dashboard: position histograms, the share of runs with a Safety Car
+and the sensitivity of a strategy to how often Safety Cars come out.
 """
 
 import warnings
@@ -16,7 +19,13 @@ import pandas as pd
 
 from f1lab.config import PODIUM_POSITIONS, POINTS_POSITIONS, POSITION_BAND
 from f1lab.models.degradation import Z_SCORE
-from f1lab.sim.engine import SimulationParams, SimulationResult, simulate
+from f1lab.sim.engine import (
+    SAFETY_CAR,
+    VIRTUAL_SAFETY_CAR,
+    SimulationParams,
+    SimulationResult,
+    simulate,
+)
 from f1lab.sim.setup import RaceSetup
 from f1lab.sim.strategy import Strategy
 
@@ -63,6 +72,37 @@ def position_stats(positions: np.ndarray, retired: np.ndarray) -> dict[str, np.n
     return stats
 
 
+def position_histogram(positions: np.ndarray, retired: np.ndarray, field_size: int) -> np.ndarray:
+    """Share of runs ending in each position, with retirements in an extra last column.
+
+    Args:
+        positions: Finishing positions, shape (runs, drivers).
+        retired: Retirement flags, same shape.
+        field_size: Cars in the race, i.e. positions 1..field_size.
+
+    Returns:
+        Shape (drivers, field_size + 1): column ``k - 1`` is the share of runs in
+        which the driver is classified k-th, the last column the share of
+        retirements. Every row sums to 1.
+    """
+    runs, drivers = positions.shape
+    shares = np.zeros((drivers, field_size + 1))
+    for column in range(drivers):
+        finished = positions[~retired[:, column], column]
+        counts = np.bincount(finished - 1, minlength=field_size)[:field_size]
+        shares[column, :field_size] = counts / runs
+        shares[column, field_size] = retired[:, column].mean()
+    return shares
+
+
+def neutralisation_shares(track_state: np.ndarray) -> tuple[float, float]:
+    """Share of runs with at least one Safety Car lap, and with at least one VSC lap."""
+    return (
+        float((track_state == SAFETY_CAR).any(axis=1).mean()),
+        float((track_state == VIRTUAL_SAFETY_CAR).any(axis=1).mean()),
+    )
+
+
 def summarise(result: SimulationResult) -> pd.DataFrame:
     """One row per driver, best expected finish first."""
     table = pd.DataFrame(
@@ -86,18 +126,20 @@ def compare_strategies(
         params: Simulation parameters (same seed for every strategy).
 
     Returns:
-        One row per strategy with position statistics and ``delta_vs_first``
-        (mean paired position difference, negative = better) with its interval.
+        One row per strategy with position statistics, ``histogram`` (see
+        ``position_histogram``) and ``delta_vs_first`` (mean paired position
+        difference, negative = better) with its interval.
     """
     params = params or SimulationParams()
     index = setup.drivers.index(driver_id)
     rows, reference = [], None
     for strategy in strategies:
         result = simulate(setup.with_strategy(driver_id, strategy), params)
-        positions = result.positions[:, index]
-        stats = position_stats(positions[:, None], result.retired[:, index][:, None])
+        positions, retired = result.positions[:, index], result.retired[:, [index]]
+        stats = position_stats(positions[:, None], retired)
         row = {"strategy": strategy.label or strategy.notation(), "notation": strategy.notation()}
         row |= {name: float(values[0]) for name, values in stats.items()}
+        row["histogram"] = position_histogram(positions[:, None], retired, len(setup.drivers))[0]
         if reference is None:
             reference = positions
         difference = (positions - reference).astype(float)
@@ -111,4 +153,42 @@ def compare_strategies(
             delta, low, high = mean_interval(difference)
             row |= {"delta_vs_first": delta, "delta_low": low, "delta_high": high}
         rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def sc_sensitivity(
+    setup: RaceSetup,
+    driver_id: str,
+    strategies: Sequence[Strategy],
+    scales: Sequence[float],
+    params: SimulationParams | None = None,
+) -> pd.DataFrame:
+    """How a driver's strategies fare as Safety Cars become rarer or more frequent.
+
+    Every SC and VSC probability of the race is multiplied by each scale
+    (1 = the circuit's history). At one scale all strategies share the random
+    numbers, so they face the same neutralisations.
+
+    Returns:
+        One row per scale and strategy: ``scale``, ``strategy``, ``notation``,
+        ``p_safety_car`` (share of runs with a Safety Car), ``mean_position``
+        with ``mean_low`` / ``mean_high``, ``p_podium`` and ``p_points``.
+    """
+    params = params or SimulationParams()
+    index = setup.drivers.index(driver_id)
+    rows = []
+    for scale in scales:
+        scaled = setup.with_neutralisation_scale(scale)
+        for strategy in strategies:
+            result = simulate(scaled.with_strategy(driver_id, strategy), params)
+            stats = position_stats(result.positions[:, [index]], result.retired[:, [index]])
+            row = {
+                "scale": scale,
+                "strategy": strategy.label or strategy.notation(),
+                "notation": strategy.notation(),
+                "p_safety_car": neutralisation_shares(result.track_state)[0],
+            }
+            for name in ("mean_position", "mean_low", "mean_high", "p_podium", "p_points"):
+                row[name] = float(stats[name][0])
+            rows.append(row)
     return pd.DataFrame(rows)

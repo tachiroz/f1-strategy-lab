@@ -125,6 +125,15 @@ def lap_plan(strategy: Strategy, race_laps: int) -> pd.DataFrame:
     )
 
 
+def strategy_stints(strategy: Strategy, race_laps: int) -> list[tuple[str, int, int]]:
+    """Stints of a strategy as ``(compound, first lap, last lap)``, in race order."""
+    bounds = [0, *(stop.lap for stop in strategy.stops), race_laps]
+    return [
+        (compound, first + 1, last)
+        for compound, first, last in zip(strategy.compounds, bounds, bounds[1:], strict=False)
+    ]
+
+
 def strategy_from_stints(
     stints: pd.DataFrame, pit_stops: pd.DataFrame | None = None, label: str = ""
 ) -> Strategy:
