@@ -146,6 +146,19 @@ BACKTEST_SEASONS: tuple[int, ...] = (2025,)
 POSITION_BAND: tuple[float, float] = (0.1, 0.9)
 """Quantiles of the simulated finishing position shown as a band (80% of runs)."""
 
+# --- API and dashboard (stage 5) ----------------------------------------------
+API_PREFIX: str = "/api"
+MAX_COMPARED_STRATEGIES: int = 3
+"""The actual strategy plus up to two alternatives."""
+SC_SENSITIVITY_SCALES: tuple[float, ...] = (0.0, 0.5, 1.0, 2.0, 3.0)
+"""Multipliers of the circuit's SC and VSC probabilities on the sensitivity chart."""
+SENSITIVITY_RUNS: int = 1000
+"""Runs per point of the sensitivity chart (5 scales x up to 3 strategies per request)."""
+API_CACHE_SIZE: int = 128
+"""Simulation results kept in memory per kind of request (the seed is fixed)."""
+MIN_OBSERVED_LAPS: int = 5
+"""An observed point of the degradation chart needs at least this many clean laps."""
+
 
 def get_data_dir() -> Path:
     """Return the directory for local data (FastF1 cache, SQLite database).

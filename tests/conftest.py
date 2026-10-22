@@ -14,7 +14,7 @@ from f1lab.ingest.http import CachedHttpClient
 from f1lab.ingest.jolpica import JolpicaClient
 from f1lab.ingest.loader import RaceLoader
 from f1lab.ingest.openf1 import OpenF1Client
-from synthetic import make_synthetic_laps
+from synthetic import complete_stints, make_synthetic_laps
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -74,3 +74,20 @@ def jolpica() -> JolpicaClient:
 def openf1() -> OpenF1Client:
     """OpenF1 client backed by recorded responses (sessions 9472 and 9636)."""
     return OpenF1Client(offline_fetcher(OPENF1_CACHE_DIR_NAME))
+
+
+@pytest.fixture(scope="module")
+def race_db(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Database file shared by a test module (read-only): the recorded races, every 2024
+    Bahrain starter with a dry strategy so that the race can be simulated."""
+    path = tmp_path_factory.mktemp("races") / "test.sqlite"
+    db_engine = create_sqlite_engine(path)
+    init_db(db_engine)
+    RaceLoader(
+        db_engine,
+        JolpicaClient(offline_fetcher(JOLPICA_CACHE_DIR_NAME)),
+        OpenF1Client(offline_fetcher(OPENF1_CACHE_DIR_NAME)),
+    ).load_season(2024, rounds=[1, 21])
+    complete_stints(db_engine, 202401, laps=57)
+    db_engine.dispose()
+    return path
