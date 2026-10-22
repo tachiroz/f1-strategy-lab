@@ -170,7 +170,7 @@ def plot_strategy_comparison(table: pd.DataFrame, title: str, path: Path) -> Pat
         Line2D([], [], color=SERIES_BLUE, marker="o", linestyle="", label="P(подиум)"),
         Line2D([], [], color=SERIES_ORANGE, marker="o", linestyle="", label="P(очки)"),
     ]
-    legend(right, handles, loc="lower right")
+    legend(right, handles, loc="lower left")  # probabilities sit to the right
     figure.suptitle(title, color=INK, fontsize=11, x=0.01, ha="left")
     figure.tight_layout()
     return save(figure, path)
