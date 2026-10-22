@@ -9,6 +9,7 @@ from f1lab.models.neutralisation import (
     Period,
     flag_neutralised_laps,
     lap_states,
+    leader_lap,
     neutralisation_periods,
 )
 
@@ -135,3 +136,13 @@ def test_lap_states_prefer_the_strongest_period() -> None:
         ]
     }
     assert lap_states(laps, periods).tolist() == ["GREEN", "VSC", "RED", "GREEN"]
+
+
+def test_leader_lap_is_the_last_lap_started() -> None:
+    starts = ["15:00", "15:02", "15:04", "15:02:30"]  # the last row: a slower car on lap 2
+    laps = pd.DataFrame(
+        {"lap": [1, 2, 3, 2], "start_time_utc": [ts(f"2025-01-01 {s}") for s in starts]}
+    )
+    assert leader_lap(laps, ts("2025-01-01 15:03")) == 2
+    assert leader_lap(laps, ts("2025-01-01 15:10")) == 3
+    assert leader_lap(laps, ts("2025-01-01 14:00")) == 1  # before the start
