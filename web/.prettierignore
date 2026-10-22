@@ -1,3 +1,5 @@
 dist
 coverage
 package-lock.json
+# Recorded API responses (tests/fixtures/export_web_fixtures.py)
+src/test/fixtures

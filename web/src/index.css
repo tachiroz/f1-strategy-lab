@@ -23,6 +23,12 @@
   --color-tyre-hard: oklch(0.95 0.005 90);
   --color-tyre-inter: oklch(0.72 0.19 142);
   --color-tyre-wet: oklch(0.66 0.15 245);
+
+  /* Chart series (strategies). Validated as a set on --color-surface with the dataviz
+     palette checks (all pairs, CVD-safe) and kept apart from the dry tyre hues. */
+  --color-series-1: #3987e5;
+  --color-series-2: #d55181;
+  --color-series-3: #008300;
 }
 
 @layer base {
