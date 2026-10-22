@@ -28,9 +28,20 @@ from f1lab.sim.strategy import (
     validate_strategy,
 )
 
+ACTUAL_LABEL = "actual"
+STAND_IN_LABEL = "most common (retired early)"
+"""Label of the strategy given to a driver who retired before showing their own."""
+
 
 class SetupError(ValueError):
     """A race cannot be simulated (unknown circuit, missing data, wet race)."""
+
+
+def _scaled_pair(sc: float, vsc: float, scale: float) -> tuple[float, float]:
+    """Multiply two per-lap probabilities, shrinking both if their sum would exceed 1."""
+    sc, vsc = sc * scale, vsc * scale
+    total = sc + vsc
+    return (sc / total, vsc / total) if total > 1 else (sc, vsc)
 
 
 @dataclass(frozen=True)
@@ -66,6 +77,24 @@ class RaceSetup:
         if driver_id not in self.drivers:
             raise SetupError(f"{driver_id} does not start this race")
         return replace(self, strategies={**self.strategies, driver_id: strategy})
+
+    def with_neutralisation_scale(self, scale: float) -> "RaceSetup":
+        """Return a copy with every SC and VSC probability multiplied by ``scale``.
+
+        ``scale = 0`` gives a race without neutralisations, 1 the circuit's
+        history; on any lap the two probabilities never sum to more than 1.
+        """
+        if scale < 0:
+            raise ValueError(f"Scale must not be negative: {scale}")
+        sc_lap1, vsc_lap1 = _scaled_pair(self.sc_lap1_probability, self.vsc_lap1_probability, scale)
+        sc_hazard, vsc_hazard = _scaled_pair(self.sc_hazard, self.vsc_hazard, scale)
+        return replace(
+            self,
+            sc_lap1_probability=sc_lap1,
+            vsc_lap1_probability=vsc_lap1,
+            sc_hazard=sc_hazard,
+            vsc_hazard=vsc_hazard,
+        )
 
 
 def with_fallback_compounds(model: CircuitModel, models: dict[str, CircuitModel]) -> CircuitModel:
@@ -113,7 +142,7 @@ def actual_strategies(
             strategy = strategy_from_stints(
                 stints[stints["driver_id"] == driver_id],
                 pit_stops[pit_stops["driver_id"] == driver_id],
-                label="actual",
+                label=ACTUAL_LABEL,
             )
             validate_strategy(strategy, race_laps)
         except StrategyError as error:
@@ -133,7 +162,7 @@ def actual_strategies(
         modal = Counter(plan.notation() for plan in finisher_plans).most_common(1)[0][0]
         stand_in = next(plan for plan in finisher_plans if plan.notation() == modal)
         for driver_id in incomplete:
-            strategies[driver_id] = replace(stand_in, label="most common (retired early)")
+            strategies[driver_id] = replace(stand_in, label=STAND_IN_LABEL)
     return strategies
 
 

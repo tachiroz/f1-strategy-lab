@@ -1,0 +1,724 @@
+{
+  "race_id": 202504,
+  "season": 2025,
+  "round": 4,
+  "race_name": "Bahrain Grand Prix",
+  "circuit_id": "bahrain",
+  "circuit_name": "Bahrain International Circuit",
+  "country": "Bahrain",
+  "date": "2025-04-13",
+  "in_sample": false,
+  "simulatable": true,
+  "reason": null,
+  "race_laps": 57,
+  "drivers": [
+    {
+      "driver_id": "piastri",
+      "code": "PIA",
+      "name": "Oscar Piastri",
+      "team": "McLaren",
+      "grid": 1,
+      "quali_position": 1,
+      "finish_position": 1,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-14-M-32-M",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 14
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 15,
+            "last_lap": 32
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "russell",
+      "code": "RUS",
+      "name": "George Russell",
+      "team": "Mercedes",
+      "grid": 3,
+      "quali_position": 2,
+      "finish_position": 2,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-13-M-32-S",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 13
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 14,
+            "last_lap": 32
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "norris",
+      "code": "NOR",
+      "name": "Lando Norris",
+      "team": "McLaren",
+      "grid": 6,
+      "quali_position": 6,
+      "finish_position": 3,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-10-M-32-M",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 10
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 11,
+            "last_lap": 32
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "leclerc",
+      "code": "LEC",
+      "name": "Charles Leclerc",
+      "team": "Ferrari",
+      "grid": 2,
+      "quali_position": 3,
+      "finish_position": 4,
+      "status": "Finished",
+      "strategy": {
+        "notation": "M-17-M-32-H",
+        "stints": [
+          {
+            "compound": "MEDIUM",
+            "first_lap": 1,
+            "last_lap": 17
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 18,
+            "last_lap": 32
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "hamilton",
+      "code": "HAM",
+      "name": "Lewis Hamilton",
+      "team": "Ferrari",
+      "grid": 9,
+      "quali_position": 9,
+      "finish_position": 5,
+      "status": "Finished",
+      "strategy": {
+        "notation": "M-17-M-32-H",
+        "stints": [
+          {
+            "compound": "MEDIUM",
+            "first_lap": 1,
+            "last_lap": 17
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 18,
+            "last_lap": 32
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "max_verstappen",
+      "code": "VER",
+      "name": "Max Verstappen",
+      "team": "Red Bull",
+      "grid": 7,
+      "quali_position": 7,
+      "finish_position": 6,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-10-H-26-M",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 10
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 11,
+            "last_lap": 26
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 27,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "gasly",
+      "code": "GAS",
+      "name": "Pierre Gasly",
+      "team": "Alpine F1 Team",
+      "grid": 4,
+      "quali_position": 5,
+      "finish_position": 7,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-10-M-28-H",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 10
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 11,
+            "last_lap": 28
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 29,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "ocon",
+      "code": "OCO",
+      "name": "Esteban Ocon",
+      "team": "Haas F1 Team",
+      "grid": 14,
+      "quali_position": 14,
+      "finish_position": 8,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S-8-M-27-H",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 8
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 9,
+            "last_lap": 27
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 28,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "tsunoda",
+      "code": "TSU",
+      "name": "Yuki Tsunoda",
+      "team": "Red Bull",
+      "grid": 10,
+      "quali_position": 10,
+      "finish_position": 9,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-11-M-32-S",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 11
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 12,
+            "last_lap": 32
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "bearman",
+      "code": "BEA",
+      "name": "Oliver Bearman",
+      "team": "Haas F1 Team",
+      "grid": 20,
+      "quali_position": 20,
+      "finish_position": 10,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S-14-H-32-S",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 14
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 15,
+            "last_lap": 32
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "antonelli",
+      "code": "ANT",
+      "name": "Andrea Kimi Antonelli",
+      "team": "Mercedes",
+      "grid": 5,
+      "quali_position": 4,
+      "finish_position": 11,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S3-12-M-27-S-32-S",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 12
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 13,
+            "last_lap": 27
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 28,
+            "last_lap": 32
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "albon",
+      "code": "ALB",
+      "name": "Alexander Albon",
+      "team": "Williams",
+      "grid": 15,
+      "quali_position": 15,
+      "finish_position": 12,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S-16-H-32-M",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 16
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 17,
+            "last_lap": 32
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "hadjar",
+      "code": "HAD",
+      "name": "Isack Hadjar",
+      "team": "RB F1 Team",
+      "grid": 12,
+      "quali_position": 12,
+      "finish_position": 13,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S-6-M-28-H",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 6
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 7,
+            "last_lap": 28
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 29,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "doohan",
+      "code": "DOO",
+      "name": "Jack Doohan",
+      "team": "Alpine F1 Team",
+      "grid": 11,
+      "quali_position": 11,
+      "finish_position": 14,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S-9-M-28-H",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 9
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 10,
+            "last_lap": 28
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 29,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "alonso",
+      "code": "ALO",
+      "name": "Fernando Alonso",
+      "team": "Aston Martin",
+      "grid": 13,
+      "quali_position": 13,
+      "finish_position": 15,
+      "status": "Finished",
+      "strategy": {
+        "notation": "M-16-M-32-H",
+        "stints": [
+          {
+            "compound": "MEDIUM",
+            "first_lap": 1,
+            "last_lap": 16
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 17,
+            "last_lap": 32
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "lawson",
+      "code": "LAW",
+      "name": "Liam Lawson",
+      "team": "RB F1 Team",
+      "grid": 17,
+      "quali_position": 17,
+      "finish_position": 16,
+      "status": "Finished",
+      "strategy": {
+        "notation": "M-14-H-32-S",
+        "stints": [
+          {
+            "compound": "MEDIUM",
+            "first_lap": 1,
+            "last_lap": 14
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 15,
+            "last_lap": 32
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "stroll",
+      "code": "STR",
+      "name": "Lance Stroll",
+      "team": "Aston Martin",
+      "grid": 19,
+      "quali_position": 19,
+      "finish_position": 17,
+      "status": "Finished",
+      "strategy": {
+        "notation": "S-12-M-32-H",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 12
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 13,
+            "last_lap": 32
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "bortoleto",
+      "code": "BOR",
+      "name": "Gabriel Bortoleto",
+      "team": "Sauber",
+      "grid": 18,
+      "quali_position": 18,
+      "finish_position": 18,
+      "status": "Finished",
+      "strategy": {
+        "notation": "M-13-H-32-M",
+        "stints": [
+          {
+            "compound": "MEDIUM",
+            "first_lap": 1,
+            "last_lap": 13
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 14,
+            "last_lap": 32
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 33,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "sainz",
+      "code": "SAI",
+      "name": "Carlos Sainz",
+      "team": "Williams",
+      "grid": 8,
+      "quali_position": 8,
+      "finish_position": null,
+      "status": "Retired",
+      "strategy": {
+        "notation": "S3-14-M-32-H-44-S",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 14
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 15,
+            "last_lap": 32
+          },
+          {
+            "compound": "HARD",
+            "first_lap": 33,
+            "last_lap": 44
+          },
+          {
+            "compound": "SOFT",
+            "first_lap": 45,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    },
+    {
+      "driver_id": "hulkenberg",
+      "code": "HUL",
+      "name": "Nico Hülkenberg",
+      "team": "Sauber",
+      "grid": 16,
+      "quali_position": 16,
+      "finish_position": null,
+      "status": "Disqualified",
+      "strategy": {
+        "notation": "S-5-M-27-M",
+        "stints": [
+          {
+            "compound": "SOFT",
+            "first_lap": 1,
+            "last_lap": 5
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 6,
+            "last_lap": 27
+          },
+          {
+            "compound": "MEDIUM",
+            "first_lap": 28,
+            "last_lap": 57
+          }
+        ],
+        "stand_in": false
+      }
+    }
+  ],
+  "field_strategies": [
+    {
+      "notation": "M-17-M-32-H",
+      "drivers": 2
+    },
+    {
+      "notation": "S3-14-M-32-M",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-13-M-32-S",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-10-M-28-H",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-12-M-27-S-32-S",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-10-M-32-M",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-10-H-26-M",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-14-M-32-H-44-S",
+      "drivers": 1
+    },
+    {
+      "notation": "S3-11-M-32-S",
+      "drivers": 1
+    },
+    {
+      "notation": "S-9-M-28-H",
+      "drivers": 1
+    },
+    {
+      "notation": "S-6-M-28-H",
+      "drivers": 1
+    },
+    {
+      "notation": "M-16-M-32-H",
+      "drivers": 1
+    },
+    {
+      "notation": "S-8-M-27-H",
+      "drivers": 1
+    },
+    {
+      "notation": "S-16-H-32-M",
+      "drivers": 1
+    },
+    {
+      "notation": "S-5-M-27-M",
+      "drivers": 1
+    },
+    {
+      "notation": "M-14-H-32-S",
+      "drivers": 1
+    },
+    {
+      "notation": "M-13-H-32-M",
+      "drivers": 1
+    },
+    {
+      "notation": "S-12-M-32-H",
+      "drivers": 1
+    },
+    {
+      "notation": "S-14-H-32-S",
+      "drivers": 1
+    }
+  ]
+}

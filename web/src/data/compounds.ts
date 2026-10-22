@@ -20,3 +20,22 @@ export const COMPOUNDS: readonly Compound[] = [
 export const COMPOUND_BY_ID: Readonly<Record<CompoundId, Compound>> = Object.fromEntries(
   COMPOUNDS.map((compound) => [compound.id, compound]),
 ) as Record<CompoundId, Compound>
+
+/** Compound names as the API sends them (OpenF1 spelling). */
+const ID_BY_API_NAME: Readonly<Record<string, CompoundId>> = {
+  SOFT: 'soft',
+  MEDIUM: 'medium',
+  HARD: 'hard',
+  INTERMEDIATE: 'inter',
+  WET: 'wet',
+}
+
+export function compoundFromApi(name: string): Compound | undefined {
+  const id = ID_BY_API_NAME[name]
+  return id ? COMPOUND_BY_ID[id] : undefined
+}
+
+/** Display name of an API compound, e.g. `SOFT` → `Soft`. */
+export function compoundLabel(name: string): string {
+  return compoundFromApi(name)?.label ?? name
+}

@@ -102,7 +102,16 @@ def actual_results(engine: Engine, race_id: int) -> pd.DataFrame:
 
 def score_race(setup: RaceSetup, actual: pd.DataFrame, params: SimulationParams) -> RaceBacktest:
     """Simulate one race and compare the mean simulated position with reality."""
-    table = summarise(simulate(setup, params)).join(actual)
+    return score_summary(setup, summarise(simulate(setup, params)), actual)
+
+
+def score_summary(setup: RaceSetup, summary: pd.DataFrame, actual: pd.DataFrame) -> RaceBacktest:
+    """Compare a simulated race (``summarise`` output) with its actual result.
+
+    Only classified finishers are scored, on the simulated position conditional
+    on finishing (``finish_mean``); the grid baseline uses the starting slot.
+    """
+    table = summary.join(actual)
     table["grid_slot"] = pd.Series(setup.grid, index=list(setup.drivers))
     finishers = table[table["position_text"].astype(str).str.isdigit()]
     return RaceBacktest(

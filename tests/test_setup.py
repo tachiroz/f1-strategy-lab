@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from f1lab.sim.setup import SetupError, actual_strategies
+from synthetic import make_setup
 
 
 def stint(driver: str, number: int, compound: str, start: int, end: int) -> dict[str, object]:
@@ -58,3 +59,21 @@ def test_stints_after_the_flag_are_ignored() -> None:
     assert actual_strategies(starters, stints, NO_STOPS, race_laps=44)["alonso"].notation() == (
         "M-13-H"
     )
+
+
+def test_neutralisation_scale_multiplies_sc_and_vsc() -> None:
+    setup = make_setup([0.0, 1.0], sc_lap1_probability=0.2, sc_hazard=0.01, vsc_hazard=0.02)
+    doubled = setup.with_neutralisation_scale(2.0)
+    assert doubled.sc_lap1_probability == pytest.approx(0.4)
+    assert (doubled.sc_hazard, doubled.vsc_hazard) == pytest.approx((0.02, 0.04))
+    calm = setup.with_neutralisation_scale(0.0)
+    assert calm.sc_lap1_probability == calm.sc_hazard == calm.vsc_hazard == 0.0
+
+
+def test_neutralisation_scale_keeps_probabilities_valid() -> None:
+    setup = make_setup([0.0], sc_lap1_probability=0.4, vsc_lap1_probability=0.2)
+    scaled = setup.with_neutralisation_scale(3.0)
+    assert scaled.sc_lap1_probability + scaled.vsc_lap1_probability == pytest.approx(1.0)
+    assert scaled.sc_lap1_probability == pytest.approx(2 * scaled.vsc_lap1_probability)
+    with pytest.raises(ValueError, match="negative"):
+        setup.with_neutralisation_scale(-1.0)

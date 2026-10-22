@@ -8,10 +8,13 @@ from f1lab.sim.backtest import (
     best_race_craft,
     prepare_races,
     score_race,
+    score_summary,
     search_race_craft,
     season_race_ids,
 )
 from f1lab.sim.calibration import calibrate, load_history
+from f1lab.sim.engine import simulate
+from f1lab.sim.montecarlo import summarise
 from synthetic import actual, make_setup, params
 
 
@@ -30,6 +33,13 @@ def test_simulator_can_beat_the_grid() -> None:
     race = score_race(setup, actual([2, 3, 1], [1, 2, 3]), params())
     assert race.mae < race.grid_mae
     assert race.spearman > race.grid_spearman
+
+
+def test_score_summary_matches_score_race() -> None:
+    setup = make_setup([0.0, 0.5, -3.0], lap_noise_sd_s=0.5)
+    real = actual([2, 3, 1], [1, 2, 3])
+    summary = summarise(simulate(setup, params()))
+    assert score_summary(setup, summary, real).mae == score_race(setup, real, params()).mae
 
 
 def test_retired_drivers_are_not_scored() -> None:
