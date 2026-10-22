@@ -197,6 +197,8 @@ class CircuitSummary(BaseModel):
     country: str | None
     laps: int
     compounds: list[str]
+    degradation_s_per_lap: dict[str, Interval]
+    """Degradation slope per compound (after partial pooling across circuits)."""
 
 
 class CurvePoint(BaseModel):

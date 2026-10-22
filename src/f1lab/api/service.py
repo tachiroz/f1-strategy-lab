@@ -440,6 +440,10 @@ class Lab:
                 else str(names.loc[circuit_id, "country"]),
                 laps=model.n_laps,
                 compounds=model.compounds,
+                degradation_s_per_lap={
+                    compound: _interval(estimate)
+                    for compound, estimate in model.degradation_s_per_lap.items()
+                },
             )
             for circuit_id, model in self.calibrated.models.items()
         ]

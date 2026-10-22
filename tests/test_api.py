@@ -162,10 +162,13 @@ def test_sc_sensitivity(client: TestClient) -> None:
 def test_circuits_and_tyres(client: TestClient) -> None:
     circuits = client.get("/api/circuits").json()
     assert [circuit["circuit_id"] for circuit in circuits] == ["bahrain"]
+    slopes = circuits[0]["degradation_s_per_lap"]
+    assert set(slopes) == set(circuits[0]["compounds"])
     tyres = client.get("/api/circuits/bahrain/tyres").json()
     assert tyres["circuit_name"] == "Bahrain International Circuit"
     assert tyres["fuel_s_per_lap"]["value"] < 0  # cars get faster as fuel burns off
     for compound in tyres["compounds"]:
+        assert compound["degradation_s_per_lap"] == slopes[compound["compound"]]
         curve = compound["curve"]
         assert curve[0]["delta_s"] == pytest.approx(compound["offset_s"]["value"])
         assert len(curve) == compound["max_tyre_age"] + 1
