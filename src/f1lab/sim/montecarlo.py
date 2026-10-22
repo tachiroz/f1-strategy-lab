@@ -8,6 +8,7 @@ retirements and noise, so the difference is far more precise than the
 difference of two independent means.
 """
 
+import warnings
 from collections.abc import Sequence
 
 import numpy as np
@@ -52,6 +53,13 @@ def position_stats(positions: np.ndarray, retired: np.ndarray) -> dict[str, np.n
         stats[f"p_{name}"] = hits / runs
         stats[f"p_{name}_low"], stats[f"p_{name}_high"] = wilson_interval(hits, runs)
     stats["p_retire"] = retired.mean(axis=0)
+    # Conditional on finishing: the fair prediction for a driver who is classified.
+    finished = np.where(retired, np.nan, positions.astype(float))
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)  # a driver retiring in every run
+        stats["finish_mean"] = np.nanmean(finished, axis=0)
+        stats["finish_low"] = np.nanquantile(finished, low_q, axis=0)
+        stats["finish_high"] = np.nanquantile(finished, high_q, axis=0)
     return stats
 
 

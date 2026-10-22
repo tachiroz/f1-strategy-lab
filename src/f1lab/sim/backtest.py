@@ -2,7 +2,8 @@
 
 For every dry race the simulator gets what was known before the start
 (qualifying, grid) plus the strategies the drivers actually ran, and the mean
-simulated position of each classified finisher is compared with the real one:
+simulated position of each classified finisher, over the runs in which that
+driver finishes, is compared with the real one:
 Spearman rank correlation and mean absolute error in positions. The naive
 baseline "finish where you started" is scored the same way.
 
@@ -108,9 +109,9 @@ def score_race(setup: RaceSetup, actual: pd.DataFrame, params: SimulationParams)
         race_id=setup.race_id,
         race_name=setup.race_name,
         table=table,
-        spearman=float(spearmanr(finishers["mean_position"], finishers["position"]).statistic),
+        spearman=float(spearmanr(finishers["finish_mean"], finishers["position"]).statistic),
         grid_spearman=float(spearmanr(finishers["grid_slot"], finishers["position"]).statistic),
-        mae=float((finishers["mean_position"] - finishers["position"]).abs().mean()),
+        mae=float((finishers["finish_mean"] - finishers["position"]).abs().mean()),
         grid_mae=float((finishers["grid_slot"] - finishers["position"]).abs().mean()),
     )
 
