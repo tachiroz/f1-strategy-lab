@@ -1,6 +1,5 @@
 """Tests for backtesting the simulator against real results."""
 
-import pandas as pd
 import pytest
 from sqlalchemy import Engine
 
@@ -13,23 +12,7 @@ from f1lab.sim.backtest import (
     season_race_ids,
 )
 from f1lab.sim.calibration import calibrate, load_history
-from synthetic import make_setup, params
-
-
-def actual(
-    positions: list[int], grid: list[int], classified: list[bool] | None = None
-) -> pd.DataFrame:
-    classified = classified or [True] * len(positions)
-    return pd.DataFrame(
-        {
-            "position": positions,
-            "position_text": [
-                str(p) if c else "R" for p, c in zip(positions, classified, strict=True)
-            ],
-            "grid": grid,
-        },
-        index=[f"car{i}" for i in range(len(positions))],
-    )
+from synthetic import actual, make_setup, params
 
 
 def test_perfect_prediction_scores_perfectly() -> None:

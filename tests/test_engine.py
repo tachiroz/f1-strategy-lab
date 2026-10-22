@@ -2,14 +2,14 @@
 
 import numpy as np
 import pytest
-from sqlalchemy import Engine, insert, select
+from sqlalchemy import Engine
 
 from f1lab.db import schema
 from f1lab.sim.calibration import calibrate, load_history
 from f1lab.sim.engine import SAFETY_CAR, SimulationParams, simulate
 from f1lab.sim.setup import RaceSetup, SetupError, race_setup
 from f1lab.sim.strategy import StrategyError, parse_strategy
-from synthetic import make_setup, params
+from synthetic import complete_stints, make_setup, params
 
 
 def winner(setup: RaceSetup, **overrides: object) -> set[str]:
@@ -96,46 +96,6 @@ def test_illegal_strategy_is_rejected() -> None:
 def test_unknown_driver_cannot_change_strategy() -> None:
     with pytest.raises(SetupError):
         make_setup([0.0]).with_strategy("nobody", parse_strategy("M-10-H"))
-
-
-def complete_stints(engine: Engine, race_id: int, laps: int) -> None:
-    """Give drivers trimmed out of the fixtures a one-stop on the compounds the model knows."""
-    with engine.begin() as conn:
-        drivers = set(
-            conn.execute(
-                select(schema.results.c.driver_id).where(schema.results.c.race_id == race_id)
-            ).scalars()
-        )
-        have = set(
-            conn.execute(
-                select(schema.stints.c.driver_id).where(schema.stints.c.race_id == race_id)
-            ).scalars()
-        )
-        rows = [
-            row
-            for driver in sorted(drivers - have)
-            for row in (
-                {
-                    "race_id": race_id,
-                    "driver_id": driver,
-                    "stint": 1,
-                    "compound": "SOFT",
-                    "lap_start": 1,
-                    "lap_end": laps // 2,
-                    "tyre_age_at_start": 0,
-                },
-                {
-                    "race_id": race_id,
-                    "driver_id": driver,
-                    "stint": 2,
-                    "compound": "HARD",
-                    "lap_start": laps // 2 + 1,
-                    "lap_end": laps,
-                    "tyre_age_at_start": 0,
-                },
-            )
-        ]
-        conn.execute(insert(schema.stints), rows)
 
 
 def test_race_setup_from_the_database(loaded: Engine) -> None:

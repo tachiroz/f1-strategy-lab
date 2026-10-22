@@ -94,6 +94,7 @@ CONFIDENCE_LEVEL: float = 0.95
 SHOWCASE_MIN_DRIVER_LAPS: int = 30
 """A race is shown in the actual-vs-model chart only if one driver has this many test laps."""
 MODEL_REPORT_DIR: Path = PROJECT_ROOT / "docs" / "models"
+SIM_REPORT_DIR: Path = PROJECT_ROOT / "docs" / "sim"
 MODEL_LAPS_SQL: Path = PROJECT_ROOT / "sql" / "model_laps.sql"
 
 # --- Simulator (stage 4) ------------------------------------------------------
@@ -126,10 +127,10 @@ DIRTY_AIR_GAP_S: float = 1.0
 """Within this gap behind another car a driver loses time in its wake (DRS window)."""
 SC_RESTART_GAP_S: float = 0.8
 """Gap between consecutive cars after a Safety Car restart (assumption)."""
-OVERTAKE_DELTA_S: float = 0.5
-"""Pace advantage per lap needed to pass the car ahead (calibrated, see docs/assumptions.md)."""
-DIRTY_AIR_PENALTY_S: float = 0.3
-"""Time lost per lap in dirty air (calibrated, see docs/assumptions.md)."""
+OVERTAKE_DELTA_S: float = 1.5
+"""Pace advantage per lap needed to pass the car ahead (python -m f1lab.sim race-craft)."""
+DIRTY_AIR_PENALTY_S: float = 1.0
+"""Time lost per lap in dirty air; upper end of the plausible range (see docs/sim/race_craft.md)."""
 PIT_LANE_START_GRID: int = 0
 """Jolpica grid value of a car starting from the pit lane."""
 PODIUM_POSITIONS: int = 3

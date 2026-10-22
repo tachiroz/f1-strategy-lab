@@ -7,7 +7,9 @@
 
 import numpy as np
 import pandas as pd
+from sqlalchemy import Engine, insert, select
 
+from f1lab.db import schema
 from f1lab.models.degradation import CircuitModel, Estimate
 from f1lab.sim.engine import SimulationParams
 from f1lab.sim.setup import RaceSetup
@@ -127,3 +129,60 @@ def make_setup(levels: list[float], laps: int = 20, **overrides: object) -> Race
 def params(**overrides: object) -> SimulationParams:
     base = {"runs": 50, "overtake_delta_s": 0.5, "dirty_air_penalty_s": 0.0}
     return SimulationParams(**{**base, **overrides})
+
+
+def complete_stints(engine: Engine, race_id: int, laps: int) -> None:
+    """Give drivers trimmed out of the fixtures a one-stop on the compounds the model knows."""
+    with engine.begin() as conn:
+        drivers = set(
+            conn.execute(
+                select(schema.results.c.driver_id).where(schema.results.c.race_id == race_id)
+            ).scalars()
+        )
+        have = set(
+            conn.execute(
+                select(schema.stints.c.driver_id).where(schema.stints.c.race_id == race_id)
+            ).scalars()
+        )
+        rows = [
+            row
+            for driver in sorted(drivers - have)
+            for row in (
+                {
+                    "race_id": race_id,
+                    "driver_id": driver,
+                    "stint": 1,
+                    "compound": "SOFT",
+                    "lap_start": 1,
+                    "lap_end": laps // 2,
+                    "tyre_age_at_start": 0,
+                },
+                {
+                    "race_id": race_id,
+                    "driver_id": driver,
+                    "stint": 2,
+                    "compound": "HARD",
+                    "lap_start": laps // 2 + 1,
+                    "lap_end": laps,
+                    "tyre_age_at_start": 0,
+                },
+            )
+        ]
+        conn.execute(insert(schema.stints), rows)
+
+
+def actual(
+    positions: list[int], grid: list[int], classified: list[bool] | None = None
+) -> pd.DataFrame:
+    """Real results of cars car0..carN: finishing position, classification, grid."""
+    classified = classified or [True] * len(positions)
+    return pd.DataFrame(
+        {
+            "position": positions,
+            "position_text": [
+                str(p) if c else "R" for p, c in zip(positions, classified, strict=True)
+            ],
+            "grid": grid,
+        },
+        index=[f"car{i}" for i in range(len(positions))],
+    )
