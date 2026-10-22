@@ -13,7 +13,7 @@ from collections.abc import Sequence
 import numpy as np
 import pandas as pd
 
-from f1lab.config import PODIUM_POSITIONS, POINTS_POSITIONS
+from f1lab.config import PODIUM_POSITIONS, POINTS_POSITIONS, POSITION_BAND
 from f1lab.models.degradation import Z_SCORE
 from f1lab.sim.engine import SimulationParams, SimulationResult, simulate
 from f1lab.sim.setup import RaceSetup
@@ -44,6 +44,9 @@ def position_stats(positions: np.ndarray, retired: np.ndarray) -> dict[str, np.n
     mean, low, high = mean_interval(positions.astype(float))
     stats = {"mean_position": mean, "mean_low": low, "mean_high": high}
     stats["median_position"] = np.median(positions, axis=0)
+    low_q, high_q = POSITION_BAND
+    stats["position_low"] = np.quantile(positions, low_q, axis=0)
+    stats["position_high"] = np.quantile(positions, high_q, axis=0)
     for name, limit in (("win", 1), ("podium", PODIUM_POSITIONS), ("points", POINTS_POSITIONS)):
         hits = (positions <= limit).sum(axis=0)
         stats[f"p_{name}"] = hits / runs

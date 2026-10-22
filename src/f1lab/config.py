@@ -135,6 +135,15 @@ PIT_LANE_START_GRID: int = 0
 PODIUM_POSITIONS: int = 3
 POINTS_POSITIONS: int = 10
 """Finishing positions that score points (2023-2025 regulations)."""
+RACE_CRAFT_OVERTAKE_DELTAS_S: tuple[float, ...] = (0.0, 0.5, 1.0, 1.5, 2.0)
+RACE_CRAFT_DIRTY_AIR_PENALTIES_S: tuple[float, ...] = (0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
+"""Search grid, fixed before searching to physically plausible values: passing needs at
+most ~2 s/lap of pace advantage and dirty air costs at most ~1 s/lap."""
+RACE_CRAFT_SEARCH_RUNS: int = 500
+BACKTEST_SEASONS: tuple[int, ...] = (2025,)
+"""Seasons scored out of sample (never used for calibration)."""
+POSITION_BAND: tuple[float, float] = (0.1, 0.9)
+"""Quantiles of the simulated finishing position shown as a band (80% of runs)."""
 
 
 def get_data_dir() -> Path:
