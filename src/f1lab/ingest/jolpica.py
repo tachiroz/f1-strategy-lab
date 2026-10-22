@@ -39,6 +39,10 @@ class JolpicaClient:
         """Return the classification of a race; empty if the race has not run yet."""
         return self._race_rows(f"{season}/{round_number}/results.json", "Results")
 
+    def qualifying(self, season: int, round_number: int) -> list[JsonObject]:
+        """Return the qualifying classification (Q1-Q3 times) of a race weekend."""
+        return self._race_rows(f"{season}/{round_number}/qualifying.json", "QualifyingResults")
+
     def pit_stops(self, season: int, round_number: int) -> list[JsonObject]:
         """Return all pit stops of a race in API order."""
         return self._race_rows(f"{season}/{round_number}/pitstops.json", "PitStops")

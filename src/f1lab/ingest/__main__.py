@@ -7,7 +7,6 @@ Examples:
 """
 
 import argparse
-import io
 import logging
 import sys
 from collections import Counter
@@ -15,6 +14,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from f1lab.config import DEFAULT_SEASONS, get_cache_dir, get_db_path
+from f1lab.console import tolerate_console_encoding
 from f1lab.db.engine import create_sqlite_engine, init_db
 from f1lab.db.quality import format_report, run_checks
 from f1lab.ingest.jolpica import create_jolpica_client
@@ -53,17 +53,10 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _tolerate_console_encoding() -> None:
-    """Avoid crashes on consoles that cannot print names like 'Pérez' (e.g. cp1251)."""
-    for stream in (sys.stdout, sys.stderr):
-        if isinstance(stream, io.TextIOWrapper):
-            stream.reconfigure(errors="backslashreplace")
-
-
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the CLI and return the process exit code."""
     args = build_parser().parse_args(argv)
-    _tolerate_console_encoding()
+    tolerate_console_encoding()
     logging.basicConfig(level=logging.INFO, format="%(message)s", force=True)
 
     db_path = args.db or get_db_path()

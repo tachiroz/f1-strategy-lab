@@ -13,7 +13,7 @@ const PIT_LAPS = EXAMPLE_STINTS.slice(0, -1).map((_, index) =>
   EXAMPLE_STINTS.slice(0, index + 1).reduce((total, stint) => total + stint.laps, 0),
 )
 
-const SIMULATOR_STAGE = 4
+const DASHBOARD_STAGE = 5
 const METRICS = ['Средняя позиция', 'P(подиум)', 'P(очки)'] as const
 
 export function StrategyPreview() {
@@ -86,7 +86,7 @@ export function StrategyPreview() {
         ))}
       </dl>
       <p className="mt-3 text-xs text-ink-subtle">
-        Метрики посчитает симулятор на Этапе {SIMULATOR_STAGE}.
+        Симулятор готов, метрики появятся в дашборде на Этапе {DASHBOARD_STAGE}.
       </p>
     </div>
   )

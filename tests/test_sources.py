@@ -118,3 +118,10 @@ def test_openf1_rejects_non_list_payload() -> None:
 
     with pytest.raises(TypeError, match="expected a list"):
         OpenF1Client(DictFetcher()).laps(1)
+
+
+def test_qualifying_classification(jolpica: JolpicaClient) -> None:
+    qualifying = jolpica.qualifying(2024, 1)
+    assert len(qualifying) == 20
+    pole = next(q for q in qualifying if q["position"] == "1")
+    assert (pole["Driver"]["driverId"], pole["Q3"]) == ("max_verstappen", "1:29.179")

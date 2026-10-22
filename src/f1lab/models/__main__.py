@@ -14,6 +14,7 @@ import pandas as pd
 
 from f1lab.config import MODEL_REPORT_DIR, TEST_SEASONS, TRAIN_SEASONS, get_db_path
 from f1lab.db.engine import create_sqlite_engine, init_db
+from f1lab.markdown import markdown_table
 from f1lab.models.degradation import fit_circuits, parameters_table
 from f1lab.models.evaluate import FINAL_VARIANT, Evaluation, evaluate
 from f1lab.models.filters import annotate_laps, clean_laps, exclusion_summary
@@ -30,20 +31,6 @@ PARAMS_FILE = "degradation_params.csv"
 RESULTS_FILE = "results.md"
 EXIT_OK = 0
 EXIT_NO_DATA = 1
-
-
-def _markdown_table(frame: pd.DataFrame, float_format: str = "{:.3f}") -> str:
-    """Render a DataFrame as a GitHub Markdown table (no extra dependency)."""
-
-    def cell(value: object) -> str:
-        if isinstance(value, float):
-            return "—" if pd.isna(value) else float_format.format(value)
-        return str(value)
-
-    header = "| " + " | ".join(str(c) for c in frame.columns) + " |"
-    divider = "|" + "|".join("---" for _ in frame.columns) + "|"
-    rows = ["| " + " | ".join(cell(v) for v in row) + " |" for row in frame.itertuples(index=False)]
-    return "\n".join([header, divider, *rows])
 
 
 def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFrame) -> str:
@@ -95,22 +82,22 @@ def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFr
             "",
             "## Фильтр кругов",
             "",
-            _markdown_table(exclusions),
+            markdown_table(exclusions),
             "",
             "## MAE на отложенных гонках",
             "",
             f"Итоговый вариант: **{FINAL_VARIANT.value}**. Остальные строки - абляция, "
             "которая его обосновывает.",
             "",
-            _markdown_table(overall),
+            markdown_table(overall),
             "",
             "### По составам",
             "",
-            _markdown_table(by_compound),
+            markdown_table(by_compound),
             "",
             "### По трассам",
             "",
-            _markdown_table(by_circuit),
+            markdown_table(by_circuit),
             "",
             "## Параметры по трассам (все сезоны, итоговый вариант)",
             "",
@@ -118,7 +105,7 @@ def render_results(evaluation: Evaluation, summary: pd.Series, params: pd.DataFr
             "износ не экстраполируется. Сдвиг состава считается относительно эталонного "
             "(MEDIUM, если он есть на трассе).",
             "",
-            _markdown_table(table),
+            markdown_table(table),
             "",
         ]
     )

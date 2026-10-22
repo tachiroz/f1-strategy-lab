@@ -105,6 +105,33 @@ def neutralisation_periods(messages: pd.DataFrame) -> list[Period]:
     return periods
 
 
+GREEN = "GREEN"
+"""State of a lap that overlaps no neutralisation period."""
+_PRECEDENCE = (
+    Neutralisation.RED_FLAG,
+    Neutralisation.SAFETY_CAR,
+    Neutralisation.VIRTUAL_SAFETY_CAR,
+)
+
+
+def lap_states(laps: pd.DataFrame, periods_by_race: Mapping[int, list[Period]]) -> pd.Series:
+    """Label every lap GREEN, SC, VSC or RED (the strongest period it overlaps).
+
+    Laps without a start time or a lap time are labelled GREEN (they cannot be
+    placed in time; other rules exclude them where it matters).
+    """
+    start = laps["start_time_utc"]
+    end = start + pd.to_timedelta(laps["lap_time_s"], unit="s")
+    states = pd.Series(GREEN, index=laps.index, dtype=object)
+    for kind in reversed(_PRECEDENCE):  # weakest first, so stronger kinds overwrite
+        for race_id, periods in periods_by_race.items():
+            in_race = laps["race_id"] == race_id
+            for period in (p for p in periods if p.kind == kind):
+                overlaps = ((start < period.end) & (end > period.start)).fillna(False)
+                states[in_race & overlaps] = kind.value
+    return states
+
+
 def flag_neutralised_laps(
     laps: pd.DataFrame, periods_by_race: Mapping[int, list[Period]]
 ) -> pd.Series:

@@ -57,6 +57,7 @@ def main() -> None:
         jolpica.pit_stops(SEASON, round_number)
     for round_number, session_key in RACES.items():
         jolpica.results(SEASON, round_number)
+        jolpica.qualifying(SEASON, round_number)
         jolpica.pit_stops(SEASON, round_number)
         openf1.weather(session_key)
         openf1.race_control(session_key)

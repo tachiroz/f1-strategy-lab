@@ -115,6 +115,7 @@ def write_race(engine: Engine, rows: RaceRows, loaded_at: datetime) -> None:
         _upsert(conn, schema.drivers, unique_drivers)
         for table, table_rows in (
             (schema.results, rows.results),
+            (schema.qualifying, rows.qualifying),
             (schema.pit_stops, rows.pit_stops),
             (schema.laps, rows.laps),
             (schema.stints, rows.stints),
@@ -227,6 +228,7 @@ class RaceLoader:
                 session,
                 results=results,
                 pit_stops=self._jolpica.pit_stops(season, round_number),
+                qualifying=self._jolpica.qualifying(season, round_number),
                 laps=self._openf1.laps(key),
                 stints=self._openf1.stints(key),
                 weather=self._openf1.weather(key),

@@ -8,6 +8,7 @@ from f1lab.models.neutralisation import (
     Neutralisation,
     Period,
     flag_neutralised_laps,
+    lap_states,
     neutralisation_periods,
 )
 
@@ -109,3 +110,28 @@ def test_flag_neutralised_laps_by_overlap() -> None:
     )
     periods = {1: [Period(SC, ts("2025-01-01 12:00:00"), ts("2025-01-01 12:04:00"))]}
     assert flag_neutralised_laps(laps, periods).tolist() == [False, True, False, False, False]
+
+
+def test_lap_states_prefer_the_strongest_period() -> None:
+    laps = pd.DataFrame(
+        {
+            "race_id": [1, 1, 1, 1],
+            "start_time_utc": pd.to_datetime(
+                [
+                    "2025-01-01 11:50:00",  # green
+                    "2025-01-01 11:59:30",  # overlaps the VSC
+                    "2025-01-01 12:09:30",  # overlaps the VSC and the red flag
+                    "2025-01-01 12:30:00",  # after everything
+                ],
+                utc=True,
+            ),
+            "lap_time_s": [90.0, 90.0, 90.0, 90.0],
+        }
+    )
+    periods = {
+        1: [
+            Period(VSC, ts("2025-01-01 12:00:00"), ts("2025-01-01 12:10:00")),
+            Period(RED, ts("2025-01-01 12:10:00"), ts("2025-01-01 12:20:00")),
+        ]
+    }
+    assert lap_states(laps, periods).tolist() == ["GREEN", "VSC", "RED", "GREEN"]
