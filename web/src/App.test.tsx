@@ -17,7 +17,7 @@ describe('App', () => {
     expect(within(roadmap).getAllByText('Следующий')).toHaveLength(1)
   })
 
-  it('does not show simulator numbers before the simulator exists', () => {
+  it('shows no made-up metrics until the dashboard is wired to the simulator', () => {
     render(<App />)
     for (const metric of ['Средняя позиция', 'P(подиум)', 'P(очки)']) {
       expect(screen.getByText(metric).nextElementSibling).toHaveTextContent('—')
