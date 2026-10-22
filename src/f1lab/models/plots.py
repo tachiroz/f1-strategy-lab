@@ -1,81 +1,34 @@
-"""Static charts of the tyre model (matplotlib, dark theme matching the web app).
-
-Colours mirror the design tokens in ``web/src/index.css``. Compounds keep the
-Pirelli convention (red / yellow / white): the palette passes the colour-vision
-and contrast checks, but yellow and white sit above the usual lightness band and
-white has no chroma, so every compound also gets its own marker shape.
-Series that are not compounds use validated categorical slots (blue, orange).
-"""
+"""Static charts of the tyre model (style shared with ``f1lab.plotting``)."""
 
 from collections.abc import Iterable
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 
 from f1lab.config import SHOWCASE_MIN_DRIVER_LAPS
 from f1lab.models.degradation import CircuitModel
 from f1lab.models.evaluate import FINAL_VARIANT, Evaluation, Variant
-
-SURFACE = "#101319"
-GRID = "#1f232b"
-AXIS = "#2c3038"
-INK = "#f4f5f8"
-INK_SECONDARY = "#adb1b9"
-INK_MUTED = "#82868f"
-SERIES_BLUE = "#3987e5"
-SERIES_ORANGE = "#d95926"
-COMPOUND_STYLE = {
-    "SOFT": ("#f72c2e", "o"),
-    "MEDIUM": ("#fccf28", "s"),
-    "HARD": ("#f0eeeb", "^"),
-}
-DPI = 160
-FIGURE_WIDTH_IN = 11.0
-LINE_WIDTH = 1.6
-MARKER_SIZE = 5.0
-MARKER_RING = 0.8
-BAR_HEIGHT = 0.28
-"""Share of the band a bar fills: keeps bars thin (about 24 px) with air between them."""
-VALUE_FORMAT = "{:.3f} с"
-THIN_SPACE = " "
-"""Thousands separator in Russian typography (19 484)."""
-
-
-def _style_axes(ax: Axes) -> None:
-    """Recessive chrome: hairline solid grid, muted ticks, no top/right spines."""
-    ax.set_facecolor(SURFACE)
-    ax.grid(True, color=GRID, linewidth=0.6, linestyle="-")
-    ax.set_axisbelow(True)
-    for side in ("top", "right"):
-        ax.spines[side].set_visible(False)
-    for side in ("left", "bottom"):
-        ax.spines[side].set_color(AXIS)
-    ax.tick_params(colors=INK_MUTED, labelsize=8.5)
-    ax.xaxis.label.set_color(INK_SECONDARY)
-    ax.yaxis.label.set_color(INK_SECONDARY)
-    ax.title.set_color(INK)
-
-
-def _new_figure(
-    height_in: float, ncols: int = 1, sharey: bool = False
-) -> tuple[Figure, list[Axes]]:
-    """Create a dark figure with ``ncols`` styled axes."""
-    figure = Figure(figsize=(FIGURE_WIDTH_IN, height_in), dpi=DPI, facecolor=SURFACE)
-    axes = list(np.atleast_1d(figure.subplots(1, ncols, sharey=sharey)))
-    for ax in axes:
-        _style_axes(ax)
-    return figure, axes
-
-
-def _legend(ax: Axes, handles: list[Line2D], **kwargs: object) -> None:
-    """Legend with text in ink colours (never the series colour)."""
-    legend = ax.legend(handles=handles, frameon=False, fontsize=8.5, **kwargs)
-    for text in legend.get_texts():
-        text.set_color(INK_SECONDARY)
+from f1lab.plotting import (
+    AXIS,
+    BAR_HEIGHT,
+    COMPOUND_STYLE,
+    INK,
+    INK_MUTED,
+    INK_SECONDARY,
+    LINE_WIDTH,
+    MARKER_RING,
+    MARKER_SIZE,
+    SERIES_BLUE,
+    SERIES_ORANGE,
+    SURFACE,
+    THIN_SPACE,
+    VALUE_FORMAT,
+    legend,
+    new_figure,
+    save,
+)
 
 
 def _compound_handle(compound: str) -> Line2D:
@@ -83,12 +36,6 @@ def _compound_handle(compound: str) -> Line2D:
     return Line2D(
         [], [], color=colour, marker=marker, linestyle="", markersize=MARKER_SIZE, label=compound
     )
-
-
-def _save(figure: Figure, path: Path) -> Path:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(path, facecolor=SURFACE, bbox_inches="tight")
-    return path
 
 
 def _with_gaps(laps: pd.Series, values: pd.Series) -> tuple[np.ndarray, np.ndarray]:
@@ -134,7 +81,7 @@ def plot_actual_vs_model(
 ) -> Path:
     """Small multiples: actual clean laps (by compound) and the full model's prediction."""
     showcase = list(showcase)
-    figure, axes = _new_figure(3.6, ncols=max(len(showcase), 1))
+    figure, axes = new_figure(3.6, ncols=max(len(showcase), 1))
     predictions = evaluation.predictions
     for ax, (race_id, driver_id) in zip(axes, showcase, strict=False):
         laps = predictions[
@@ -168,7 +115,7 @@ def plot_actual_vs_model(
     compounds = [c for c in COMPOUND_STYLE if c in set(predictions["compound"])]
     handles = [_compound_handle(c) for c in compounds]
     handles.append(Line2D([], [], color=SERIES_BLUE, linewidth=LINE_WIDTH, label="модель"))
-    _legend(axes[-1], handles, loc="upper right")
+    legend(axes[-1], handles, loc="upper right")
     figure.suptitle(
         "Факт против модели на отложенных гонках 2025: лучшая, средняя и худшая трасса",
         color=INK,
@@ -177,7 +124,7 @@ def plot_actual_vs_model(
         ha="left",
     )
     figure.tight_layout()
-    return _save(figure, path)
+    return save(figure, path)
 
 
 def plot_mae_overall(evaluation: Evaluation, path: Path) -> Path:
@@ -186,7 +133,7 @@ def plot_mae_overall(evaluation: Evaluation, path: Path) -> Path:
     labels = [variant.value for variant in reversed(Variant)]
     values = [mae[label] for label in labels]
     colours = [SERIES_BLUE if label == FINAL_VARIANT.value else INK_MUTED for label in labels]
-    figure, (ax,) = _new_figure(2.4)
+    figure, (ax,) = new_figure(2.4)
     ax.barh(labels, values, color=colours, height=BAR_HEIGHT)
     for y, value in enumerate(values):
         ax.text(value, y, "  " + VALUE_FORMAT.format(value), va="center", color=INK, fontsize=9)
@@ -204,7 +151,7 @@ def plot_mae_overall(evaluation: Evaluation, path: Path) -> Path:
         color=INK,
     )
     figure.tight_layout()
-    return _save(figure, path)
+    return save(figure, path)
 
 
 def plot_mae_by_circuit(evaluation: Evaluation, path: Path) -> Path:
@@ -212,7 +159,7 @@ def plot_mae_by_circuit(evaluation: Evaluation, path: Path) -> Path:
     mae = evaluation.mae(by="circuit_id")
     mae = mae.sort_values(FINAL_VARIANT.value, ascending=False)
     y = np.arange(len(mae))
-    figure, (ax,) = _new_figure(0.28 * len(mae) + 1.2)
+    figure, (ax,) = new_figure(0.28 * len(mae) + 1.2)
     without = mae[Variant.NO_DEGRADATION.value].to_numpy()
     full = mae[FINAL_VARIANT.value].to_numpy()
     ax.hlines(y, np.minimum(without, full), np.maximum(without, full), color=AXIS, linewidth=2)
@@ -251,9 +198,9 @@ def plot_mae_by_circuit(evaluation: Evaluation, path: Path) -> Path:
             (SERIES_BLUE, FINAL_VARIANT.value),
         )
     ]
-    _legend(ax, handles, loc="upper right")
+    legend(ax, handles, loc="upper right")
     figure.tight_layout()
-    return _save(figure, path)
+    return save(figure, path)
 
 
 def plot_degradation(models: Iterable[CircuitModel], path: Path) -> Path:
@@ -264,7 +211,7 @@ def plot_degradation(models: Iterable[CircuitModel], path: Path) -> Path:
         for compound, estimate in model.degradation_s_per_lap.items()
     ]
     compounds = [c for c in COMPOUND_STYLE if any(r[1] == c for r in rows)]
-    figure, axes = _new_figure(
+    figure, axes = new_figure(
         0.24 * max(len(rows) // max(len(compounds), 1), 4) + 1.6, ncols=max(len(compounds), 1)
     )
     for ax, compound in zip(axes, compounds, strict=False):
@@ -298,4 +245,4 @@ def plot_degradation(models: Iterable[CircuitModel], path: Path) -> Path:
         ha="left",
     )
     figure.tight_layout()
-    return _save(figure, path)
+    return save(figure, path)
