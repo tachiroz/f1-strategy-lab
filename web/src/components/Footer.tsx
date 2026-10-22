@@ -9,6 +9,9 @@ const STACK = [
   'SciPy',
   'FastAPI',
   'React',
+  'React Router',
+  'TanStack Query',
+  'D3',
   'TypeScript',
   'Tailwind CSS',
 ] as const

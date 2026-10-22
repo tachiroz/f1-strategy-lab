@@ -1,5 +1,5 @@
-import { ArrowDown, ArrowUpRight } from 'lucide-react'
-import { REPO_URL } from '../config'
+import { ArrowDown, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router'
 import { LAST_DONE_STAGE, STAGES, stageStatus } from '../data/stages'
 import { StrategyPreview } from './StrategyPreview'
 
@@ -36,21 +36,19 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/races"
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-accent/25 transition hover:brightness-110"
+            >
+              Открыть дашборд
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
             <a
               href="#roadmap"
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-accent/25 transition hover:brightness-110"
+              className="inline-flex items-center gap-2 rounded-lg border border-line-strong px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white/5"
             >
               Дорожная карта
               <ArrowDown aria-hidden="true" className="size-4" />
-            </a>
-            <a
-              href={REPO_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-line-strong px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white/5"
-            >
-              Исходный код
-              <ArrowUpRight aria-hidden="true" className="size-4" />
             </a>
           </div>
         </div>

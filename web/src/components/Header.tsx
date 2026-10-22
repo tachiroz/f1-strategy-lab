@@ -1,49 +1,62 @@
 import { ArrowUpRight } from 'lucide-react'
+import { NavLink, useSearchParams } from 'react-router'
 import { REPO_URL } from '../config'
 import { LAST_DONE_STAGE, STAGES } from '../data/stages'
 import { LogoMark } from './LogoMark'
 
-/** Sections of the future dashboard; only the overview exists for now. */
-const NAV_ITEMS = [
-  { label: 'Обзор', available: true },
-  { label: 'Гонки', available: false },
-  { label: 'Шины', available: false },
-  { label: 'Стратегии', available: false },
-  { label: 'Отчёты', available: false },
-] as const
+interface NavItem {
+  label: string
+  to?: string
+  /** Carry the selected race over to this section. */
+  keepsRace?: boolean
+  hint?: string
+}
+
+const NAV_ITEMS: readonly NavItem[] = [
+  { label: 'Обзор', to: '/' },
+  { label: 'Гонки', to: '/races', keepsRace: true },
+  { label: 'Шины', to: '/tyres', keepsRace: true },
+  { label: 'Стратегии', to: '/strategy', keepsRace: true },
+  { label: 'Отчёты', hint: 'Появится на Этапе 6: авто-разбор гонки' },
+]
+
+const LINK_CLASS =
+  'rounded-md px-3 py-1.5 whitespace-nowrap text-ink-muted transition-colors hover:bg-white/5 hover:text-ink aria-[current=page]:bg-white/8 aria-[current=page]:font-medium aria-[current=page]:text-ink'
+
+function NavItems() {
+  const [params] = useSearchParams()
+  const race = params.get('race')
+  return NAV_ITEMS.map(({ label, to, keepsRace, hint }) => (
+    <li key={label}>
+      {to ? (
+        <NavLink to={keepsRace && race ? `${to}?race=${race}` : to} end className={LINK_CLASS}>
+          {label}
+        </NavLink>
+      ) : (
+        <span
+          aria-disabled="true"
+          title={hint}
+          className="cursor-not-allowed rounded-md px-3 py-1.5 whitespace-nowrap text-ink-subtle/70"
+        >
+          {label}
+        </span>
+      )}
+    </li>
+  ))
+}
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-canvas/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-20 border-b border-line bg-canvas/75 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-4 sm:px-6">
-        <a href="/" className="flex items-center gap-3">
+        <NavLink to="/" className="flex items-center gap-3">
           <LogoMark />
           <span className="font-semibold tracking-tight">F1 Strategy Lab</span>
-        </a>
+        </NavLink>
 
         <nav aria-label="Разделы" className="hidden md:block">
           <ul className="flex items-center gap-1 text-sm">
-            {NAV_ITEMS.map(({ label, available }) => (
-              <li key={label}>
-                {available ? (
-                  <a
-                    href="/"
-                    aria-current="page"
-                    className="rounded-md bg-white/5 px-3 py-1.5 font-medium text-ink"
-                  >
-                    {label}
-                  </a>
-                ) : (
-                  <span
-                    aria-disabled="true"
-                    title="Появится вместе с дашбордом"
-                    className="cursor-not-allowed rounded-md px-3 py-1.5 text-ink-subtle"
-                  >
-                    {label}
-                  </span>
-                )}
-              </li>
-            ))}
+            <NavItems />
           </ul>
         </nav>
 
@@ -62,6 +75,12 @@ export function Header() {
           </a>
         </div>
       </div>
+
+      <nav aria-label="Разделы (мобильная версия)" className="border-t border-line md:hidden">
+        <ul className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2 py-2 text-sm">
+          <NavItems />
+        </ul>
+      </nav>
     </header>
   )
 }
