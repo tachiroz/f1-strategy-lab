@@ -5,16 +5,28 @@ Drivers' pace comes from qualifying (known before the start); strategies are
 the ones actually run unless the caller supplies others.
 """
 
+from collections import Counter
 from dataclasses import dataclass, replace
 
 import numpy as np
 import pandas as pd
 from sqlalchemy import Engine, text
 
-from f1lab.config import DRY_COMPOUNDS, NON_STARTER_STATUSES, PIT_LANE_START_GRID
+from f1lab.config import (
+    DISQUALIFIED_STATUS,
+    DRY_COMPOUNDS,
+    FINISHED_STATUSES,
+    NON_STARTER_STATUSES,
+    PIT_LANE_START_GRID,
+)
 from f1lab.models.degradation import CircuitModel, Estimate
 from f1lab.sim.calibration import Calibration
-from f1lab.sim.strategy import Strategy, StrategyError, strategy_from_stints
+from f1lab.sim.strategy import (
+    Strategy,
+    StrategyError,
+    strategy_from_stints,
+    validate_strategy,
+)
 
 
 class SetupError(ValueError):
@@ -76,6 +88,55 @@ def with_fallback_compounds(model: CircuitModel, models: dict[str, CircuitModel]
     )
 
 
+def actual_strategies(
+    starters: pd.DataFrame, stints: pd.DataFrame, pit_stops: pd.DataFrame, race_laps: int
+) -> dict[str, Strategy]:
+    """Strategies the starters actually ran.
+
+    A driver who retired before completing a legal strategy (no stint, or one
+    compound only) never showed the plan; such drivers get the most common
+    strategy of the race's finishers instead, the most neutral guess. Stints
+    starting after the race distance (post-chequered laps) are ignored.
+
+    Raises:
+        SetupError: If a finisher's strategy cannot be rebuilt or is illegal.
+    """
+    finished = starters["status"].isin(FINISHED_STATUSES) | (
+        starters["status"] == DISQUALIFIED_STATUS
+    )
+    # OpenF1 may open a "stint" on the lap after the chequered flag (Alonso, Belgium 2024).
+    stints = stints[~(stints["lap_start"] > race_laps)]
+    strategies: dict[str, Strategy] = {}
+    incomplete = []
+    for driver_id, did_finish in zip(starters["driver_id"], finished, strict=True):
+        try:
+            strategy = strategy_from_stints(
+                stints[stints["driver_id"] == driver_id],
+                pit_stops[pit_stops["driver_id"] == driver_id],
+                label="actual",
+            )
+            validate_strategy(strategy, race_laps)
+        except StrategyError as error:
+            if did_finish:
+                raise SetupError(f"{driver_id}: {error}") from error
+            incomplete.append(driver_id)
+            continue
+        strategies[driver_id] = strategy
+    if incomplete:
+        finisher_plans = [
+            strategies[driver_id]
+            for driver_id, did_finish in zip(starters["driver_id"], finished, strict=True)
+            if did_finish and driver_id in strategies
+        ]
+        if not finisher_plans:
+            raise SetupError("No finisher with a complete strategy")
+        modal = Counter(plan.notation() for plan in finisher_plans).most_common(1)[0][0]
+        stand_in = next(plan for plan in finisher_plans if plan.notation() == modal)
+        for driver_id in incomplete:
+            strategies[driver_id] = replace(stand_in, label="most common (retired early)")
+    return strategies
+
+
 def _read(engine: Engine, sql: str, race_id: int) -> pd.DataFrame:
     with engine.connect() as conn:
         return pd.read_sql(text(sql), conn, params={"race": race_id})
@@ -125,16 +186,8 @@ def race_setup(
     quali_position = starters["driver_id"].map(quali).fillna(quali.max() + 1 if len(quali) else 1)
     level = calibration.quali_s_per_position * (quali_position - quali_position.median())
 
-    strategies = {}
-    for driver_id in starters["driver_id"]:
-        try:
-            strategies[driver_id] = strategy_from_stints(
-                stints[stints["driver_id"] == driver_id],
-                pit_stops[pit_stops["driver_id"] == driver_id],
-                label="actual",
-            )
-        except StrategyError as error:
-            raise SetupError(f"{driver_id}: {error}") from error
+    race_laps = int(results["laps"].max())
+    strategies = actual_strategies(starters, stints, pit_stops, race_laps)
 
     model = with_fallback_compounds(models[circuit_id], models)
     unknown = {c for s in strategies.values() for c in s.compounds} - set(model.compounds)
@@ -145,7 +198,7 @@ def race_setup(
         race_id=race_id,
         race_name=f"{race.loc[0, 'race_name']} {race.loc[0, 'season']}",
         circuit_id=circuit_id,
-        race_laps=int(results["laps"].max()),
+        race_laps=race_laps,
         drivers=tuple(starters["driver_id"]),
         grid=starters["grid_slot"].to_numpy(),
         level_s=level.to_numpy(dtype=float),
