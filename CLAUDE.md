@@ -21,7 +21,8 @@
 - API: FastAPI (`src/f1lab/api`) отдаёт данные и результаты симуляции дашборду
 - Дашборд: веб-приложение в `web/`: React + TypeScript (Vite), Tailwind CSS, Node.js 24 LTS + npm.
   Дизайн современный и аккуратный: тёмная тема, адаптивность, токены в `web/src/index.css`.
-  Библиотека графиков выбирается на Этапе 5. Streamlit не используем.
+  Графики: собственные SVG-компоненты на d3-scale и d3-shape; маршруты React Router, данные
+  TanStack Query. Streamlit не используем.
 - Тесты: pytest (Python), Vitest + Testing Library (web)
 - Линтеры и форматтеры: ruff + ruff format (Python), Oxlint + Prettier (web); хуки pre-commit
 - CI: GitHub Actions, ubuntu + windows (Python: ruff + pytest; web: lint, format, tests, build)
