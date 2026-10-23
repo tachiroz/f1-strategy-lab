@@ -8,10 +8,12 @@ const STACK = [
   'NumPy',
   'SciPy',
   'FastAPI',
+  'Jinja2',
   'React',
   'React Router',
   'TanStack Query',
   'D3',
+  'react-markdown',
   'TypeScript',
   'Tailwind CSS',
 ] as const
