@@ -3,6 +3,8 @@
 export const MINUS = '−'
 const LOCALE = 'ru-RU'
 const PERCENT = 100
+/** Grid position of a pit-lane start in the API. */
+const PIT_LANE_GRID = 0
 
 const formatters = new Map<number, Intl.NumberFormat>()
 
@@ -68,4 +70,9 @@ export function pluralize(count: number, forms: readonly [string, string, string
   if (mod10 === 1 && mod100 !== 11) return forms[0]
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return forms[1]
   return forms[2]
+}
+
+/** Starting position for tables: `ПЛ` for a pit-lane start. */
+export function formatGrid(grid: number): string {
+  return grid === PIT_LANE_GRID ? 'ПЛ' : String(grid)
 }

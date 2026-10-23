@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   formatDate,
+  formatGrid,
   formatInterval,
   formatNumber,
   formatPercent,
@@ -70,5 +71,12 @@ describe('pluralize', () => {
     [57, 'кругов'],
   ])('%i → %s', (count, form) => {
     expect(pluralize(count, ['круг', 'круга', 'кругов'])).toBe(form)
+  })
+})
+
+describe('formatGrid', () => {
+  it('names a pit-lane start', () => {
+    expect(formatGrid(3)).toBe('3')
+    expect(formatGrid(0)).toBe('ПЛ')
   })
 })

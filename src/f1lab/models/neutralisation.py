@@ -19,6 +19,7 @@ from enum import StrEnum
 import pandas as pd
 
 from f1lab.config import (
+    FIRST_RACE_LAP,
     RC_FLAG_CHEQUERED,
     RC_FLAG_RED,
     RC_GREEN_FLAGS,
@@ -103,6 +104,18 @@ def neutralisation_periods(messages: pd.DataFrame) -> list[Period]:
         for kind in list(opened):
             close(kind, last)
     return periods
+
+
+def leader_lap(laps: pd.DataFrame, at: pd.Timestamp, first_lap: int = FIRST_RACE_LAP) -> int:
+    """Lap the leader was on at a moment: the highest lap number already started.
+
+    Args:
+        laps: Laps of one race with ``lap`` and ``start_time_utc``.
+        at: The moment, e.g. the start of a neutralisation period.
+        first_lap: Returned when no lap has started yet (before the race start).
+    """
+    started = laps[laps["start_time_utc"] <= at]
+    return int(started["lap"].max()) if not started.empty else first_lap
 
 
 GREEN = "GREEN"

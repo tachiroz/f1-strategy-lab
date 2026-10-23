@@ -18,7 +18,7 @@ export interface Stage {
 }
 
 /** Last finished stage; bump it in the PR that completes a stage (together with README). */
-export const LAST_DONE_STAGE = 5
+export const LAST_DONE_STAGE = 6
 
 /** Project roadmap, mirrors the stages in CLAUDE.md. */
 export const STAGES: readonly Stage[] = [

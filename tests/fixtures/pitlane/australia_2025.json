@@ -1,0 +1,1925 @@
+{
+ "source": "f1lab.sqlite, Australian Grand Prix 2025 (race_id 202501); queries in the docstring of tests/test_pitlane.py",
+ "race_control": [
+  {
+   "seq": 3,
+   "time_utc": "2025-03-16T03:20:01+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "GREEN",
+   "scope": "Track",
+   "message": "GREEN LIGHT - PIT EXIT OPEN"
+  },
+  {
+   "seq": 4,
+   "time_utc": "2025-03-16T03:25:03+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 17"
+  },
+  {
+   "seq": 5,
+   "time_utc": "2025-03-16T03:25:08+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 17"
+  },
+  {
+   "seq": 7,
+   "time_utc": "2025-03-16T03:41:43+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 10"
+  },
+  {
+   "seq": 8,
+   "time_utc": "2025-03-16T03:42:22+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 9"
+  },
+  {
+   "seq": 9,
+   "time_utc": "2025-03-16T03:43:16+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 10"
+  },
+  {
+   "seq": 10,
+   "time_utc": "2025-03-16T03:43:17+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 9"
+  },
+  {
+   "seq": 12,
+   "time_utc": "2025-03-16T03:49:00+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 3"
+  },
+  {
+   "seq": 13,
+   "time_utc": "2025-03-16T03:49:47+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 3"
+  },
+  {
+   "seq": 14,
+   "time_utc": "2025-03-16T04:00:59+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 2"
+  },
+  {
+   "seq": 17,
+   "time_utc": "2025-03-16T04:05:17+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 2"
+  },
+  {
+   "seq": 19,
+   "time_utc": "2025-03-16T04:18:23+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "GREEN",
+   "scope": "Track",
+   "message": "GREEN LIGHT - PIT EXIT OPEN"
+  },
+  {
+   "seq": 20,
+   "time_utc": "2025-03-16T04:19:27+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 8"
+  },
+  {
+   "seq": 21,
+   "time_utc": "2025-03-16T04:19:31+00:00",
+   "lap": 1,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR DEPLOYED"
+  },
+  {
+   "seq": 22,
+   "time_utc": "2025-03-16T04:20:18+00:00",
+   "lap": 1,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 8"
+  },
+  {
+   "seq": 23,
+   "time_utc": "2025-03-16T04:20:58+00:00",
+   "lap": 2,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 20"
+  },
+  {
+   "seq": 24,
+   "time_utc": "2025-03-16T04:21:22+00:00",
+   "lap": 2,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR THROUGH THE PIT LANE"
+  },
+  {
+   "seq": 28,
+   "time_utc": "2025-03-16T04:30:05+00:00",
+   "lap": 5,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 20"
+  },
+  {
+   "seq": 29,
+   "time_utc": "2025-03-16T04:30:31+00:00",
+   "lap": 5,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 8"
+  },
+  {
+   "seq": 30,
+   "time_utc": "2025-03-16T04:33:54+00:00",
+   "lap": 7,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR IN THIS LAP"
+  },
+  {
+   "seq": 31,
+   "time_utc": "2025-03-16T04:35:12+00:00",
+   "lap": 7,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Track",
+   "message": "TRACK CLEAR"
+  },
+  {
+   "seq": 39,
+   "time_utc": "2025-03-16T04:51:15+00:00",
+   "lap": 18,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 15"
+  },
+  {
+   "seq": 41,
+   "time_utc": "2025-03-16T04:51:31+00:00",
+   "lap": 18,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 12"
+  },
+  {
+   "seq": 46,
+   "time_utc": "2025-03-16T04:52:10+00:00",
+   "lap": 18,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 1"
+  },
+  {
+   "seq": 47,
+   "time_utc": "2025-03-16T04:52:11+00:00",
+   "lap": 18,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 13"
+  },
+  {
+   "seq": 50,
+   "time_utc": "2025-03-16T04:52:56+00:00",
+   "lap": 19,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 15"
+  },
+  {
+   "seq": 56,
+   "time_utc": "2025-03-16T05:07:48+00:00",
+   "lap": 29,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 87 (BEA) TIMED AT 16:07:48"
+  },
+  {
+   "seq": 57,
+   "time_utc": "2025-03-16T05:08:37+00:00",
+   "lap": 29,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 31 (OCO) TIMED AT 16:08:36"
+  },
+  {
+   "seq": 59,
+   "time_utc": "2025-03-16T05:13:01+00:00",
+   "lap": 32,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 30 (LAW) TIMED AT 16:13:00"
+  },
+  {
+   "seq": 60,
+   "time_utc": "2025-03-16T05:13:38+00:00",
+   "lap": 33,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 30 (LAW) TIMED AT 16:13:37"
+  },
+  {
+   "seq": 62,
+   "time_utc": "2025-03-16T05:14:46+00:00",
+   "lap": 34,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 87 (BEA) TIMED AT 16:14:46"
+  },
+  {
+   "seq": 63,
+   "time_utc": "2025-03-16T05:14:49+00:00",
+   "lap": 34,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 10"
+  },
+  {
+   "seq": 64,
+   "time_utc": "2025-03-16T05:15:09+00:00",
+   "lap": 34,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR DEPLOYED"
+  },
+  {
+   "seq": 66,
+   "time_utc": "2025-03-16T05:24:33+00:00",
+   "lap": 38,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 8"
+  },
+  {
+   "seq": 67,
+   "time_utc": "2025-03-16T05:24:36+00:00",
+   "lap": 38,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 9"
+  },
+  {
+   "seq": 68,
+   "time_utc": "2025-03-16T05:25:02+00:00",
+   "lap": 38,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 8"
+  },
+  {
+   "seq": 69,
+   "time_utc": "2025-03-16T05:28:03+00:00",
+   "lap": 39,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 9"
+  },
+  {
+   "seq": 70,
+   "time_utc": "2025-03-16T05:28:05+00:00",
+   "lap": 39,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 10"
+  },
+  {
+   "seq": 73,
+   "time_utc": "2025-03-16T05:30:50+00:00",
+   "lap": 41,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR IN THIS LAP"
+  },
+  {
+   "seq": 75,
+   "time_utc": "2025-03-16T05:32:25+00:00",
+   "lap": 41,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Track",
+   "message": "TRACK CLEAR"
+  },
+  {
+   "seq": 78,
+   "time_utc": "2025-03-16T05:36:48+00:00",
+   "lap": 44,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 80,
+   "time_utc": "2025-03-16T05:37:35+00:00",
+   "lap": 45,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 81,
+   "time_utc": "2025-03-16T05:37:37+00:00",
+   "lap": 45,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 18"
+  },
+  {
+   "seq": 82,
+   "time_utc": "2025-03-16T05:38:12+00:00",
+   "lap": 45,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 83,
+   "time_utc": "2025-03-16T05:38:13+00:00",
+   "lap": 45,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 18"
+  },
+  {
+   "seq": 86,
+   "time_utc": "2025-03-16T05:38:57+00:00",
+   "lap": 46,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 87 (BEA) TIMED AT 16:38:56"
+  },
+  {
+   "seq": 87,
+   "time_utc": "2025-03-16T05:39:06+00:00",
+   "lap": 46,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 87 (BEA) TIMED AT 16:39:06"
+  },
+  {
+   "seq": 88,
+   "time_utc": "2025-03-16T05:40:09+00:00",
+   "lap": 46,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 81 (PIA) TIMED AT 16:40:09"
+  },
+  {
+   "seq": 89,
+   "time_utc": "2025-03-16T05:40:26+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 87 (BEA) TIMED AT 16:40:25"
+  },
+  {
+   "seq": 90,
+   "time_utc": "2025-03-16T05:40:33+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "BLUE",
+   "scope": "Driver",
+   "message": "WAVED BLUE FLAG FOR CAR 81 (PIA) TIMED AT 16:40:33"
+  },
+  {
+   "seq": 91,
+   "time_utc": "2025-03-16T05:40:37+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 18"
+  },
+  {
+   "seq": 92,
+   "time_utc": "2025-03-16T05:40:41+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 93,
+   "time_utc": "2025-03-16T05:40:42+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 18"
+  },
+  {
+   "seq": 94,
+   "time_utc": "2025-03-16T05:40:45+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 95,
+   "time_utc": "2025-03-16T05:40:54+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "YELLOW",
+   "scope": "Sector",
+   "message": "YELLOW IN TRACK SECTOR 18"
+  },
+  {
+   "seq": 96,
+   "time_utc": "2025-03-16T05:40:55+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 18"
+  },
+  {
+   "seq": 97,
+   "time_utc": "2025-03-16T05:40:56+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 98,
+   "time_utc": "2025-03-16T05:41:00+00:00",
+   "lap": 47,
+   "category": "Flag",
+   "flag": "DOUBLE YELLOW",
+   "scope": "Sector",
+   "message": "DOUBLE YELLOW IN TRACK SECTOR 2"
+  },
+  {
+   "seq": 100,
+   "time_utc": "2025-03-16T05:41:06+00:00",
+   "lap": 47,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR DEPLOYED"
+  },
+  {
+   "seq": 104,
+   "time_utc": "2025-03-16T05:46:48+00:00",
+   "lap": 49,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 2"
+  },
+  {
+   "seq": 105,
+   "time_utc": "2025-03-16T05:47:00+00:00",
+   "lap": 50,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Sector",
+   "message": "CLEAR IN TRACK SECTOR 19"
+  },
+  {
+   "seq": 107,
+   "time_utc": "2025-03-16T05:49:42+00:00",
+   "lap": 51,
+   "category": "SafetyCar",
+   "flag": null,
+   "scope": null,
+   "message": "SAFETY CAR IN THIS LAP"
+  },
+  {
+   "seq": 108,
+   "time_utc": "2025-03-16T05:51:17+00:00",
+   "lap": 51,
+   "category": "Flag",
+   "flag": "CLEAR",
+   "scope": "Track",
+   "message": "TRACK CLEAR"
+  },
+  {
+   "seq": 114,
+   "time_utc": "2025-03-16T06:00:29+00:00",
+   "lap": 57,
+   "category": "Flag",
+   "flag": "CHEQUERED",
+   "scope": "Track",
+   "message": "CHEQUERED FLAG"
+  }
+ ],
+ "stints": [
+  {
+   "driver_id": "albon",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "albon",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "albon",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 1
+  },
+  {
+   "driver_id": "albon",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "albon",
+   "stint": 5,
+   "compound": "MEDIUM",
+   "lap_start": 33.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "albon",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "alonso",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "alonso",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "alonso",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "alonso",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 32.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "antonelli",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "antonelli",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "antonelli",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "antonelli",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "antonelli",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 33.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "antonelli",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 5,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 6,
+   "compound": "MEDIUM",
+   "lap_start": 4.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bearman",
+   "stint": 7,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 5,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 6,
+   "compound": "MEDIUM",
+   "lap_start": 4.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "bortoleto",
+   "stint": 7,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 45.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "doohan",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": null,
+   "lap_end": null,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "gasly",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "gasly",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "gasly",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "gasly",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "gasly",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 33.0,
+   "lap_end": 46.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "gasly",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 46.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hadjar",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": null,
+   "lap_end": null,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hamilton",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hamilton",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "hamilton",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "hamilton",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "hamilton",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 33.0,
+   "lap_end": 47.0,
+   "tyre_age_at_start": 1
+  },
+  {
+   "driver_id": "hamilton",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 47.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stint": 5,
+   "compound": "MEDIUM",
+   "lap_start": 33.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": null,
+   "lap_end": null,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": null,
+   "lap_end": null,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 5,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "lawson",
+   "stint": 7,
+   "compound": "MEDIUM",
+   "lap_start": 33.0,
+   "lap_end": 46.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "leclerc",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "leclerc",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "leclerc",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "leclerc",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 34.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "leclerc",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 34.0,
+   "lap_end": 47.0,
+   "tyre_age_at_start": 1
+  },
+  {
+   "driver_id": "leclerc",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 47.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 34.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stint": 5,
+   "compound": "MEDIUM",
+   "lap_start": 34.0,
+   "lap_end": 46.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 46.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "norris",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "norris",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "norris",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "norris",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 34.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "norris",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 34.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 1
+  },
+  {
+   "driver_id": "norris",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "ocon",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "ocon",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "ocon",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "ocon",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 39.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "ocon",
+   "stint": 5,
+   "compound": "MEDIUM",
+   "lap_start": 39.0,
+   "lap_end": 46.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "ocon",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 46.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "piastri",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "piastri",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "piastri",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "piastri",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 34.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "piastri",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 34.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 1
+  },
+  {
+   "driver_id": "piastri",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "russell",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "russell",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "russell",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "russell",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 34.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "russell",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 34.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "russell",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "sainz",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": null,
+   "lap_end": null,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "stroll",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "stroll",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "stroll",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 3
+  },
+  {
+   "driver_id": "stroll",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 4
+  },
+  {
+   "driver_id": "stroll",
+   "stint": 5,
+   "compound": "HARD",
+   "lap_start": 33.0,
+   "lap_end": 44.0,
+   "tyre_age_at_start": 1
+  },
+  {
+   "driver_id": "stroll",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 44.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "tsunoda",
+   "stint": 1,
+   "compound": "INTERMEDIATE",
+   "lap_start": 1.0,
+   "lap_end": 2.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "tsunoda",
+   "stint": 2,
+   "compound": "INTERMEDIATE",
+   "lap_start": 2.0,
+   "lap_end": 3.0,
+   "tyre_age_at_start": 2
+  },
+  {
+   "driver_id": "tsunoda",
+   "stint": 3,
+   "compound": "INTERMEDIATE",
+   "lap_start": 3.0,
+   "lap_end": 4.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "tsunoda",
+   "stint": 4,
+   "compound": "INTERMEDIATE",
+   "lap_start": 4.0,
+   "lap_end": 33.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "tsunoda",
+   "stint": 5,
+   "compound": "MEDIUM",
+   "lap_start": 33.0,
+   "lap_end": 47.0,
+   "tyre_age_at_start": 0
+  },
+  {
+   "driver_id": "tsunoda",
+   "stint": 6,
+   "compound": "INTERMEDIATE",
+   "lap_start": 47.0,
+   "lap_end": 57.0,
+   "tyre_age_at_start": 0
+  }
+ ],
+ "pit_stops": [
+  {
+   "driver_id": "albon",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 15.02
+  },
+  {
+   "driver_id": "albon",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.993
+  },
+  {
+   "driver_id": "albon",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.285
+  },
+  {
+   "driver_id": "albon",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 18.573
+  },
+  {
+   "driver_id": "albon",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 18.952
+  },
+  {
+   "driver_id": "alonso",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 15.535
+  },
+  {
+   "driver_id": "alonso",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.241
+  },
+  {
+   "driver_id": "alonso",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 15.034
+  },
+  {
+   "driver_id": "antonelli",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.658
+  },
+  {
+   "driver_id": "antonelli",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.374
+  },
+  {
+   "driver_id": "antonelli",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 13.975
+  },
+  {
+   "driver_id": "antonelli",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 18.912
+  },
+  {
+   "driver_id": "antonelli",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 21.946
+  },
+  {
+   "driver_id": "bearman",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.605
+  },
+  {
+   "driver_id": "bearman",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.347
+  },
+  {
+   "driver_id": "bearman",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 22.494
+  },
+  {
+   "driver_id": "bearman",
+   "stop": 4,
+   "lap": 39,
+   "duration_s": 22.441
+  },
+  {
+   "driver_id": "bearman",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 19.37
+  },
+  {
+   "driver_id": "bortoleto",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.432
+  },
+  {
+   "driver_id": "bortoleto",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.363
+  },
+  {
+   "driver_id": "bortoleto",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.206
+  },
+  {
+   "driver_id": "bortoleto",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 24.073
+  },
+  {
+   "driver_id": "bortoleto",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 26.214
+  },
+  {
+   "driver_id": "gasly",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 15.104
+  },
+  {
+   "driver_id": "gasly",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 15.744
+  },
+  {
+   "driver_id": "gasly",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.71
+  },
+  {
+   "driver_id": "gasly",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 19.589
+  },
+  {
+   "driver_id": "gasly",
+   "stop": 5,
+   "lap": 46,
+   "duration_s": 19.482
+  },
+  {
+   "driver_id": "hamilton",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 15.002
+  },
+  {
+   "driver_id": "hamilton",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.191
+  },
+  {
+   "driver_id": "hamilton",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.789
+  },
+  {
+   "driver_id": "hamilton",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 18.526
+  },
+  {
+   "driver_id": "hamilton",
+   "stop": 5,
+   "lap": 47,
+   "duration_s": 20.802
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 15.13
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 15.971
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.198
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 21.123
+  },
+  {
+   "driver_id": "hulkenberg",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 20.209
+  },
+  {
+   "driver_id": "lawson",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.79
+  },
+  {
+   "driver_id": "lawson",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.309
+  },
+  {
+   "driver_id": "lawson",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 18.88
+  },
+  {
+   "driver_id": "lawson",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 20.067
+  },
+  {
+   "driver_id": "leclerc",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.182
+  },
+  {
+   "driver_id": "leclerc",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 14.621
+  },
+  {
+   "driver_id": "leclerc",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.129
+  },
+  {
+   "driver_id": "leclerc",
+   "stop": 4,
+   "lap": 34,
+   "duration_s": 18.154
+  },
+  {
+   "driver_id": "leclerc",
+   "stop": 5,
+   "lap": 47,
+   "duration_s": 24.528
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 13.416
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 13.74
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 12.938
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stop": 4,
+   "lap": 34,
+   "duration_s": 18.7
+  },
+  {
+   "driver_id": "max_verstappen",
+   "stop": 5,
+   "lap": 46,
+   "duration_s": 18.721
+  },
+  {
+   "driver_id": "norris",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 13.341
+  },
+  {
+   "driver_id": "norris",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 12.91
+  },
+  {
+   "driver_id": "norris",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 12.804
+  },
+  {
+   "driver_id": "norris",
+   "stop": 4,
+   "lap": 34,
+   "duration_s": 18.464
+  },
+  {
+   "driver_id": "norris",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 18.031
+  },
+  {
+   "driver_id": "ocon",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.395
+  },
+  {
+   "driver_id": "ocon",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.477
+  },
+  {
+   "driver_id": "ocon",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 19.649
+  },
+  {
+   "driver_id": "ocon",
+   "stop": 4,
+   "lap": 39,
+   "duration_s": 18.778
+  },
+  {
+   "driver_id": "ocon",
+   "stop": 5,
+   "lap": 46,
+   "duration_s": 19.858
+  },
+  {
+   "driver_id": "piastri",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 13.078
+  },
+  {
+   "driver_id": "piastri",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 13.838
+  },
+  {
+   "driver_id": "piastri",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 12.816
+  },
+  {
+   "driver_id": "piastri",
+   "stop": 4,
+   "lap": 34,
+   "duration_s": 19.719
+  },
+  {
+   "driver_id": "piastri",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 19.85
+  },
+  {
+   "driver_id": "russell",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 13.672
+  },
+  {
+   "driver_id": "russell",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 14.104
+  },
+  {
+   "driver_id": "russell",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 13.696
+  },
+  {
+   "driver_id": "russell",
+   "stop": 4,
+   "lap": 34,
+   "duration_s": 19.125
+  },
+  {
+   "driver_id": "russell",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 19.378
+  },
+  {
+   "driver_id": "stroll",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 15.505
+  },
+  {
+   "driver_id": "stroll",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 16.014
+  },
+  {
+   "driver_id": "stroll",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 14.451
+  },
+  {
+   "driver_id": "stroll",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 18.802
+  },
+  {
+   "driver_id": "stroll",
+   "stop": 5,
+   "lap": 44,
+   "duration_s": 18.901
+  },
+  {
+   "driver_id": "tsunoda",
+   "stop": 1,
+   "lap": 2,
+   "duration_s": 14.957
+  },
+  {
+   "driver_id": "tsunoda",
+   "stop": 2,
+   "lap": 3,
+   "duration_s": 15.223
+  },
+  {
+   "driver_id": "tsunoda",
+   "stop": 3,
+   "lap": 4,
+   "duration_s": 13.605
+  },
+  {
+   "driver_id": "tsunoda",
+   "stop": 4,
+   "lap": 33,
+   "duration_s": 18.997
+  },
+  {
+   "driver_id": "tsunoda",
+   "stop": 5,
+   "lap": 47,
+   "duration_s": 19.312
+  }
+ ]
+}

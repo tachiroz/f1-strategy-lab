@@ -38,6 +38,7 @@ from f1lab.models.neutralisation import (
     Neutralisation,
     Period,
     lap_states,
+    leader_lap,
     neutralisation_periods,
 )
 
@@ -232,12 +233,6 @@ def estimate_pit_losses(
     return per_circuit, green["loss"].to_numpy(), ratio(SC), ratio(VSC)
 
 
-def _deployment_lap(laps: pd.DataFrame, race_id: int, start: pd.Timestamp) -> int:
-    """Leader's lap when a period starts: the highest lap number already started."""
-    started = laps[(laps["race_id"] == race_id) & (laps["start_time_utc"] <= start)]
-    return int(started["lap"].max()) if not started.empty else FIRST_RACE_LAP
-
-
 def estimate_neutralisations(
     laps: pd.DataFrame, periods: dict[int, list[Period]], results: pd.DataFrame
 ) -> dict[str, NeutralisationStats]:
@@ -263,7 +258,7 @@ def estimate_neutralisations(
                 {
                     "race_id": race_id,
                     "kind": period.kind.value,
-                    "lap": _deployment_lap(laps, race_id, period.start),
+                    "lap": leader_lap(laps[laps["race_id"] == race_id], period.start),
                     "length": max(1, round(seconds / green_lap.get(race_id, np.nan)))
                     if race_id in green_lap.index
                     else 1,

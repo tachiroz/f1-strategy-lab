@@ -12,3 +12,6 @@ fastapi==0.142.4
 starlette==1.7.0
 pydantic==2.13.5
 uvicorn==0.54.0
+# Race report (stage 6): templates.
+Jinja2==3.1.6
+MarkupSafe==3.0.4

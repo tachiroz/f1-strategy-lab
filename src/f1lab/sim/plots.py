@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
+from matplotlib.ticker import MaxNLocator
 
 from f1lab.plotting import (
     AXIS,
@@ -29,6 +30,7 @@ ACTUAL_MARKER = "D"
 RETIRED_MARKER = "x"
 LEGEND_BAND = 0.05
 """Share of the figure height kept free below the panels for the legend."""
+SHOWCASE_TITLE = "Симуляция против реальности (вне обучения): лучшая, средняя и худшая гонка"
 
 
 def pick_showcase(result: Backtest, count: int = 3) -> list[RaceBacktest]:
@@ -40,7 +42,9 @@ def pick_showcase(result: Backtest, count: int = 3) -> list[RaceBacktest]:
     return [ordered[i] for i in dict.fromkeys(positions)]
 
 
-def plot_backtest_races(races: Sequence[RaceBacktest], path: Path) -> Path:
+def plot_backtest_races(
+    races: Sequence[RaceBacktest], path: Path, title: str = SHOWCASE_TITLE
+) -> Path:
     """Small multiples: simulated position band and mean vs the real finish, per driver."""
     rows = max((len(race.table) for race in races), default=1)
     figure, axes = new_figure(ROW_HEIGHT_IN * rows + 1.6, ncols=max(len(races), 1))
@@ -73,6 +77,7 @@ def plot_backtest_races(races: Sequence[RaceBacktest], path: Path) -> Path:
         ax.tick_params(axis="y", colors=INK_SECONDARY)
         ax.grid(axis="y", visible=False)
         ax.set_xlim(0.5, len(table) + 0.5)
+        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.set_xlabel("Позиция")
         ax.set_title(
             f"{race.race_name}\nSpearman {race.spearman:.2f} (решётка {race.grid_spearman:.2f})",
@@ -94,7 +99,7 @@ def plot_backtest_races(races: Sequence[RaceBacktest], path: Path) -> Path:
     for text in box.get_texts():
         text.set_color(INK_SECONDARY)
     figure.suptitle(
-        "Симуляция против реальности (вне обучения): лучшая, средняя и худшая гонка",
+        title,
         color=INK,
         fontsize=11,
         x=0.01,

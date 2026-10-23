@@ -20,6 +20,9 @@ optional-dependencies = { dev = { file = ["requirements-dev.txt"] } }
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+f1lab = ["report/templates/*.j2"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"

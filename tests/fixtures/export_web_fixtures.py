@@ -27,6 +27,8 @@ FIXTURES = {
     "simulation-202504.json": f"{SHOWCASE}/simulation",
     "strategies-202504.json": f"{SHOWCASE}/strategies?{STRATEGIES}",
     "sc-sensitivity-202504.json": f"{SHOWCASE}/sc-sensitivity?{STRATEGIES}",
+    "report-202504.json": f"{SHOWCASE}/report",
+    "report-202501.json": "/api/races/202501/report",
     "circuits.json": "/api/circuits",
     "tyres-bahrain.json": "/api/circuits/bahrain/tyres",
 }

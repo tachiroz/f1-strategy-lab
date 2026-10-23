@@ -51,7 +51,10 @@ describe('App', () => {
       '/strategy?race=202504',
     )
     expect(within(nav).getByRole('link', { name: 'Гонки' })).toHaveAttribute('aria-current', 'page')
-    expect(within(nav).getByText('Отчёты')).toHaveAttribute('aria-disabled', 'true')
+    expect(within(nav).getByRole('link', { name: 'Отчёты' })).toHaveAttribute(
+      'href',
+      '/reports?race=202504',
+    )
   })
 
   it('answers unknown paths with a 404 page', () => {

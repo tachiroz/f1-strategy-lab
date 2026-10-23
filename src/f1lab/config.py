@@ -104,6 +104,13 @@ MIN_DRY_COMPOUNDS: int = 2
 """Sporting rule: a dry race must use at least two different dry compounds."""
 RED_FLAG_STOP_S: float = 300.0
 """A recorded 'pit stop' longer than this is a tyre change under red flag (free)."""
+RC_PIT_LANE_PASS: str = "THROUGH THE PIT LANE"
+"""Race control: the Safety Car leads the field through the pit lane (no tyre change)."""
+PIT_LANE_PASS_LAP_SLACK: int = 1
+"""Passes are looked for from one lap before that message: lapped cars are a lap behind."""
+PIT_LANE_PASS_MARGIN_S: float = 3.0
+"""A same-compound visit this much longer than the window's median one is a real stop
+(standing time plus braking into the box and accelerating out of it)."""
 FINISHED_STATUSES: frozenset[str] = frozenset({"Finished", "Lapped"})
 NON_STARTER_STATUSES: frozenset[str] = frozenset({"Did not start", "Withdrew"})
 DISQUALIFIED_STATUS: str = "Disqualified"
@@ -159,6 +166,24 @@ API_CACHE_SIZE: int = 128
 """Simulation results kept in memory per kind of request (the seed is fixed)."""
 MIN_OBSERVED_LAPS: int = 5
 """An observed point of the degradation chart needs at least this many clean laps."""
+
+# --- Race report (stage 6) ----------------------------------------------------
+REPORT_DIR: Path = PROJECT_ROOT / "docs" / "reports"
+REPO_URL: str = "https://github.com/tachiroz/f1-strategy-lab"
+"""Reports link the method documents here, so the links work wherever the Markdown goes."""
+REPORT_MOVERS: int = 3
+"""Biggest position gainers and losers named in a report."""
+REPORT_SURPRISES: int = 2
+"""Drivers per direction whose real finish fell outside the simulated band."""
+REPORT_STRATEGY_DRIVERS: int = 3
+"""Strategy check for the first classified finishers (the podium)."""
+REPORT_STRATEGY_CANDIDATES: int = 4
+"""Most common strategies of the field tried against each of those drivers' own."""
+REPORT_STRATEGY_RUNS: int = 2000
+"""Runs per strategy in that check (podium x candidates simulations per report)."""
+REPORT_MIN_STRATEGY_GAIN: float = 0.1
+"""A strategy idea needs at least this mean position gain; smaller ones are not worth a line."""
+WET_COMPOUNDS: tuple[str, ...] = ("INTERMEDIATE", "WET")
 
 
 def get_data_dir() -> Path:

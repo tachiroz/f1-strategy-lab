@@ -190,3 +190,13 @@ export interface TyreModel {
   laps: number
   compounds: TyreCompound[]
 }
+
+/** Automatic report of a race in Markdown (the charts are drawn by the dashboard). */
+export interface RaceReport {
+  race_id: number
+  /** Suggested name of the downloaded file, e.g. `2025-04-bahrain.md`. */
+  file_name: string
+  /** The report has the simulator's view (false when the race cannot be simulated). */
+  simulated: boolean
+  markdown: string
+}

@@ -23,6 +23,7 @@
   Дизайн современный и аккуратный: тёмная тема, адаптивность, токены в `web/src/index.css`.
   Графики: собственные SVG-компоненты на d3-scale и d3-shape; маршруты React Router, данные
   TanStack Query. Streamlit не используем.
+- Отчёт: шаблон Jinja2 → Markdown (`src/f1lab/report`); в дашборде react-markdown + remark-gfm
 - Тесты: pytest (Python), Vitest + Testing Library (web)
 - Линтеры и форматтеры: ruff + ruff format (Python), Oxlint + Prettier (web); хуки pre-commit
 - CI: GitHub Actions, ubuntu + windows (Python: ruff + pytest; web: lint, format, tests, build)

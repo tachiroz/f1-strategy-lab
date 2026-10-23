@@ -26,6 +26,8 @@ COMPOUND_STYLE = {
     "SOFT": ("#f72c2e", "o"),
     "MEDIUM": ("#fccf28", "s"),
     "HARD": ("#f0eeeb", "^"),
+    "INTERMEDIATE": ("#51c148", "v"),
+    "WET": ("#2b99e7", "D"),
 }
 DPI = 160
 FIGURE_WIDTH_IN = 11.0
