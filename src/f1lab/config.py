@@ -160,6 +160,22 @@ API_CACHE_SIZE: int = 128
 MIN_OBSERVED_LAPS: int = 5
 """An observed point of the degradation chart needs at least this many clean laps."""
 
+# --- Race report (stage 6) ----------------------------------------------------
+REPORT_DIR: Path = PROJECT_ROOT / "docs" / "reports"
+REPO_URL: str = "https://github.com/tachiroz/f1-strategy-lab"
+"""Reports link the method documents here, so the links work wherever the Markdown goes."""
+REPORT_MOVERS: int = 3
+"""Biggest position gainers and losers named in a report."""
+REPORT_SURPRISES: int = 2
+"""Drivers per direction whose real finish fell outside the simulated band."""
+REPORT_STRATEGY_DRIVERS: int = 3
+"""Strategy check for the first classified finishers (the podium)."""
+REPORT_STRATEGY_CANDIDATES: int = 4
+"""Most common strategies of the field tried against each of those drivers' own."""
+REPORT_STRATEGY_RUNS: int = 2000
+"""Runs per strategy in that check (podium x candidates simulations per report)."""
+WET_COMPOUNDS: tuple[str, ...] = ("INTERMEDIATE", "WET")
+
 
 def get_data_dir() -> Path:
     """Return the directory for local data (FastF1 cache, SQLite database).

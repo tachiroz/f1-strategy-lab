@@ -1,0 +1,150 @@
+{#- Race report. Prints facts only: every number is a field of RaceFacts, formatted by a filter
+    from f1lab.report.text (checked by tests/test_report.py). No arithmetic in this file. -#}
+{%- macro start(d) -%}
+{%- if d.grid == 0 %}с пит-лейна{% else %}с {{ d.grid }}-го места{% endif -%}
+{%- endmacro -%}
+{%- macro laps(n) -%}
+{{ n }} {{ n | plural("круг", "круга", "кругов") }}
+{%- endmacro -%}
+{%- set w = f.podium[0] -%}
+# {{ f.race_name }} {{ f.season }}: разбор гонки
+
+> Автоматический отчёт, собранный по шаблону из данных OpenF1 и Jolpica-F1
+> (`python -m f1lab.report --season {{ f.season }} --round {{ f.round }}`). Факты взяты из протоколов
+> как есть. Всё, что сказано от имени симулятора, — оценка модели, а не факт.
+
+{{ f.date | longdate }} · {{ f.circuit_name }}{% if f.country %}, {{ f.country }}{% endif %} · {{ laps(f.race_laps) }}
+{%- if f.weather %} · воздух {{ f.weather.air_c | num(0) }} °C, трасса {{ f.weather.track_c | num(0) }} °C{% endif %}
+{%- if f.wet %} · мокрая гонка{% elif f.weather and f.weather.rain %} · был дождь{% endif %}.
+
+## Итог
+
+Победил **{{ w.name }}** ({{ w.team }}), стартовав {{ start(w) }}.
+{%- if f.winner_margin_s is not none %} Отрыв от второго места — {{ f.winner_margin_s | num(1) }} с.{% endif %}
+
+
+Подиум:
+
+{% for d in f.podium %}
+{{ d.position }}. {{ d.name }}, {{ d.team }} (старт {% if d.grid == 0 %}с пит-лейна{% else %}P{{ d.grid }}{% endif %})
+{% endfor %}
+
+{% if f.pole %}
+С поула стартовал {{ f.pole.name }}{% if f.pole.position %} и финишировал P{{ f.pole.position }}{% else %}, но до финиша не доехал{% endif %}.
+{% endif %}
+{% if f.fastest_lap %}
+Быстрый круг — {{ f.fastest_lap.name }}: {{ f.fastest_lap.time_s | laptime }} на {{ f.fastest_lap.lap }}-м круге.
+{% endif %}
+Классифицированы {{ f.classified }} из {{ f.starters }} стартовавших.
+
+## Позиции
+
+{% if f.gainers %}
+Больше всех отыграли:
+
+{% for d in f.gainers %}
+- {{ d.name }}: {{ start(d) }} на P{{ d.position }} ({{ d.gained | signed(0) }})
+{% endfor %}
+
+{% endif %}
+{% if f.losers %}
+Больше всех потеряли:
+
+{% for d in f.losers %}
+- {{ d.name }}: {{ start(d) }} на P{{ d.position }} ({{ d.gained | signed(0) }})
+{% endfor %}
+
+{% endif %}
+{% if f.retirements %}
+Не доехали до финиша:
+
+{% for d in f.retirements %}
+- {{ d.name }} ({{ d.team }}): {{ d.status | status }}, {{ laps(d.laps) }}
+{% endfor %}
+{% else %}
+Сходов не было.
+{% endif %}
+{% if f.disqualified %}
+
+Дисквалификация: {% for d in f.disqualified %}{{ d.name }}{{ ", " if not loop.last }}{% endfor %}.
+{% endif %}
+
+## Пит-стопы и шины
+
+{% for c in f.stop_counts %}
+- {{ c.stops }} {{ c.stops | plural("пит-стоп", "пит-стопа", "пит-стопов") }}: {{ c.drivers }} {{ c.drivers | plural("финишёр", "финишёра", "финишёров") }}
+{% endfor %}
+
+| Финиш | Пилот | Старт | Пит-стопы | Шины |
+|---:|---|---:|---:|---|
+{% for d in f.drivers %}
+| {{ d.position if d.position else ("дискв." if d.is_disqualified else "сход") }} | {{ d.name }} | {{ "ПЛ" if d.grid == 0 else d.grid }} | {{ d.stops }}{% if d.red_flag_changes %} (+{{ d.red_flag_changes }} под красным флагом){% endif %} | {{ d.compounds | compounds }} |
+{% endfor %}
+{% if f.has_red_flag_changes %}
+
+Смена шин во время остановки гонки красным флагом бесплатна и пит-стопом здесь не считается.
+{% endif %}
+{% if f.neutralisations %}
+
+## Нейтрализации
+
+{% for n in f.neutralisations %}
+- {{ n.kind | kind | capitalize }}: {% if n.start_lap == n.end_lap %}{{ n.start_lap }}-й круг{% else %}круги {{ n.start_lap }}–{{ n.end_lap }}{% endif %}, {{ n.minutes | num(1) }} мин
+{% endfor %}
+{% else %}
+
+## Нейтрализации
+
+Гонка прошла без сейфти-кара, VSC и красного флага.
+{% endif %}
+
+## Взгляд симулятора
+
+{% if f.simulation %}
+{% set s = f.simulation %}
+> Оценка модели, а не факт. Симулятор знал квалификацию, решётку и стратегии, которые пилоты
+> реально выбрали, и прогнал гонку {{ s.runs }} раз.
+{%- if s.in_sample %} Эта гонка входила в калибровку, так что это проверка в выборке.{% else %} Калибровка эту гонку не видела: это прогноз вне выборки.{% endif %}
+
+
+- **Фаворит до старта:** {{ s.favourite_name }}, победа в {{ s.favourite_p_win | pct }} прогонов.
+{%- if s.favourite_id == w.driver_id %} Он и выиграл.{% else %} Победитель {{ w.name }} выигрывал в {{ s.winner_p_win | pct }} прогонов ({{ s.winner_rank }}-й по шансам).{% endif %}
+
+- **Точность:** средняя ошибка позиции {{ s.mae | num(2) }} у симулятора против {{ s.grid_mae | num(2) }} у модели «финиш = решётка» ({{ s.finishers }} {{ s.finishers | plural("финишёр", "финишёра", "финишёров") }}).
+{%- if s.spearman is not none and s.grid_spearman is not none %} Совпадение порядка (Spearman): {{ s.spearman | num(2) }} против {{ s.grid_spearman | num(2) }}.{% endif %}
+
+- **Safety Car:** выезжал в {{ s.p_safety_car | pct }} прогонов; в реальности {% if f.has_safety_car %}выезжал{% else %}не выезжал{% endif %}.
+{% if s.over %}
+- **Выше ожиданий:**{% for x in s.over %} {{ x.name }} — P{{ x.position }}, а в {{ s.band_share | pct }} прогонов модель видела его на P{{ x.band_low | num(0) }}–P{{ x.band_high | num(0) }} (в среднем {{ x.expected | num(1) }}){{ ";" if not loop.last else "." }}{% endfor %}
+
+{% endif %}
+{% if s.under %}
+- **Ниже ожиданий:**{% for x in s.under %} {{ x.name }} — P{{ x.position }} при ожидаемых P{{ x.band_low | num(0) }}–P{{ x.band_high | num(0) }} (в среднем {{ x.expected | num(1) }}){{ ";" if not loop.last else "." }}{% endfor %}
+
+{% endif %}
+- **Стратегии призёров:** для каждого из первых {{ s.strategy_drivers }} симулятор перебрал самые частые стратегии поля ({{ s.strategy_runs }} прогонов на вариант).
+{%- if s.strategy_ideas %}
+
+{% for i in s.strategy_ideas %}
+  - {{ i.name }}: `{{ i.better }}` вместо `{{ i.actual }}` — в среднем на {{ i.delta | unsigned(2) }} позиции выше ({{ s.confidence | pct }} интервал разницы {{ i.delta_low | signed(2) }}…{{ i.delta_high | signed(2) }}).
+{% endfor %}
+{% else %} Заметно лучшей стратегии ни для кого не нашлось.
+{% endif %}
+{% else %}
+Симулятор эту гонку не считал: {{ f.simulation_reason | reason }}.
+{% endif %}
+{% if charts %}
+
+## Графики
+
+{% if charts.outcome %}
+![Прогноз против факта]({{ charts.outcome }})
+
+{% endif %}
+![Шины по стинтам]({{ charts.stints }})
+{% endif %}
+
+---
+
+Как это посчитано: [допущения симулятора]({{ repo_url }}/blob/main/docs/assumptions.md),
+[модель шин]({{ repo_url }}/blob/main/docs/models/tyre_model.md).
