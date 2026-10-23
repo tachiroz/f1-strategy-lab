@@ -241,3 +241,17 @@ class TyreModel(BaseModel):
     residual_sd_s: float
     laps: int
     compounds: list[TyreCompound]
+
+
+class RaceReport(BaseModel):
+    """Automatic report of a race in Markdown, as ``python -m f1lab.report`` writes it.
+
+    The charts are left out: the dashboard draws its own next to the text.
+    """
+
+    race_id: int
+    file_name: str
+    """Suggested name of the downloaded file, e.g. ``2025-04-bahrain.md``."""
+    simulated: bool
+    """The report has the simulator's view (false when the race cannot be simulated)."""
+    markdown: str

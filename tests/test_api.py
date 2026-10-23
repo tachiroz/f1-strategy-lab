@@ -15,12 +15,15 @@ from f1lab.config import MAX_COMPARED_STRATEGIES, MIN_OBSERVED_LAPS, SC_SENSITIV
 from f1lab.models.degradation import fit_circuit
 
 BAHRAIN, SAO_PAULO = 202401, 202421
-RUNS, SENSITIVITY_RUNS = 200, 50
+RUNS, SENSITIVITY_RUNS, REPORT_RUNS = 200, 50, 20
 
 
 @pytest.fixture(scope="module")
 def client(race_db: Path) -> Iterator[TestClient]:
-    with TestClient(create_app(race_db, runs=RUNS, sensitivity_runs=SENSITIVITY_RUNS)) as api:
+    app = create_app(
+        race_db, runs=RUNS, sensitivity_runs=SENSITIVITY_RUNS, report_strategy_runs=REPORT_RUNS
+    )
+    with TestClient(app) as api:
         yield api
 
 
@@ -176,9 +179,28 @@ def test_circuits_and_tyres(client: TestClient) -> None:
     assert client.get("/api/circuits/monaco/tyres").status_code == 404
 
 
+def test_report(client: TestClient) -> None:
+    report = client.get(f"/api/races/{BAHRAIN}/report").json()
+    assert (report["race_id"], report["file_name"]) == (BAHRAIN, "2024-01-bahrain.md")
+    assert report["simulated"]
+    markdown = report["markdown"]
+    assert markdown.startswith("# Bahrain Grand Prix 2024: разбор гонки")
+    assert f"прогнал гонку {RUNS} раз" in markdown
+    assert f"({REPORT_RUNS} прогонов на вариант)" in markdown
+    assert "![" not in markdown  # the dashboard draws the charts itself
+
+
+def test_wet_race_report_has_no_simulation(client: TestClient) -> None:
+    report = client.get(f"/api/races/{SAO_PAULO}/report").json()
+    assert (report["file_name"], report["simulated"]) == ("2024-21-interlagos.md", False)
+    assert "Симулятор эту гонку не считал" in report["markdown"]
+    assert client.get("/api/races/190001/report").status_code == 404
+
+
 def test_simulations_are_cached(race_db: Path) -> None:
-    lab = Lab(race_db, runs=20)
+    lab = Lab(race_db, runs=20, report_strategy_runs=REPORT_RUNS)
     assert lab.simulation(BAHRAIN) is lab.simulation(BAHRAIN)
+    assert lab.report(SAO_PAULO) is lab.report(SAO_PAULO)
     assert lab.compare(BAHRAIN, "max_verstappen", ()) is lab.compare(BAHRAIN, "max_verstappen", ())
 
 

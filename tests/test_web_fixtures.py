@@ -13,6 +13,7 @@ from pydantic import TypeAdapter
 from f1lab.api.schemas import (
     CircuitSummary,
     RaceDetail,
+    RaceReport,
     RaceSimulation,
     RaceSummary,
     ScSensitivity,
@@ -28,6 +29,8 @@ MODELS: dict[str, object] = {
     "simulation-202504.json": RaceSimulation,
     "strategies-202504.json": StrategyComparison,
     "sc-sensitivity-202504.json": ScSensitivity,
+    "report-202504.json": RaceReport,
+    "report-202501.json": RaceReport,
     "circuits.json": list[CircuitSummary],
     "tyres-bahrain.json": TyreModel,
 }

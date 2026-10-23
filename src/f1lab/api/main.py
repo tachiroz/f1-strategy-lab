@@ -17,6 +17,7 @@ from f1lab.api.schemas import (
     CircuitSummary,
     Health,
     RaceDetail,
+    RaceReport,
     RaceSimulation,
     RaceSummary,
     ScSensitivity,
@@ -24,7 +25,13 @@ from f1lab.api.schemas import (
     TyreModel,
 )
 from f1lab.api.service import Lab, NotFoundError
-from f1lab.config import API_PREFIX, SENSITIVITY_RUNS, SIM_RUNS, get_db_path
+from f1lab.config import (
+    API_PREFIX,
+    REPORT_STRATEGY_RUNS,
+    SENSITIVITY_RUNS,
+    SIM_RUNS,
+    get_db_path,
+)
 from f1lab.sim.setup import SetupError
 from f1lab.sim.strategy import StrategyError
 
@@ -46,6 +53,7 @@ def create_app(
     *,
     runs: int = SIM_RUNS,
     sensitivity_runs: int = SENSITIVITY_RUNS,
+    report_strategy_runs: int = REPORT_STRATEGY_RUNS,
 ) -> FastAPI:
     """Build the API on top of a database.
 
@@ -53,11 +61,17 @@ def create_app(
         db_path: SQLite database (default: ``<data dir>/f1lab.sqlite``).
         runs: Monte Carlo runs per race and per compared strategy.
         sensitivity_runs: Runs per point of the Safety Car sensitivity curve.
+        report_strategy_runs: Runs per strategy in the report's strategy check.
 
     Returns:
         The application; the database is opened on the first request.
     """
-    lab = Lab(db_path or get_db_path(), runs=runs, sensitivity_runs=sensitivity_runs)
+    lab = Lab(
+        db_path or get_db_path(),
+        runs=runs,
+        sensitivity_runs=sensitivity_runs,
+        report_strategy_runs=report_strategy_runs,
+    )
     app = FastAPI(
         title="F1 Strategy Lab API",
         version=__version__,
@@ -94,6 +108,11 @@ def create_app(
     def sc_sensitivity(race_id: int, driver: str, strategy: Strategies = None) -> ScSensitivity:
         """The same strategies with Safety Cars rarer or more frequent than usual."""
         return lab.sensitivity(race_id, driver, tuple(strategy or ()))
+
+    @router.get("/races/{race_id}/report")
+    def report(race_id: int) -> RaceReport:
+        """Automatic report of the race in Markdown, built from the data only."""
+        return lab.report(race_id)
 
     @router.get("/circuits")
     def circuits() -> list[CircuitSummary]:

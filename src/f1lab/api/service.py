@@ -26,6 +26,7 @@ from f1lab.api.schemas import (
     Interval,
     ObservedPoint,
     RaceDetail,
+    RaceReport,
     RaceScore,
     RaceSimulation,
     RaceSummary,
@@ -45,6 +46,7 @@ from f1lab.config import (
     MAX_COMPARED_STRATEGIES,
     MIN_OBSERVED_LAPS,
     NON_STARTER_STATUSES,
+    REPORT_STRATEGY_RUNS,
     SC_SENSITIVITY_SCALES,
     SENSITIVITY_RUNS,
     SIM_RUNS,
@@ -52,6 +54,8 @@ from f1lab.config import (
 from f1lab.db.engine import create_sqlite_engine, init_db
 from f1lab.models.degradation import CircuitModel, Estimate, driver_levels
 from f1lab.models.filters import clean_laps
+from f1lab.report.facts import race_facts
+from f1lab.report.render import render_report, report_stem
 from f1lab.sim.backtest import actual_results, score_summary
 from f1lab.sim.calibration import Calibration, calibrate, load_history
 from f1lab.sim.engine import SimulationParams, simulate
@@ -159,7 +163,12 @@ class Lab:
     """Database, calibration and cached simulation results behind the API."""
 
     def __init__(
-        self, db_path: Path, *, runs: int = SIM_RUNS, sensitivity_runs: int = SENSITIVITY_RUNS
+        self,
+        db_path: Path,
+        *,
+        runs: int = SIM_RUNS,
+        sensitivity_runs: int = SENSITIVITY_RUNS,
+        report_strategy_runs: int = REPORT_STRATEGY_RUNS,
     ) -> None:
         """Nothing touches the disk until the first request.
 
@@ -167,10 +176,12 @@ class Lab:
             db_path: SQLite database written by ``python -m f1lab.ingest``.
             runs: Monte Carlo runs per race and per compared strategy.
             sensitivity_runs: Runs per point of the Safety Car sensitivity curve.
+            report_strategy_runs: Runs per strategy in the report's strategy check.
         """
         self.db_path = db_path
         self.params = SimulationParams(runs=runs)
         self.sensitivity_params = SimulationParams(runs=sensitivity_runs)
+        self.report_params = SimulationParams(runs=report_strategy_runs)
         self._lock = threading.RLock()
         self._engine: Engine | None = None
         self._calibrated: Calibrated | None = None
@@ -178,6 +189,7 @@ class Lab:
         self.simulation = lru_cache(maxsize=API_CACHE_SIZE)(self._simulation)
         self.compare = lru_cache(maxsize=API_CACHE_SIZE)(self._compare)
         self.sensitivity = lru_cache(maxsize=API_CACHE_SIZE)(self._sensitivity)
+        self.report = lru_cache(maxsize=API_CACHE_SIZE)(self._report)
 
     @property
     def engine(self) -> Engine:
@@ -419,6 +431,19 @@ class Lab:
             runs=self.sensitivity_params.runs,
             scales=list(SC_SENSITIVITY_SCALES),
             series=series,
+        )
+
+    def _report(self, race_id: int) -> RaceReport:
+        row = self._race_row(race_id)
+        facts = race_facts(
+            self.engine, race_id, self._setup_or_reason(race_id), self.params, self.report_params
+        )
+        stem = report_stem(int(row["season"]), int(row["round"]), str(row["circuit_id"]))
+        return RaceReport(
+            race_id=race_id,
+            file_name=f"{stem}.md",
+            simulated=facts.simulation is not None,
+            markdown=render_report(facts),
         )
 
     def _circuit_names(self) -> pd.DataFrame:
