@@ -7,6 +7,8 @@ import circuits from './fixtures/circuits.json'
 import race202501 from './fixtures/race-202501.json'
 import race202504 from './fixtures/race-202504.json'
 import races from './fixtures/races.json'
+import report202501 from './fixtures/report-202501.json'
+import report202504 from './fixtures/report-202504.json'
 import scSensitivity from './fixtures/sc-sensitivity-202504.json'
 import simulation from './fixtures/simulation-202504.json'
 import strategies from './fixtures/strategies-202504.json'
@@ -20,6 +22,8 @@ export const FIXTURES: Readonly<Record<string, unknown>> = {
   '/api/races/202504': race202504,
   '/api/races/202501': race202501,
   '/api/races/202504/simulation': simulation,
+  '/api/races/202504/report': report202504,
+  '/api/races/202501/report': report202501,
   [`/api/races/202504/strategies?${RECORDED_STRATEGIES}`]: strategies,
   [`/api/races/202504/sc-sensitivity?${RECORDED_STRATEGIES}`]: scSensitivity,
   '/api/circuits': circuits,

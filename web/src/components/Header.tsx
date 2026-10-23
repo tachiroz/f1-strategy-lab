@@ -6,10 +6,9 @@ import { LogoMark } from './LogoMark'
 
 interface NavItem {
   label: string
-  to?: string
+  to: string
   /** Carry the selected race over to this section. */
   keepsRace?: boolean
-  hint?: string
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
@@ -17,7 +16,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { label: 'Гонки', to: '/races', keepsRace: true },
   { label: 'Шины', to: '/tyres', keepsRace: true },
   { label: 'Стратегии', to: '/strategy', keepsRace: true },
-  { label: 'Отчёты', hint: 'Появится на Этапе 6: авто-разбор гонки' },
+  { label: 'Отчёты', to: '/reports', keepsRace: true },
 ]
 
 const LINK_CLASS =
@@ -26,21 +25,11 @@ const LINK_CLASS =
 function NavItems() {
   const [params] = useSearchParams()
   const race = params.get('race')
-  return NAV_ITEMS.map(({ label, to, keepsRace, hint }) => (
+  return NAV_ITEMS.map(({ label, to, keepsRace }) => (
     <li key={label}>
-      {to ? (
-        <NavLink to={keepsRace && race ? `${to}?race=${race}` : to} end className={LINK_CLASS}>
-          {label}
-        </NavLink>
-      ) : (
-        <span
-          aria-disabled="true"
-          title={hint}
-          className="cursor-not-allowed rounded-md px-3 py-1.5 whitespace-nowrap text-ink-subtle/70"
-        >
-          {label}
-        </span>
-      )}
+      <NavLink to={keepsRace && race ? `${to}?race=${race}` : to} end className={LINK_CLASS}>
+        {label}
+      </NavLink>
     </li>
   ))
 }

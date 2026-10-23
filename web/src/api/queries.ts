@@ -3,6 +3,7 @@ import { ApiError, getJson, queryString } from './client'
 import type {
   CircuitSummary,
   RaceDetail,
+  RaceReport,
   RaceSimulation,
   RaceSummary,
   ScSensitivity,
@@ -45,6 +46,14 @@ export function useSimulation(raceId: number | undefined, enabled = true) {
     queryKey: ['simulation', raceId],
     queryFn: ({ signal }) => getJson<RaceSimulation>(`/races/${raceId}/simulation`, signal),
     enabled: raceId !== undefined && enabled,
+  })
+}
+
+export function useReport(raceId: number | undefined) {
+  return useQuery({
+    queryKey: ['report', raceId],
+    queryFn: ({ signal }) => getJson<RaceReport>(`/races/${raceId}/report`, signal),
+    enabled: raceId !== undefined,
   })
 }
 
