@@ -126,6 +126,61 @@ def test_splits_merge_only_inside_a_window() -> None:
     assert list(zip(merged["lap_start"], merged["lap_end"], strict=True)) == [(1, 20), (21, 50)]
 
 
+@pytest.mark.parametrize(
+    ("ends", "starts"),
+    [
+        ((65, 66, 67), (66, 67, 68)),  # stint ends a lap before the visit (Canada 2025)
+        ((66, 67, 68), (66, 67, 68)),  # ends and starts on the visit lap (Australia 2025)
+        ((66, 67, 68), (67, 68, 69)),  # ends on the visit, starts after it (Qatar 2024)
+    ],
+)
+def test_consecutive_passes_under_any_boundary_convention(
+    ends: tuple[int, ...], starts: tuple[int, ...]
+) -> None:
+    laps = stints(
+        ("a", 1, "HARD", 50, ends[0]),
+        ("a", 2, "HARD", starts[0], ends[1]),
+        ("a", 3, "HARD", starts[1], ends[2]),
+        ("a", 4, "HARD", starts[2], 70),
+    )
+    stops = visits(("a", 66, PASS_S), ("a", 67, PASS_S), ("a", 68, PASS_S))
+    window = PassWindow(66, 70)
+    assert pit_lane_passes(stops, laps, [window]).all()
+    merged = merge_pit_lane_passes(laps, stops, [window])
+    assert list(zip(merged["lap_start"], merged["lap_end"], strict=True)) == [(50, 70)]
+
+
+def test_a_real_stop_between_passes_keeps_its_place() -> None:
+    laps = stints(
+        ("a", 1, "HARD", 45, 66),
+        ("a", 2, "SOFT", 67, 67),  # real stop on lap 67 (Piastri, Canada 2025)
+        ("a", 3, "SOFT", 68, 70),  # then a pass on lap 68
+    )
+    stops = visits(("a", 67, PASS_S + 8), ("a", 68, PASS_S), ("b", 68, PASS_S))
+    window = PassWindow(66, 70)
+    assert pit_lane_passes(stops, laps, [window]).tolist() == [False, True, True]
+    merged = merge_pit_lane_passes(laps, stops, [window])
+    assert list(zip(merged["compound"], merged["lap_end"], strict=True)) == [
+        ("HARD", 66),
+        ("SOFT", 70),
+    ]
+
+
+def test_a_duplicated_stint_does_not_take_the_visit_of_a_tyre_change() -> None:
+    laps = stints(
+        ("a", 1, "INTERMEDIATE", 1, 3),
+        ("a", 2, "INTERMEDIATE", 3, 4),  # OpenF1 duplicate: no visit of its own
+        ("a", 3, "MEDIUM", 4, 40),
+    )
+    stops = visits(("a", 4, PASS_S + 8), ("b", 4, PASS_S), ("c", 4, PASS_S))
+    assert not pit_lane_passes(stops, laps, [WINDOW])[0]
+    merged = merge_pit_lane_passes(laps, stops, [WINDOW])
+    assert list(zip(merged["compound"], merged["lap_end"], strict=True)) == [
+        ("INTERMEDIATE", 4),
+        ("MEDIUM", 40),
+    ]
+
+
 def test_no_window_changes_nothing() -> None:
     laps = stints(("a", 1, "MEDIUM", 1, 3), ("a", 2, "MEDIUM", 3, 50))
     stops = visits(("a", 3, PASS_S))

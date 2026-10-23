@@ -15,6 +15,7 @@ unless the compound changed or the visit took more than
 
 from dataclasses import dataclass
 
+import numpy as np
 import pandas as pd
 
 from f1lab.config import (
@@ -70,12 +71,37 @@ def _usable(stints: pd.DataFrame) -> pd.DataFrame:
     return ordered[ordered["lap_end"] >= ordered["lap_start"]]
 
 
-def _visit_lap(visit_laps: set[int], boundary: int) -> int | None:
-    """Visit behind a stint boundary: OpenF1 ends a stint on the in-lap or a lap before it."""
-    for lap in (boundary, boundary + 1):
-        if lap in visit_laps:
-            return lap
-    return None
+def _boundary_visits(stints: pd.DataFrame, visits: pd.DataFrame) -> list[object | None]:
+    """Index of the recorded visit behind each boundary between one driver's stints.
+
+    OpenF1 places the boundary differently from race to race (a stint ends on the
+    in-lap or a lap before it, the next starts on it or a lap after), but the
+    visit always lies between the end of one stint and the start of the next.
+    Boundaries take the earliest visit in that range not taken yet, in order:
+    first those where the compound changes (certainly a stop), then the rest, so
+    that a duplicated one-lap stint cannot take the visit of a real tyre change.
+
+    Args:
+        stints: One driver's stints with a lap range, in order.
+        visits: The same driver's recorded pit stops.
+
+    Returns:
+        One entry per boundary: the index of the visit in ``visits``, or None.
+    """
+    ends = stints["lap_end"].to_numpy()[:-1]
+    starts = stints["lap_start"].to_numpy()[1:]
+    compounds = stints["compound"].to_numpy()
+    changes = compounds[:-1] != compounds[1:]
+    order = [*np.flatnonzero(changes), *np.flatnonzero(~changes)]
+    free = visits.sort_values("lap")
+    found: list[object | None] = [None] * len(ends)
+    for boundary in order:
+        low, high = sorted((ends[boundary], starts[boundary]))
+        candidates = free[free["lap"].between(low, high)]
+        if not candidates.empty:
+            found[boundary] = candidates.index[0]
+            free = free.drop(index=candidates.index[0])
+    return found
 
 
 def _in_any(lap: int, windows: list[PassWindow]) -> bool:
@@ -109,14 +135,12 @@ def pit_lane_passes(
     changed = pd.Series(False, index=pit_stops.index)
     for driver_id, group in _usable(stints).groupby("driver_id"):
         visits = pit_stops[pit_stops["driver_id"] == driver_id]
-        visit_laps = {int(lap) for lap in visits["lap"]}
         compounds = group["compound"].tolist()
-        for before, after, boundary in zip(
-            compounds, compounds[1:], group["lap_end"].iloc[:-1], strict=False
+        for before, after, visit in zip(
+            compounds[:-1], compounds[1:], _boundary_visits(group, visits), strict=True
         ):
-            lap = _visit_lap(visit_laps, int(boundary))
-            if before != after and lap is not None:
-                changed[visits.index[visits["lap"] == lap]] = True
+            if before != after and visit is not None:
+                changed[visit] = True
     return inside & short.fillna(False).astype(bool) & ~changed
 
 
@@ -125,8 +149,8 @@ def merge_pit_lane_passes(
 ) -> pd.DataFrame:
     """Stints of one race with the splits at pit lane passes merged into the stint before.
 
-    A split is merged when the compound stays the same, the boundary lies in a
-    pass window and the visit behind it (if Jolpica recorded one) was a pass.
+    A split is merged when the compound stays the same and the visit behind it
+    was a pass (with no visit recorded: when the split lies in a pass window).
     Stints without a lap range are kept as they are.
     """
     if not windows:
@@ -136,16 +160,15 @@ def merge_pit_lane_passes(
     merged: list[dict[str, object]] = []
     for driver_id, group in usable.groupby("driver_id", sort=False):
         visits = pit_stops[pit_stops["driver_id"] == driver_id]
-        visit_laps = {int(lap) for lap in visits["lap"]}
-        real_laps = {int(lap) for lap in visits.loc[~passes[visits.index], "lap"]}
-        rows: list[dict[str, object]] = []
-        for row in group.to_dict("records"):
-            if rows and row["compound"] == rows[-1]["compound"]:
-                boundary = int(rows[-1]["lap_end"])
-                lap = _visit_lap(visit_laps, boundary)
-                if _in_any(boundary, windows) and (lap is None or lap not in real_laps):
-                    rows[-1]["lap_end"] = row["lap_end"]
-                    continue
+        records = group.to_dict("records")
+        rows = records[:1]
+        for row, visit in zip(records[1:], _boundary_visits(group, visits), strict=True):
+            is_pass = (
+                bool(passes[visit]) if visit is not None else _in_any(row["lap_start"], windows)
+            )
+            if row["compound"] == rows[-1]["compound"] and is_pass:
+                rows[-1]["lap_end"] = row["lap_end"]
+                continue
             rows.append(row)
         merged.extend(rows)
     result = pd.DataFrame(merged, columns=stints.columns)
