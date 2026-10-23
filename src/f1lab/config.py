@@ -181,6 +181,8 @@ REPORT_STRATEGY_CANDIDATES: int = 4
 """Most common strategies of the field tried against each of those drivers' own."""
 REPORT_STRATEGY_RUNS: int = 2000
 """Runs per strategy in that check (podium x candidates simulations per report)."""
+REPORT_MIN_STRATEGY_GAIN: float = 0.1
+"""A strategy idea needs at least this mean position gain; smaller ones are not worth a line."""
 WET_COMPOUNDS: tuple[str, ...] = ("INTERMEDIATE", "WET")
 
 

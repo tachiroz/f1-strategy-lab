@@ -21,6 +21,7 @@ from f1lab.config import (
     PODIUM_POSITIONS,
     POSITION_BAND,
     RED_FLAG_STOP_S,
+    REPORT_MIN_STRATEGY_GAIN,
     REPORT_MOVERS,
     REPORT_STRATEGY_CANDIDATES,
     REPORT_STRATEGY_DRIVERS,
@@ -130,7 +131,7 @@ class Weather:
 
 @dataclass(frozen=True)
 class StopCount:
-    """How many classified finishers made this many pit stops."""
+    """How many classified finishers made this many pit stops (ordered by stops)."""
 
     stops: int
     drivers: int
@@ -187,6 +188,7 @@ class SimulationView:
     under: tuple[Surprise, ...]
     strategy_runs: int
     strategy_drivers: int
+    strategy_min_gain: float
     strategy_ideas: tuple[StrategyIdea, ...]
 
 
@@ -371,10 +373,7 @@ def _movers(lines: tuple[DriverLine, ...]) -> tuple[tuple[DriverLine, ...], tupl
 
 def _stop_counts(lines: tuple[DriverLine, ...]) -> tuple[StopCount, ...]:
     counts = Counter(line.stops for line in lines if line.position is not None)
-    return tuple(
-        StopCount(stops, drivers)
-        for stops, drivers in sorted(counts.items(), key=lambda item: (-item[1], item[0]))
-    )
+    return tuple(StopCount(stops, drivers) for stops, drivers in sorted(counts.items()))
 
 
 def _surprises(
@@ -408,7 +407,8 @@ def strategy_ideas(
     """For each podium finisher, the best of the field's most common strategies, if clearly better.
 
     "Clearly" means the whole confidence interval of the paired position
-    difference is below zero.
+    difference is below zero and the mean gain is at least
+    ``REPORT_MIN_STRATEGY_GAIN`` positions.
     """
     field_plans = Counter(
         plan.notation() for plan in setup.strategies.values() if plan.label == ACTUAL_LABEL
@@ -427,7 +427,7 @@ def strategy_ideas(
         plans = [own, *(parse_strategy(notation) for notation in candidates)]
         table = compare_strategies(setup, line.driver_id, plans, params).iloc[1:]
         best = table.sort_values("delta_vs_first").iloc[0]
-        if best["delta_high"] < 0:
+        if best["delta_high"] < 0 and best["delta_vs_first"] <= -REPORT_MIN_STRATEGY_GAIN:
             ideas.append(
                 StrategyIdea(
                     driver_id=line.driver_id,
@@ -480,6 +480,7 @@ def simulation_view(
         under=under,
         strategy_runs=strategy_params.runs,
         strategy_drivers=REPORT_STRATEGY_DRIVERS,
+        strategy_min_gain=REPORT_MIN_STRATEGY_GAIN,
         strategy_ideas=strategy_ideas(setup, lines, strategy_params),
     )
 

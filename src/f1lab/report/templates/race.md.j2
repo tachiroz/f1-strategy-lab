@@ -127,7 +127,7 @@
 - **Ниже ожиданий:**{% for x in s.under %} {{ x.name }} — P{{ x.position }} при ожидаемых P{{ x.band_low | num(0) }}–P{{ x.band_high | num(0) }} (в среднем {{ x.expected | num(1) }}){{ ";" if not loop.last else "." }}{% endfor %}
 
 {% endif %}
-- **Стратегии призёров:** для каждого из первых {{ s.strategy_drivers }} симулятор перебрал самые частые стратегии поля ({{ s.strategy_runs }} прогонов на вариант).
+- **Стратегии призёров:** для каждого из первых {{ s.strategy_drivers }} симулятор перебрал самые частые стратегии поля ({{ s.strategy_runs }} прогонов на вариант). Вариант попадает сюда, если в среднем он лучше хотя бы на {{ s.strategy_min_gain | num(1) }} позиции и весь {{ s.confidence | pct }} интервал разницы ниже нуля.
 {%- if s.strategy_ideas %}
 
 {% for i in s.strategy_ideas %}

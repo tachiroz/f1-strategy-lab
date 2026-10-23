@@ -99,6 +99,8 @@ def test_bahrain_facts(bahrain: RaceFacts) -> None:
     assert bahrain.neutralisations == ()
     assert not bahrain.wet
     assert sum(count.drivers for count in bahrain.stop_counts) == bahrain.classified
+    stops = [count.stops for count in bahrain.stop_counts]
+    assert stops == sorted(stops)
     assert bahrain.pit_lane_passes is None
 
 
@@ -125,6 +127,7 @@ def test_simulator_view(bahrain: RaceFacts) -> None:
         assert surprise.position > surprise.band_high
     for idea in view.strategy_ideas:
         assert idea.delta_high < 0
+        assert idea.delta <= -view.strategy_min_gain
         assert idea.better != idea.actual
 
 
