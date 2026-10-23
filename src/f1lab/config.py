@@ -104,6 +104,13 @@ MIN_DRY_COMPOUNDS: int = 2
 """Sporting rule: a dry race must use at least two different dry compounds."""
 RED_FLAG_STOP_S: float = 300.0
 """A recorded 'pit stop' longer than this is a tyre change under red flag (free)."""
+RC_PIT_LANE_PASS: str = "THROUGH THE PIT LANE"
+"""Race control: the Safety Car leads the field through the pit lane (no tyre change)."""
+PIT_LANE_PASS_LAP_SLACK: int = 1
+"""Passes are looked for from one lap before that message: lapped cars are a lap behind."""
+PIT_LANE_PASS_MARGIN_S: float = 3.0
+"""A same-compound visit this much longer than the window's median one is a real stop
+(standing time plus braking into the box and accelerating out of it)."""
 FINISHED_STATUSES: frozenset[str] = frozenset({"Finished", "Lapped"})
 NON_STARTER_STATUSES: frozenset[str] = frozenset({"Did not start", "Withdrew"})
 DISQUALIFIED_STATUS: str = "Disqualified"

@@ -20,6 +20,8 @@ from f1lab.config import (
     PIT_LANE_START_GRID,
 )
 from f1lab.models.degradation import CircuitModel, Estimate
+from f1lab.models.laps import load_race_control
+from f1lab.models.pitlane import merge_pit_lane_passes, pass_windows
 from f1lab.sim.calibration import Calibration
 from f1lab.sim.strategy import (
     Strategy,
@@ -181,7 +183,8 @@ def race_setup(
 
     Pace: ``calibration.quali_s_per_position`` times the qualifying position
     (relative to the median). Grid: the actual starting grid, pit-lane starters
-    at the back. Strategies: the ones the drivers actually ran.
+    at the back. Strategies: the ones the drivers actually ran (pit lane passes
+    behind the Safety Car are not stops, see ``f1lab.models.pitlane``).
 
     Raises:
         SetupError: If the circuit has no tyre model, a starter used wet tyres,
@@ -216,6 +219,8 @@ def race_setup(
     level = calibration.quali_s_per_position * (quali_position - quali_position.median())
 
     race_laps = int(results["laps"].max())
+    windows = pass_windows(load_race_control(engine, [race_id]))
+    stints = merge_pit_lane_passes(stints, pit_stops, windows)
     strategies = actual_strategies(starters, stints, pit_stops, race_laps)
 
     model = with_fallback_compounds(models[circuit_id], models)

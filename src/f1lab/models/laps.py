@@ -51,7 +51,7 @@ def load_race_control(engine: Engine, race_ids: Sequence[int]) -> pd.DataFrame:
     table = schema.race_control
     query = (
         select(table.c.race_id, table.c.seq, table.c.time_utc, table.c.category)
-        .add_columns(table.c.flag, table.c.scope, table.c.message)
+        .add_columns(table.c.lap, table.c.flag, table.c.scope, table.c.message)
         .where(table.c.race_id.in_(list(race_ids)))
         .order_by(table.c.race_id, table.c.seq)
     )
