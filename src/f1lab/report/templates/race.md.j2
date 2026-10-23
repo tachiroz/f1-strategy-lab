@@ -120,7 +120,7 @@
 
 - **Safety Car:** выезжал в {{ s.p_safety_car | pct }} прогонов; в реальности {% if f.has_safety_car %}выезжал{% else %}не выезжал{% endif %}.
 {% if s.over %}
-- **Выше ожиданий:**{% for x in s.over %} {{ x.name }} — P{{ x.position }}, а в {{ s.band_share | pct }} прогонов модель видела его на P{{ x.band_low | num(0) }}–P{{ x.band_high | num(0) }} (в среднем {{ x.expected | num(1) }}){{ ";" if not loop.last else "." }}{% endfor %}
+- **Выше ожиданий:**{% for x in s.over %} {{ x.name }} — P{{ x.position }}, а в {{ s.band_share | pct }} прогонов без схода модель видела его на P{{ x.band_low | num(0) }}–P{{ x.band_high | num(0) }} (в среднем {{ x.expected | num(1) }}){{ ";" if not loop.last else "." }}{% endfor %}
 
 {% endif %}
 {% if s.under %}
