@@ -46,6 +46,11 @@ class ReportCharts:
     outcome: str | None = None
 
 
+def report_stem(season: int, round_number: int, circuit_id: str) -> str:
+    """File name of a report without extension, e.g. ``2025-04-bahrain``."""
+    return f"{season}-{round_number:02d}-{circuit_id}"
+
+
 def environment() -> Environment:
     """Jinja environment with the report filters; undefined names fail loudly."""
     env = Environment(

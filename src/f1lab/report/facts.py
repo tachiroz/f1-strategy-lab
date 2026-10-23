@@ -30,6 +30,7 @@ from f1lab.config import (
 )
 from f1lab.models.laps import load_race_control
 from f1lab.models.neutralisation import Neutralisation, leader_lap, neutralisation_periods
+from f1lab.models.pitlane import merge_pit_lane_passes, pass_windows, pit_lane_passes
 from f1lab.sim.backtest import actual_results, score_summary
 from f1lab.sim.engine import SimulationParams, simulate
 from f1lab.sim.montecarlo import compare_strategies, neutralisation_shares, summarise
@@ -71,7 +72,7 @@ class DriverLine:
     laps: int
     points: float
     stops: int
-    """Pit stops, tyre changes under red flag not counted."""
+    """Pit stops; tyre changes under red flag and pit lane passes behind the SC not counted."""
     red_flag_changes: int
     """Tyre changes while the race was stopped (free, not pit stops)."""
     stints: tuple[StintLine, ...]
@@ -97,6 +98,15 @@ class NeutralisationLine:
     start_lap: int
     end_lap: int
     minutes: float
+
+
+@dataclass(frozen=True)
+class PitLanePasses:
+    """Drives through the pit lane behind the Safety Car, recorded as pit stops."""
+
+    count: int
+    first_lap: int
+    last_lap: int
 
 
 @dataclass(frozen=True)
@@ -209,6 +219,8 @@ class RaceFacts:
     retirements: tuple[DriverLine, ...]
     disqualified: tuple[DriverLine, ...]
     stop_counts: tuple[StopCount, ...]
+    pit_lane_passes: PitLanePasses | None
+    """None when the Safety Car never led the field through the pit lane."""
     simulation: SimulationView | None
     simulation_reason: str | None
     """Why there is no simulator view (e.g. a wet race)."""
@@ -288,9 +300,17 @@ def driver_lines(
     return tuple(lines)
 
 
-def neutralisation_lines(engine: Engine, race_id: int) -> tuple[NeutralisationLine, ...]:
-    """SC, VSC and red flag periods with the leader's laps at their start and end."""
-    periods = neutralisation_periods(load_race_control(engine, [race_id]))
+def neutralisation_lines(
+    engine: Engine, race_id: int, messages: pd.DataFrame
+) -> tuple[NeutralisationLine, ...]:
+    """SC, VSC and red flag periods with the leader's laps at their start and end.
+
+    Args:
+        engine: Database engine.
+        race_id: The race.
+        messages: Its race control messages (``load_race_control``).
+    """
+    periods = neutralisation_periods(messages)
     if not periods:
         return ()
     laps = _read(engine, "SELECT lap, start_time_utc FROM laps WHERE race_id = :race", race_id)
@@ -497,8 +517,12 @@ def race_facts(
     )
     stints = _read(engine, "SELECT * FROM stints WHERE race_id = :race", race_id)
     pit_stops = _read(engine, "SELECT * FROM pit_stops WHERE race_id = :race", race_id)
+    messages = load_race_control(engine, [race_id])
+    windows = pass_windows(messages)
+    passes = pit_lane_passes(pit_stops, stints, windows)
+    stints = merge_pit_lane_passes(stints, pit_stops, windows)
     race_laps = int(results["laps"].max())
-    lines = driver_lines(results, stints, pit_stops, race_laps)
+    lines = driver_lines(results, stints, pit_stops[~passes], race_laps)
     pole = next((line for line in lines if line.grid == 1), None)
     gainers, losers = _movers(lines)
     used = {compound for line in lines for compound in line.compounds}
@@ -531,7 +555,7 @@ def race_facts(
         pole=pole,
         winner_margin_s=_margin(results[results["position_text"].astype(str).str.isdigit()]),
         fastest_lap=_fastest_lap(results, lines),
-        neutralisations=neutralisation_lines(engine, race_id),
+        neutralisations=neutralisation_lines(engine, race_id, messages),
         weather=_weather(engine, race_id),
         wet=bool(used & set(WET_COMPOUNDS)),
         gainers=gainers,
@@ -541,6 +565,13 @@ def race_facts(
         ),
         disqualified=tuple(line for line in lines if line.is_disqualified),
         stop_counts=_stop_counts(lines),
+        pit_lane_passes=PitLanePasses(
+            count=int(passes.sum()),
+            first_lap=int(pit_stops.loc[passes, "lap"].min()),
+            last_lap=int(pit_stops.loc[passes, "lap"].max()),
+        )
+        if passes.any()
+        else None,
         simulation=simulation,
         simulation_reason=setup if isinstance(setup, str) else None,
     )

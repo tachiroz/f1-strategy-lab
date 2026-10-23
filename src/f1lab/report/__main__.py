@@ -24,7 +24,7 @@ from f1lab.db.engine import create_sqlite_engine, init_db
 from f1lab.ingest.transform import race_id_for
 from f1lab.report.facts import RaceNotFoundError, race_facts
 from f1lab.report.plots import plot_stints
-from f1lab.report.render import ReportCharts, render_report
+from f1lab.report.render import ReportCharts, render_report, report_stem
 from f1lab.sim.backtest import actual_results, score_race
 from f1lab.sim.calibration import calibrate, load_history
 from f1lab.sim.engine import SimulationParams
@@ -34,11 +34,6 @@ from f1lab.sim.setup import RaceSetup, SetupError, race_setup
 EXIT_OK = 0
 EXIT_USAGE = 2
 OUTCOME_TITLE = "Прогноз симулятора против реального финиша"
-
-
-def report_stem(season: int, round_number: int, circuit_id: str) -> str:
-    """File name of a report without extension, e.g. ``2025-04-bahrain``."""
-    return f"{season}-{round_number:02d}-{circuit_id}"
 
 
 def write_report(

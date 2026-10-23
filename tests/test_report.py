@@ -14,9 +14,9 @@ from sqlalchemy import Engine
 from f1lab.config import CALIBRATION_SEASONS
 from f1lab.db.engine import create_sqlite_engine
 from f1lab.report import text
-from f1lab.report.__main__ import EXIT_OK, EXIT_USAGE, main, report_stem
-from f1lab.report.facts import RaceFacts, RaceNotFoundError, race_facts
-from f1lab.report.render import NUMBER_FORMATS, ReportCharts, render_report
+from f1lab.report.__main__ import EXIT_OK, EXIT_USAGE, main
+from f1lab.report.facts import PitLanePasses, RaceFacts, RaceNotFoundError, race_facts
+from f1lab.report.render import NUMBER_FORMATS, ReportCharts, render_report, report_stem
 from f1lab.sim.calibration import calibrate, load_history
 from f1lab.sim.engine import SimulationParams
 from f1lab.sim.setup import race_setup
@@ -99,6 +99,7 @@ def test_bahrain_facts(bahrain: RaceFacts) -> None:
     assert bahrain.neutralisations == ()
     assert not bahrain.wet
     assert sum(count.drivers for count in bahrain.stop_counts) == bahrain.classified
+    assert bahrain.pit_lane_passes is None
 
 
 def test_movers_are_ordered_and_consistent(bahrain: RaceFacts) -> None:
@@ -192,6 +193,16 @@ def test_dry_report_sections(bahrain: RaceFacts) -> None:
     assert "без сейфти-кара, VSC и красного флага" in markdown
     assert "## Графики" not in markdown
     assert "None" not in markdown
+
+
+def test_pit_lane_passes_are_explained(bahrain: RaceFacts) -> None:
+    facts = dataclasses.replace(bahrain, pit_lane_passes=PitLanePasses(47, 2, 4))
+    markdown = render_report(facts)
+    assert "47 «пит-стопов» на кругах 2–4 без смены шин" in markdown
+    assert printed_numbers(markdown) <= allowed_numbers(facts)
+    single = dataclasses.replace(bahrain, pit_lane_passes=PitLanePasses(1, 3, 3))
+    assert "1 «пит-стоп» на 3-м круге" in render_report(single)
+    assert "через пит-лейн" not in render_report(bahrain)
 
 
 def test_wet_report_explains_the_missing_simulation(sao_paulo: RaceFacts) -> None:
